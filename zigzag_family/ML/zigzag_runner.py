@@ -63,6 +63,10 @@ class COMSOLRunner:
         self.voltage_floor = 1e-3
         self.voltage_tol = 0.05
         self.max_voltage_iters = 20
+        self.voltage_policy = "max_safe"
+        self.voltage_objective = "lifeTotalP03sphere_J"
+        self.voltage_candidate_ratios = (
+            1.0, 0.95, 0.90, 0.85, 0.80, 0.70, 0.60)
         self.Aev = 3.9e9
         self.Bev = 1.023e5
         self.failure_fraction = 0.20
@@ -250,6 +254,13 @@ class COMSOLRunner:
             return str(exc)
         except Exception:
             return exc.__class__.__name__
+
+    @staticmethod
+    def _finite_number(value):
+        try:
+            return math.isfinite(float(value))
+        except Exception:
+            return False
 
     def _is_server_alive(self):
         """Quick check: returns False if COMSOL server is disconnected."""
@@ -786,11 +797,142 @@ class COMSOLRunner:
         low_res["search_steps"] = steps
         return low_res
 
+    def _build_voltage_candidates(self, max_voltage, voltage_candidates=None):
+        """Build a descending, de-duplicated voltage candidate list."""
+        if voltage_candidates is None:
+            raw = [max_voltage * r for r in self.voltage_candidate_ratios]
+        else:
+            raw = list(voltage_candidates)
+            raw.append(max_voltage)
+
+        candidates = []
+        for value in raw:
+            try:
+                voltage = float(value)
+            except Exception:
+                continue
+            if not math.isfinite(voltage):
+                continue
+            if voltage < self.voltage_floor:
+                continue
+            if voltage > max_voltage + self.voltage_tol:
+                continue
+            voltage = min(voltage, max_voltage)
+            if any(abs(voltage - existing) <= self.voltage_tol
+                   for existing in candidates):
+                continue
+            candidates.append(voltage)
+
+        return sorted(candidates, reverse=True)
+
+    def _voltage_score(self, result, objective):
+        """Return the scalar score used by A4 voltage candidate selection."""
+        value = result.get(objective, float('nan'))
+        if self._finite_number(value):
+            return float(value)
+
+        if objective == "lifeTotalP03sphere_J":
+            avg = result.get("lifeAvgP03sphere_W", float('nan'))
+            life_h = result.get("lifetimeH", float('nan'))
+            if self._finite_number(avg) and self._finite_number(life_h):
+                return float(avg) * float(life_h) * 3600.0
+
+        return float('nan')
+
+    def _voltage_scan_summary(self, results, objective):
+        parts = []
+        for item in results:
+            voltage = item.get("Vwork_V", float('nan'))
+            status = item.get("status", "UNKNOWN")
+            score = self._voltage_score(item, objective)
+            v_txt = f"{voltage:.4g}V" if self._finite_number(voltage) else "nanV"
+            s_txt = f"{score:.4g}" if self._finite_number(score) else "nan"
+            parts.append(f"{v_txt}:{status}:{s_txt}")
+        return "; ".join(parts)
+
+    def _annotate_voltage_result(self, result, policy, objective,
+                                 max_safe_v=None, candidate_count=1,
+                                 scan_summary=""):
+        result["voltagePolicy"] = policy
+        result["voltageObjective"] = objective
+        result["voltageCandidateCount"] = candidate_count
+        if max_safe_v is not None:
+            result["voltageMaxSafe_V"] = max_safe_v
+        if scan_summary:
+            result["voltageScanSummary"] = scan_summary
+        return result
+
+    def _select_voltage_scan_result(self, results, objective):
+        scored = []
+        for item in results:
+            score = self._voltage_score(item, objective)
+            if self._finite_number(score):
+                ok = item.get("status") == "OK"
+                scored.append((ok, score, item))
+
+        if not scored:
+            return results[0]
+
+        eligible = [item for item in scored if item[0]]
+        pool = eligible if eligible else scored
+        return max(pool, key=lambda item: item[1])[2]
+
+    def evaluate_voltage_candidates(self, N_RUNS, L_RUN_m, z_first_m,
+                                    voltage_candidates=None, objective=None):
+        """Run full lifecycle evaluations for candidate working voltages."""
+        objective = objective or self.voltage_objective
+        scan_start = time.time()
+
+        print("  A4 voltage scan: evaluating max-safe voltage first...")
+        first = self.evaluate(
+            N_RUNS=N_RUNS,
+            L_RUN_m=L_RUN_m,
+            z_first_m=z_first_m,
+            voltage_policy="max_safe",
+            voltage_objective=objective,
+        )
+        if not self._finite_number(first.get("Vwork_V", float('nan'))):
+            first["voltageScanElapsed_sec"] = round(time.time() - scan_start, 1)
+            return self._annotate_voltage_result(
+                first, "full_scan", objective, None, 0)
+
+        max_safe_v = float(first["Vwork_V"])
+        candidates = self._build_voltage_candidates(
+            max_safe_v, voltage_candidates)
+
+        results = [first]
+        for voltage in candidates:
+            if abs(voltage - max_safe_v) <= self.voltage_tol:
+                continue
+            print(f"  A4 voltage scan: evaluating {voltage:.4f}V...")
+            result = self.evaluate(
+                N_RUNS=N_RUNS,
+                L_RUN_m=L_RUN_m,
+                z_first_m=z_first_m,
+                voltage_policy="fixed",
+                voltage_objective=objective,
+                voltage_override=voltage,
+            )
+            results.append(result)
+
+        selected = self._select_voltage_scan_result(results, objective)
+        selected["voltageScanElapsed_sec"] = round(time.time() - scan_start, 1)
+        return self._annotate_voltage_result(
+            selected,
+            "full_scan",
+            objective,
+            max_safe_v=max_safe_v,
+            candidate_count=len(results),
+            scan_summary=self._voltage_scan_summary(results, objective),
+        )
+
     # ================================================================
     #  主评估入口
     # ================================================================
 
-    def evaluate(self, N_RUNS, L_RUN_m, z_first_m):
+    def evaluate(self, N_RUNS, L_RUN_m, z_first_m, voltage_policy=None,
+                 voltage_candidates=None, voltage_objective=None,
+                 voltage_override=None):
         """
         完整评估流程：几何预检 → 建模 → 电压搜索 → 侵蚀循环。
 
@@ -802,6 +944,17 @@ class COMSOLRunner:
         Returns:
             dict: 包含所有赛题指标；status != "OK" 表示失败
         """
+        policy = voltage_policy or self.voltage_policy
+        objective = voltage_objective or self.voltage_objective
+        if policy in ("full_scan", "scan") and voltage_override is None:
+            return self.evaluate_voltage_candidates(
+                N_RUNS=N_RUNS,
+                L_RUN_m=L_RUN_m,
+                z_first_m=z_first_m,
+                voltage_candidates=voltage_candidates,
+                objective=objective,
+            )
+
         t_start = time.time()
 
         # ---- 几何预检 ----
@@ -809,19 +962,25 @@ class COMSOLRunner:
             N_RUNS, L_RUN_m, z_first_m)
 
         if side < 0.1e-3:
-            return {"status": "FAIL_SIDE_TOO_SMALL",
-                    "elapsed_sec": round(time.time() - t_start, 1)}
+            return self._annotate_voltage_result({
+                "status": "FAIL_SIDE_TOO_SMALL",
+                "elapsed_sec": round(time.time() - t_start, 1),
+            }, policy, objective)
         if side > 1.2e-3:
             # 截面过厚（>1.2mm）：路径极短，辐射面积远小于 baseline，不具竞争力
             # 且视角因子计算量 O(n_faces²) 过大，易造成 COMSOL JVM 内存崩溃
-            return {"status": "FAIL_SIDE_TOO_LARGE",
-                    "elapsed_sec": round(time.time() - t_start, 1)}
+            return self._annotate_voltage_result({
+                "status": "FAIL_SIDE_TOO_LARGE",
+                "elapsed_sec": round(time.time() - t_start, 1),
+            }, policy, objective)
 
         z_last = self.L0 - z_first_m
         z_step = (z_last - z_first_m) / max(N_RUNS - 1, 1)
         if z_step < side * 1.2:
-            return {"status": "FAIL_Z_OVERLAP",
-                    "elapsed_sec": round(time.time() - t_start, 1)}
+            return self._annotate_voltage_result({
+                "status": "FAIL_Z_OVERLAP",
+                "elapsed_sec": round(time.time() - t_start, 1),
+            }, policy, objective)
 
         n_blocks = len(blocks)
         resolve_thr = 0.01 * side  # geometry update limit for solver stability
@@ -833,27 +992,43 @@ class COMSOLRunner:
         try:
             self._init_model(N_RUNS, L_RUN_m, z_first_m)
         except MeshError as e:
-            return {"status": "FAIL_MESH: " + self._safe_exception_text(e),
-                    "elapsed_sec": round(time.time() - t_start, 1)}
+            return self._annotate_voltage_result({
+                "status": "FAIL_MESH: " + self._safe_exception_text(e),
+                "elapsed_sec": round(time.time() - t_start, 1),
+            }, policy, objective)
         except ServerDisconnectError:
             raise
         except Exception as e:
             if not self._is_server_alive():
                 raise ServerDisconnectError(self._safe_exception_text(e))
-            return {"status": "FAIL_INIT: " + self._safe_exception_text(e),
-                    "elapsed_sec": round(time.time() - t_start, 1)}
+            return self._annotate_voltage_result({
+                "status": "FAIL_INIT: " + self._safe_exception_text(e),
+                "elapsed_sec": round(time.time() - t_start, 1),
+            }, policy, objective)
 
         # ---- Phase 1: 电压搜索 ----
-        print("  Phase 1: voltage search...")
-        r0_res = self._search_best_voltage()
+        if voltage_override is None:
+            print("  Phase 1: voltage search...")
+            r0_res = self._search_best_voltage()
+        else:
+            print(f"  Phase 1: fixed voltage {voltage_override:.4f}V...")
+            r0_res = self._solve_prepared(voltage_override)
+            r0_res["search_ok"] = self._meets_constraint(r0_res)
+            r0_res["search_steps"] = 1
         Vwork = r0_res["applied_V"]
+        max_safe_v = Vwork if (
+            voltage_override is None and r0_res.get("search_ok", False)
+        ) else None
         print(f"  PHASE1: Vwork={Vwork:.4f}V Tmax={r0_res['Tmax']:.1f}K "
               f"P03sph={r0_res['P03sphere']:.1f}W "
               f"steps={r0_res['search_steps']}")
 
         if not r0_res.get("search_ok", False):
-            return {"status": "FAIL_VOLTAGE_SEARCH",
-                    "elapsed_sec": round(time.time() - t_start, 1)}
+            return self._annotate_voltage_result({
+                "status": "FAIL_VOLTAGE_SEARCH",
+                "failure": r0_res.get("failure", ""),
+                "elapsed_sec": round(time.time() - t_start, 1),
+            }, policy, objective, max_safe_v)
 
         # ---- Phase 2: 侵蚀循环 ----
         print("  Phase 2: erosion loop...")
@@ -930,7 +1105,7 @@ class COMSOLRunner:
                     raise ServerDisconnectError(self._safe_exception_text(e))
                 failure = self._safe_exception_text(e)
                 print(f"  WARN: rebuild failed step {macro}: {failure}")
-                return {
+                return self._annotate_voltage_result({
                     "Vwork_V": Vwork,
                     "initialTmax_K": r0_res["Tmax"],
                     "Tmin_K": r0_res["Tmin"],
@@ -949,12 +1124,12 @@ class COMSOLRunner:
                     "status": "FAIL_EROSION_SOLVE",
                     "failure": failure,
                     "elapsed_sec": round(time.time() - t_start, 1),
-                }
+                }, policy, objective, max_safe_v)
 
             if not r_now["solve_ok"]:
                 failure = r_now.get("failure", "")
                 print(f"  WARN: solve failed step {macro}: {failure}")
-                return {
+                return self._annotate_voltage_result({
                     "Vwork_V": Vwork,
                     "initialTmax_K": r0_res["Tmax"],
                     "Tmin_K": r0_res["Tmin"],
@@ -973,7 +1148,7 @@ class COMSOLRunner:
                     "status": "FAIL_EROSION_SOLVE",
                     "failure": failure,
                     "elapsed_sec": round(time.time() - t_start, 1),
-                }
+                }, policy, objective, max_safe_v)
 
             # (e) 梯形积分
             if r_now["solve_ok"] and r_now["Tmax"] > max_erosion_tmax:
@@ -996,7 +1171,7 @@ class COMSOLRunner:
                 avg_prads = (prads_int / time_s) if time_s > 0 else float('nan')
                 sv_loss = ((1.0 - p03s_int / p03_int) * 100.0
                            if (time_s > 0 and p03_int > 0) else float('nan'))
-                return {
+                return self._annotate_voltage_result({
                     "Vwork_V": Vwork,
                     "initialTmax_K": r0_res["Tmax"],
                     "Tmin_K": r0_res["Tmin"],
@@ -1017,7 +1192,7 @@ class COMSOLRunner:
                     "erosionSteps": macro,
                     "status": "FAIL_OVERTEMP_DURING_EROSION",
                     "elapsed_sec": round(elapsed, 1),
-                }
+                }, policy, objective, max_safe_v)
 
             prev_p03, prev_prad   = cur_p03, cur_prad
             prev_p03s, prev_prads = cur_p03s, cur_prads
@@ -1037,7 +1212,7 @@ class COMSOLRunner:
                    if (time_s > 0 and p03_int > 0) else float('nan'))
 
         elapsed = time.time() - t_start
-        return {
+        return self._annotate_voltage_result({
             "Vwork_V":              Vwork,
             "initialTmax_K":        r0_res["Tmax"],
             "Tmin_K":               r0_res["Tmin"],
@@ -1055,7 +1230,7 @@ class COMSOLRunner:
             "erosionSteps":         macro,
             "status":               "OK",
             "elapsed_sec":          round(elapsed, 1),
-        }
+        }, policy, objective, max_safe_v)
 
     # ================================================================
     #  清理
