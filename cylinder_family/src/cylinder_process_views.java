@@ -25,7 +25,7 @@
     //   [Fix-2] selfViewLoss 负值说明注释完善：
     //           对凸圆柱体 selfViewLoss 物理上应 ≈ 0%；
     //           出现约 −5% 的负值是 qRadNetOutExpr 表面积分不包含 S2S 面间辐射
-    //           交换项造成的系统性低估（PradSurface < PradSphere = V×I），
+    //           Current baseline uses free-surface 0 K radiation integrals.
     //           是 P03sphere 方法的固有误差，不影响形状间相对比较，
     //           但竞赛汇报时需注明该系统偏差约 ±5%。
     //
@@ -61,7 +61,7 @@
     double AevValue = 3.9e9;
     double BevValue = 1.023e5;
     double failureFraction = 0.20;
-    String epsRadS2SValue = "if(comp1.rad.lambda<lam03,eps03,epsRest)";
+    String epsRadS2SValue = "if(z<1e-9[m],0,if(z>L0-1e-9[m],0,if(comp1.rad.lambda<lam03,eps03,epsRest)))";
 
     // 从输入半径推导参考值
     double r0Tmp = 0.0;
@@ -81,9 +81,7 @@
 
     // ---- Planck f03 黑体谱分数 ----
     String x03TExpr = "(c2bb/(lam03*T))";
-    String x03TambExpr = "(c2bb/(lam03*Tamb))";
     String seriesTExpr = "";
-    String seriesTambExpr = "";
     for (int n = 1; n <= 6; n++) {
         int n2 = n * n;
         int n3 = n2 * n;
@@ -95,27 +93,17 @@
             + "+6*" + x03TExpr + "/" + n3
             + "+6/" + n4
             + ")";
-        String termTamb =
-            "exp(-" + n + "*" + x03TambExpr + ")*("
-            + x03TambExpr + "^3/" + n
-            + "+3*" + x03TambExpr + "^2/" + n2
-            + "+6*" + x03TambExpr + "/" + n3
-            + "+6/" + n4
-            + ")";
         if (n == 1) {
             seriesTExpr = termT;
-            seriesTambExpr = termTamb;
         } else {
             seriesTExpr = seriesTExpr + "+" + termT;
-            seriesTambExpr = seriesTambExpr + "+" + termTamb;
         }
     }
     String f03bbTExpr = "min(1,max(0,(15/pi^4)*(" + seriesTExpr + ")))";
-    String f03bbTambExpr = "min(1,max(0,(15/pi^4)*(" + seriesTambExpr + ")))";
     String q03NetOutExpr =
-        "eps03*sigmaSB*((" + f03bbTExpr + ")*T^4-(" + f03bbTambExpr + ")*Tamb^4)";
+        "eps03*sigmaSB*((" + f03bbTExpr + ")*T^4)";
     String qRadNetOutExpr =
-        "sigmaSB*(epsRest*(T^4-Tamb^4)+(eps03-epsRest)*((" + f03bbTExpr + ")*T^4-(" + f03bbTambExpr + ")*Tamb^4))";
+        "sigmaSB*(epsRest*T^4+(eps03-epsRest)*((" + f03bbTExpr + ")*T^4))";
 
     // ---- 数据类 ----
 
@@ -133,6 +121,9 @@
         double appliedV = Double.NaN;
         int searchSteps = 0;
         double Tmax = Double.NaN;
+        double Tmin = Double.NaN;
+        double Tmean = Double.NaN;
+        double U_pct = Double.NaN;
         double I = Double.NaN;
         double R = Double.NaN;
         double Pelec = Double.NaN;
@@ -281,6 +272,7 @@
             // 清理旧选择
             removeSelection("selInS2S");
             removeSelection("selOutS2S");
+            removeSelection("selFreeS2S");
 
             model.component("comp1").selection().create("selInS2S", "Box");
             model.component("comp1").selection("selInS2S").geom("geom1", 2);
@@ -301,6 +293,16 @@
             model.component("comp1").selection("selOutS2S").set("ymax", 10.0);
             model.component("comp1").selection("selOutS2S").set("zmin", 14.999999);
             model.component("comp1").selection("selOutS2S").set("zmax", 15.000001);
+
+            model.component("comp1").selection().create("selFreeS2S", "Box");
+            model.component("comp1").selection("selFreeS2S").geom("geom1", 2);
+            model.component("comp1").selection("selFreeS2S").set("condition", "intersects");
+            model.component("comp1").selection("selFreeS2S").set("xmin", -10.0);
+            model.component("comp1").selection("selFreeS2S").set("xmax", 10.0);
+            model.component("comp1").selection("selFreeS2S").set("ymin", -10.0);
+            model.component("comp1").selection("selFreeS2S").set("ymax", 10.0);
+            model.component("comp1").selection("selFreeS2S").set("zmin", 1.0e-6);
+            model.component("comp1").selection("selFreeS2S").set("zmax", 14.999999);
 
             // ---- [Fix-1] 每段侧面 Box 选择（用于精确段平均温度）----
             // 坐标系单位 mm（geom1 使用 lengthUnit="mm"）
@@ -334,6 +336,14 @@
             model.component("comp1").physics("ec").feature("potS2S").set("V0", "Vapp");
             model.component("comp1").physics("ec").create("gndS2S", "Ground", 2);
             model.component("comp1").physics("ec").feature("gndS2S").selection().named("selOutS2S");
+            removeHtFeature("tempInS2S");
+            removeHtFeature("tempOutS2S");
+            model.component("comp1").physics("ht").create("tempInS2S", "TemperatureBoundary", 2);
+            model.component("comp1").physics("ht").feature("tempInS2S").selection().named("selInS2S");
+            model.component("comp1").physics("ht").feature("tempInS2S").set("T0", "Telectrode");
+            model.component("comp1").physics("ht").create("tempOutS2S", "TemperatureBoundary", 2);
+            model.component("comp1").physics("ht").feature("tempOutS2S").selection().named("selOutS2S");
+            model.component("comp1").physics("ht").feature("tempOutS2S").set("T0", "Telectrode");
 
             // ---- 结构力学：两端面固定 + 热膨胀载荷，用于直接求解 solid.mises ----
             removeSolidFeature("fixInS2S");
@@ -437,13 +447,16 @@
                     System.out.println("WARN: MinVolume failed, using Tmin=" + Tmin + " (0.95*Tmax)");
                 }
                 double V = model.result().numerical("volS2S").getReal()[0][0];
+                double TintVol = model.result().numerical("TintVolS2S").getReal()[0][0];
+                r.Tmin = Tmin;
+                r.Tmean = (V > 1.0e-20) ? (TintVol / V) : Double.NaN;
+                r.U_pct = (r.Tmean > 1.0e-20) ? ((r.Tmax - r.Tmin) / r.Tmean * 100.0) : Double.NaN;
                 double I = Math.abs(model.result().numerical("IinS2S").getReal()[0][0]);
                 r.P03steady = model.result().numerical("P03emitS2S").getReal()[0][0];
                 r.PradSteady = model.result().numerical("PradEmitS2S").getReal()[0][0];
-                // 外接球：PradSphere = V×I（能量守恒），P03sphere = PradSphere × 光谱比例
-                r.PradSphere = voltage * I;
-                r.P03sphere = (r.PradSteady > 1e-10)
-                    ? (voltage * I * r.P03steady / r.PradSteady) : 0.0;
+                // Current baseline: sphere stats reuse free-surface 0 K radiation integrals.
+                r.PradSphere = r.PradSteady;
+                r.P03sphere = r.P03steady;
 
                 // [Fix-1] 各段侧面平均温度：优先用 IntSurface 算子直接读取，
                 // 失败时回退到原抛物线近似（算子未就绪或几何异常时的保护）
@@ -610,6 +623,7 @@
     model.param().set("epsRest", "0.15", "Emissivity outside 0-3 um band");
     model.param().set("rhoMassW", "19350[kg/m^3]", "Density of tungsten");
     model.param().set("Tamb", "293.15[K]", "Ambient temperature");
+    model.param().set("Telectrode", "293.15[K]", "Copper electrode temperature");
     model.param().set("EW", "411[GPa]", "Young's modulus of tungsten for Solid Mechanics");
     model.param().set("nuW", "0.28", "Poisson ratio of tungsten for Solid Mechanics");
     model.param().set("alphaW", "4.5e-6[1/K]", "Thermal expansion coefficient of tungsten for Solid Mechanics");
@@ -665,20 +679,24 @@
     model.result().numerical("volS2S").selection().all();
     model.result().numerical("volS2S").set("expr", new String[]{"1"});
 
+    model.result().numerical().create("TintVolS2S", "IntVolume");
+    model.result().numerical("TintVolS2S").selection().all();
+    model.result().numerical("TintVolS2S").set("expr", new String[]{"T"});
+
     model.result().numerical().create("IinS2S", "IntSurface");
     model.result().numerical("IinS2S").selection().named("selInS2S");
     model.result().numerical("IinS2S").set("expr", new String[]{"ec.Jx*nx+ec.Jy*ny+ec.Jz*nz"});
 
     model.result().numerical().create("AsurfS2S", "IntSurface");
-    model.result().numerical("AsurfS2S").selection().all();
+    model.result().numerical("AsurfS2S").selection().named("selFreeS2S");
     model.result().numerical("AsurfS2S").set("expr", new String[]{"1"});
 
     model.result().numerical().create("P03emitS2S", "IntSurface");
-    model.result().numerical("P03emitS2S").selection().all();
+    model.result().numerical("P03emitS2S").selection().named("selFreeS2S");
     model.result().numerical("P03emitS2S").set("expr", new String[]{q03NetOutExpr});
 
     model.result().numerical().create("PradEmitS2S", "IntSurface");
-    model.result().numerical("PradEmitS2S").selection().all();
+    model.result().numerical("PradEmitS2S").selection().named("selFreeS2S");
     model.result().numerical("PradEmitS2S").set("expr", new String[]{qRadNetOutExpr});
 
     // ---- [Fix-1] 每段侧面平均温度算子：TintSeg_{i+1} = ∫T dA，AsegS2S_{i+1} = ∫1 dA ----
@@ -743,6 +761,11 @@
     double prevP03sphere = r0.P03sphere;
     double prevPradSphere = r0.PradSphere;
     double[] Tavg = r0.segTavg;
+    double maxErosionTmax = r0.Tmax;
+    int overtempStep = -1;
+    double overtempTimeH = Double.NaN;
+    double overtempTmax = Double.NaN;
+    String status = "OK";
 
     // ---- 过程快照：0%、约 6.7%、约 13.3%、20% 损失四个节点 ----
     double[][] radiiHist = new double[maxMacroSteps + 1][];
@@ -814,7 +837,12 @@
 
         if (!rNow.solveOk) {
             System.out.println("WARN: solve failed step " + macroStep);
+            status = "FAIL_EROSION_SOLVE";
             failed = true;
+        }
+
+        if (rNow.solveOk && rNow.Tmax > maxErosionTmax) {
+            maxErosionTmax = rNow.Tmax;
         }
 
         // (g) 梯形积分 P03 / Prad（表面发射 + 外接球）
@@ -832,6 +860,14 @@
         prevPradSphere = curPradSphere;
 
         Tavg = rNow.segTavg;
+
+        if (rNow.solveOk && rNow.Tmax >= tempLimitK) {
+            status = "FAIL_OVERTEMP_DURING_EROSION";
+            overtempStep = macroStep;
+            overtempTimeH = timeS / 3600.0;
+            overtempTmax = rNow.Tmax;
+            break;
+        }
 
         radiiHist[macroStep] = new double[segCount];
         for (int i = 0; i < segCount; i++) {
@@ -856,38 +892,46 @@
 
     // [Fix-2] selfViewLoss 说明：
     //   定义：selfViewLoss = (1 - P03sphere积分 / P03surface积分) × 100%
-    //   其中 P03sphere（能量守恒路径）= V×I × (P03surface/PradSurface)，
-    //        P03surface / PradSurface（表面 IntSurface 路径）来自 qRadNetOutExpr 积分。
+    //   当前口径：P03sphere 与 PradSphere 直接采用自由表面 0 K 辐射积分。
+    //        P03surface / PradSurface 保留为同一自由表面选择下的诊断积分。
     //   问题根源：qRadNetOutExpr 是局部自发射公式，不含 S2S 面间辐射交换的修正项，
-    //   导致 PradSurface（IntSurface 积分）系统性低估实际净辐射功率 PradSphere = V×I，
+    //   若 selfViewLoss 明显偏离 0，应优先检查 selFreeS2S 和积分算子选择。
     //   从而 P03sphere > P03surface，selfViewLoss 呈负值（约 −5%）。
     //   物理真值：对凸圆柱体无自遮挡，selfViewLoss 应 ≈ 0%。
     //   影响评估：此偏差为系统性固定偏移，不影响不同形状之间的相对比较，
     //   ML 优化阶段可正常使用 P03sphere 和寿命作为目标。竞赛汇报时需注明
-    //   "PradSurface 由局部辐射公式积分得到，含约 ±5% 的系统性低估"。
+    //   汇报时按官方 0 K 统计面口径说明即可。
     double selfViewLoss = (timeS > 0.0 && p03Integral > 0.0)
         ? (1.0 - p03SphereIntegral / p03Integral) * 100.0 : Double.NaN;
 
     // CSV header + data（方便 ML pipeline 解析）
-    System.out.println("RESULT_HEADER=Vwork_V,initialTmax_K,lifetimeH,initialP03sphere_W,initialPradSphere_W,lifeAvgP03sphere_W,lifeAvgPradSphere_W,selfViewLoss_pct,failureReached,erosionSteps");
+    System.out.println("RESULT_HEADER=Vwork_V,initialTmax_K,Tmin_K,Tmean_K,U_pct,maxErosionTmax_K,lifetimeH,initialP03sphere_W,initialPradSphere_W,lifeAvgP03sphere_W,lifeAvgPradSphere_W,lifeTotalP03sphere_J,selfViewLoss_pct,failureReached,erosionSteps,overtempStep,overtempTimeH,overtempTmax_K,status");
     System.out.println("RESULT="
         + String.format("%.6f", Vwork) + ","
         + String.format("%.1f", r0.Tmax) + ","
+        + String.format("%.1f", r0.Tmin) + ","
+        + String.format("%.1f", r0.Tmean) + ","
+        + String.format("%.4f", r0.U_pct) + ","
+        + String.format("%.1f", maxErosionTmax) + ","
         + String.format("%.4f", lifetimeH) + ","
         + String.format("%.2f", r0.P03sphere) + ","
         + String.format("%.2f", r0.PradSphere) + ","
         + String.format("%.2f", avgP03sphere) + ","
         + String.format("%.2f", avgPradSphere) + ","
+        + String.format("%.2f", p03SphereIntegral) + ","
         + String.format("%.2f", selfViewLoss) + ","
         + failed + ","
-        + step);
+        + step + ","
+        + overtempStep + ","
+        + String.format("%.4f", overtempTimeH) + ","
+        + String.format("%.1f", overtempTmax) + ","
+        + status);
 
     // [Fix-2] 输出 selfViewLoss 诊断行，提醒负值是已知系统误差
     if (!Double.isNaN(selfViewLoss) && selfViewLoss < -1.0) {
         System.out.println("NOTE: selfViewLoss=" + String.format("%.2f", selfViewLoss)
-            + "% (<0). Expected for convex cylinder. Cause: qRadNetOutExpr surface integral"
-            + " excludes S2S inter-surface exchange => PradSurface underestimates V*I by ~5%."
-            + " Does NOT affect shape-to-shape comparisons. Note in report.");
+            + "% (<0). Current baseline uses free-surface 0 K statistics;"
+            + " check selFreeS2S and P03/Prad integrals if this is unexpected.");
     }
 
     // 输入半径回显（方便核查）

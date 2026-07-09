@@ -39,20 +39,16 @@
     // ================================================================
     //  Planck f03 六项级数
     // ================================================================
-    String x03T    = "(c2bb/(lam03*T))";
-    String x03Tamb = "(c2bb/(lam03*Tamb))";
-    String serT = "", serTa = "";
+    String x03T = "(c2bb/(lam03*T))";
+    String serT = "";
     for (int n = 1; n <= 6; n++) {
         int n2=n*n, n3=n2*n, n4=n3*n;
         String tT  = "exp(-"+n+"*"+x03T+")*("+x03T+"^3/"+n+"+3*"+x03T+"^2/"+n2+"+6*"+x03T+"/"+n3+"+6/"+n4+")";
-        String tTa = "exp(-"+n+"*"+x03Tamb+")*("+x03Tamb+"^3/"+n+"+3*"+x03Tamb+"^2/"+n2+"+6*"+x03Tamb+"/"+n3+"+6/"+n4+")";
-        serT  = (n==1) ? tT  : serT+"+"+tT;
-        serTa = (n==1) ? tTa : serTa+"+"+tTa;
+        serT = (n==1) ? tT : serT+"+"+tT;
     }
-    String f03T    = "min(1,max(0,(15/pi^4)*("+serT+")))";
-    String f03Tamb = "min(1,max(0,(15/pi^4)*("+serTa+")))";
-    String q03Expr  = "eps03*sigmaSB*(("+f03T+")*T^4-("+f03Tamb+")*Tamb^4)";
-    String qradExpr = "sigmaSB*(epsRest*(T^4-Tamb^4)+(eps03-epsRest)*(("+f03T+")*T^4-("+f03Tamb+")*Tamb^4))";
+    String f03T = "min(1,max(0,(15/pi^4)*("+serT+")))";
+    String q03Expr  = "eps03*sigmaSB*(("+f03T+")*T^4)";
+    String qradExpr = "sigmaSB*(epsRest*T^4+(eps03-epsRest)*(("+f03T+")*T^4))";
 
     // ================================================================
     //  路径 & 几何计算
@@ -151,6 +147,7 @@
     model.param().set("epsRest","0.15");
     model.param().set("rhoMassW","19350[kg/m^3]");
     model.param().set("Tamb","293.15[K]");
+    model.param().set("Telectrode","293.15[K]");
     model.param().set("Vapp","1[V]");
     model.param().set("lam03","3[um]");
     model.param().set("c2bb","1.438776877e-2[m*K]");
@@ -226,6 +223,8 @@
         // Box selections（坐标驱动，几何重建后自动刷新）
         try{model.component("comp1").selection().remove("selInZZ");}catch(Exception e){}
         try{model.component("comp1").selection().remove("selOutZZ");}catch(Exception e){}
+        try{model.component("comp1").selection().remove("selFreeZZ");}catch(Exception e){}
+        for(int bi=0;bi<MAX_BLOCK_SLOTS;bi++) try{model.component("comp1").selection().remove("selBlkLat_"+(bi+1));}catch(Exception e){}
         model.component("comp1").selection().create("selInZZ","Box");
         model.component("comp1").selection("selInZZ").geom("geom1",2);
         model.component("comp1").selection("selInZZ").set("condition","inside");
@@ -238,6 +237,45 @@
         model.component("comp1").selection("selOutZZ").set("xmin",-10.0); model.component("comp1").selection("selOutZZ").set("xmax",10.0);
         model.component("comp1").selection("selOutZZ").set("ymin",-10.0); model.component("comp1").selection("selOutZZ").set("ymax",10.0);
         model.component("comp1").selection("selOutZZ").set("zmin",14.999999); model.component("comp1").selection("selOutZZ").set("zmax",15.000001);
+        model.component("comp1").selection().create("selFreeZZ","Box");
+        model.component("comp1").selection("selFreeZZ").geom("geom1",2);
+        model.component("comp1").selection("selFreeZZ").set("condition","intersects");
+        model.component("comp1").selection("selFreeZZ").set("xmin",-1.0);
+        model.component("comp1").selection("selFreeZZ").set("xmax",110.0);
+        model.component("comp1").selection("selFreeZZ").set("ymin",-10.0);
+        model.component("comp1").selection("selFreeZZ").set("ymax",10.0);
+        model.component("comp1").selection("selFreeZZ").set("zmin",1e-6);
+        model.component("comp1").selection("selFreeZZ").set("zmax",14.999999);
+
+        for(int bi=0;bi<blkCount;bi++){
+            String sTag="selBlkLat_"+(bi+1);
+            double nx0,ny0,nz0,nsx,nsy,nsz;
+            if(blkIsHoriz[bi]){nx0=blkX0[bi];ny0=blkY0[bi]+sh;nz0=blkZ0[bi]+sh;nsx=blkSX[bi];nsy=gs;nsz=gs;}
+            else{nx0=blkX0[bi]+sh;ny0=blkY0[bi]+sh;nz0=blkZ0[bi];nsx=gs;nsy=gs;nsz=blkSZ[bi];}
+            double pad=Math.max(1e-5,0.01*gs*1e3);
+            model.component("comp1").selection().create(sTag,"Box");
+            model.component("comp1").selection(sTag).geom("geom1",2);
+            model.component("comp1").selection(sTag).set("condition","intersects");
+            if(blkIsHoriz[bi]){
+                double x0=(nx0+0.10*nsx)*1e3, x1=(nx0+0.90*nsx)*1e3;
+                if(x1<=x0){x0=nx0*1e3; x1=(nx0+nsx)*1e3;}
+                model.component("comp1").selection(sTag).set("xmin",x0);
+                model.component("comp1").selection(sTag).set("xmax",x1);
+                model.component("comp1").selection(sTag).set("ymin",ny0*1e3-pad);
+                model.component("comp1").selection(sTag).set("ymax",(ny0+nsy)*1e3+pad);
+                model.component("comp1").selection(sTag).set("zmin",nz0*1e3-pad);
+                model.component("comp1").selection(sTag).set("zmax",(nz0+nsz)*1e3+pad);
+            } else {
+                double z0=(nz0+0.10*nsz)*1e3, z1=(nz0+0.90*nsz)*1e3;
+                if(z1<=z0){z0=nz0*1e3; z1=(nz0+nsz)*1e3;}
+                model.component("comp1").selection(sTag).set("xmin",nx0*1e3-pad);
+                model.component("comp1").selection(sTag).set("xmax",(nx0+nsx)*1e3+pad);
+                model.component("comp1").selection(sTag).set("ymin",ny0*1e3-pad);
+                model.component("comp1").selection(sTag).set("ymax",(ny0+nsy)*1e3+pad);
+                model.component("comp1").selection(sTag).set("zmin",z0);
+                model.component("comp1").selection(sTag).set("zmax",z1);
+            }
+        }
 
         // EC 边界条件
         model.component("comp1").physics("ec").create("potZZ","ElectricPotential",2);
@@ -245,6 +283,14 @@
         model.component("comp1").physics("ec").feature("potZZ").set("V0","Vapp");
         model.component("comp1").physics("ec").create("gndZZ","Ground",2);
         model.component("comp1").physics("ec").feature("gndZZ").selection().named("selOutZZ");
+        try{model.component("comp1").physics("ht").feature().remove("tempInZZ");}catch(Exception e){}
+        try{model.component("comp1").physics("ht").feature().remove("tempOutZZ");}catch(Exception e){}
+        model.component("comp1").physics("ht").create("tempInZZ","TemperatureBoundary",2);
+        model.component("comp1").physics("ht").feature("tempInZZ").selection().named("selInZZ");
+        model.component("comp1").physics("ht").feature("tempInZZ").set("T0","Telectrode");
+        model.component("comp1").physics("ht").create("tempOutZZ","TemperatureBoundary",2);
+        model.component("comp1").physics("ht").feature("tempOutZZ").selection().named("selOutZZ");
+        model.component("comp1").physics("ht").feature("tempOutZZ").set("T0","Telectrode");
 
         // S2S（MultipleSpectralBands，ε₀₃=0.35，ε_rest=0.15）
         model.component("comp1").physics().create("rad","SurfaceToSurfaceRadiation","geom1");
@@ -254,7 +300,7 @@
         model.component("comp1").physics("rad").feature("dsZZ").selection().all();
         model.component("comp1").physics("rad").feature("dsZZ").set("defineSurfaceEmissivityOnEachSide","0");
         model.component("comp1").physics("rad").feature("dsZZ").set("epsilon_radMulti_mat","userdef");
-        model.component("comp1").physics("rad").feature("dsZZ").set("epsilon_radMulti","if(comp1.rad.lambda<lam03,eps03,epsRest)");
+        model.component("comp1").physics("rad").feature("dsZZ").set("epsilon_radMulti","if(z<1e-9[m],0,if(z>L0-1e-9[m],0,if(comp1.rad.lambda<lam03,eps03,epsRest)))");
         model.component("comp1").physics("rad").feature("dsZZ").set("spectralBandNameAmbientEmissivityMulti",new String[][]{{"[0, 3["},{"[3, +inf["}});
         model.component("comp1").physics("rad").feature("dsZZ").set("Tamb","Tamb");
         model.component("comp1").physics("rad").feature("dsZZ").set("Tambu","Tamb");
@@ -297,15 +343,32 @@
     model.result().numerical().create("volZZ","IntVolume");
     model.result().numerical("volZZ").selection().all();
     model.result().numerical("volZZ").set("expr",new String[]{"1"});
+    model.result().numerical().create("TintVolZZ","IntVolume");
+    model.result().numerical("TintVolZZ").selection().all();
+    model.result().numerical("TintVolZZ").set("expr",new String[]{"T"});
     model.result().numerical().create("IinZZ","IntSurface");
     model.result().numerical("IinZZ").selection().named("selInZZ");
     model.result().numerical("IinZZ").set("expr",new String[]{"ec.Jx*nx+ec.Jy*ny+ec.Jz*nz"});
     model.result().numerical().create("P03emitZZ","IntSurface");
-    model.result().numerical("P03emitZZ").selection().all();
+    model.result().numerical("P03emitZZ").selection().named("selFreeZZ");
     model.result().numerical("P03emitZZ").set("expr",new String[]{q03Expr});
     model.result().numerical().create("PradEmitZZ","IntSurface");
-    model.result().numerical("PradEmitZZ").selection().all();
+    model.result().numerical("PradEmitZZ").selection().named("selFreeZZ");
     model.result().numerical("PradEmitZZ").set("expr",new String[]{qradExpr});
+
+    for(int bi=0;bi<blkCount;bi++){
+        String tTag="TintBlk_"+(bi+1);
+        String aTag="AblkLat_"+(bi+1);
+        String sTag="selBlkLat_"+(bi+1);
+        try{model.result().numerical().remove(tTag);}catch(Exception e){}
+        model.result().numerical().create(tTag,"IntSurface");
+        model.result().numerical(tTag).selection().named(sTag);
+        model.result().numerical(tTag).set("expr",new String[]{"T"});
+        try{model.result().numerical().remove(aTag);}catch(Exception e){}
+        model.result().numerical().create(aTag,"IntSurface");
+        model.result().numerical(aTag).selection().named(sTag);
+        model.result().numerical(aTag).set("expr",new String[]{"1"});
+    }
 
     double sanT=model.result().numerical("maxTZZ").getReal()[0][0];
     double sanI=Math.abs(model.result().numerical("IinZZ").getReal()[0][0]);
@@ -334,7 +397,7 @@
         double Icur=Math.abs(model.result().numerical("IinZZ").getReal()[0][0]);
         double P03=model.result().numerical("P03emitZZ").getReal()[0][0];
         double Prad=model.result().numerical("PradEmitZZ").getReal()[0][0];
-        double PradSph=voltageUpper*Icur, P03Sph=(Prad>1e-10)?PradSph*P03/Prad:0.0;
+        double PradSph=Prad, P03Sph=P03;
         double vErr=Math.abs(Vol-V0)/V0;
         solRes[0]=Tmx; solRes[1]=Tmn; solRes[2]=Icur; solRes[3]=P03; solRes[4]=Prad;
         solRes[5]=P03Sph; solRes[6]=PradSph; solRes[7]=vErr;
@@ -362,7 +425,7 @@
                 double Icur=Math.abs(model.result().numerical("IinZZ").getReal()[0][0]);
                 double P03=model.result().numerical("P03emitZZ").getReal()[0][0];
                 double Prad=model.result().numerical("PradEmitZZ").getReal()[0][0];
-                double PradSph=gV*Icur; double P03Sph=(Prad>1e-10)?PradSph*P03/Prad:0.0;
+                double PradSph=Prad; double P03Sph=P03;
                 double vErr=Math.abs(Vol-V0)/V0;
                 double[] gRes={Tmx,Tmn,Icur,P03,Prad,P03Sph,PradSph,vErr,(Tmx<tempLimitK)?1:0,(vErr<=volTol)?1:0,(Icur>currentTol)?1:0};
                 if(gRes[8]>0&&gRes[9]>0&&gRes[10]>0){lowV=gV;lowRes=gRes;}
@@ -381,7 +444,7 @@
             double Icur=Math.abs(model.result().numerical("IinZZ").getReal()[0][0]);
             double P03=model.result().numerical("P03emitZZ").getReal()[0][0];
             double Prad=model.result().numerical("PradEmitZZ").getReal()[0][0];
-            double PradSph=nV*Icur; double P03Sph=(Prad>1e-10)?PradSph*P03/Prad:0.0;
+            double PradSph=Prad; double P03Sph=P03;
             double vErr=Math.abs(Vol-V0)/V0;
             double[] nRes={Tmx,Tmn,Icur,P03,Prad,P03Sph,PradSph,vErr,(Tmx<tempLimitK)?1:0,(vErr<=volTol)?1:0,(Icur>currentTol)?1:0};
             if(nRes[8]>0&&nRes[9]>0&&nRes[10]>0){lowV=nV;lowRes=nRes;}
@@ -400,13 +463,32 @@
             double Icur=Math.abs(model.result().numerical("IinZZ").getReal()[0][0]);
             double P03=model.result().numerical("P03emitZZ").getReal()[0][0];
             double Prad=model.result().numerical("PradEmitZZ").getReal()[0][0];
-            double PradSph=mV*Icur; double P03Sph=(Prad>1e-10)?PradSph*P03/Prad:0.0;
+            double PradSph=Prad; double P03Sph=P03;
             double vErr=Math.abs(Vol-V0)/V0;
             double[] mRes={Tmx,Tmn,Icur,P03,Prad,P03Sph,PradSph,vErr,(Tmx<tempLimitK)?1:0,(vErr<=volTol)?1:0,(Icur>currentTol)?1:0};
             if(mRes[8]>0&&mRes[9]>0&&mRes[10]>0){lowV=mV;lowRes=mRes;}
             else highV=mV;
         }
         Vwork=lowV; System.arraycopy(lowRes,0,r0Res,0,11);
+    }
+    double r0Tmean=Double.NaN, r0U=Double.NaN;
+    {
+        model.param().set("Vapp",Vwork+"[V]");
+        try{for(String st:model.sol().tags()) try{model.sol(st).clearSolution();}catch(Exception e2){}}catch(Exception e){}
+        model.study("std1").run();
+        double Tmx=model.result().numerical("maxTZZ").getReal()[0][0];
+        double Tmn; try{Tmn=model.result().numerical("minTZZ").getReal()[0][0];}catch(Exception e){Tmn=Tmx*0.95;}
+        double Vol=model.result().numerical("volZZ").getReal()[0][0];
+        double TintVol=model.result().numerical("TintVolZZ").getReal()[0][0];
+        double Icur=Math.abs(model.result().numerical("IinZZ").getReal()[0][0]);
+        double P03=model.result().numerical("P03emitZZ").getReal()[0][0];
+        double Prad=model.result().numerical("PradEmitZZ").getReal()[0][0];
+        double vErr=Math.abs(Vol-V0)/V0;
+        r0Tmean=(Vol>1e-20)?TintVol/Vol:Double.NaN;
+        r0U=(r0Tmean>1e-20)?(Tmx-Tmn)/r0Tmean*100.0:Double.NaN;
+        r0Res[0]=Tmx; r0Res[1]=Tmn; r0Res[2]=Icur; r0Res[3]=P03; r0Res[4]=Prad;
+        r0Res[5]=P03; r0Res[6]=Prad; r0Res[7]=vErr;
+        r0Res[8]=(Tmx<tempLimitK)?1:0; r0Res[9]=(vErr<=volTol)?1:0; r0Res[10]=(Icur>currentTol)?1:0;
     }
     System.out.println("PHASE1: Vwork="+String.format("%.4f",Vwork)+"V  Tmax="+String.format("%.1f",r0Res[0])+"K  P03sph="+String.format("%.1f",r0Res[5])+"W");
 
@@ -421,10 +503,23 @@
 
     double[] blockTavg=new double[blkCount];
     for(int bi=0;bi<blkCount;bi++){
-        double zc=(blkIsHoriz[bi])?(blkZ0[bi]+0.5*side0):(blkZ0[bi]+0.5*blkSZ[bi]);
-        blockTavg[bi]=r0Res[1]+(r0Res[0]-r0Res[1])*4.0*(zc/L0Value)*(1.0-zc/L0Value);
+        boolean readOk=false;
+        try{
+            double Tint=model.result().numerical("TintBlk_"+(bi+1)).getReal()[0][0];
+            double Ablk=model.result().numerical("AblkLat_"+(bi+1)).getReal()[0][0];
+            if(Ablk>1e-20){blockTavg[bi]=Tint/Ablk; readOk=true;}
+        }catch(Exception e){}
+        if(!readOk){
+            double zc=(blkIsHoriz[bi])?(blkZ0[bi]+0.5*side0):(blkZ0[bi]+0.5*blkSZ[bi]);
+            blockTavg[bi]=r0Res[1]+(r0Res[0]-r0Res[1])*4.0*(zc/L0Value)*(1.0-zc/L0Value);
+        }
     }
     double prevP03=r0Res[3], prevPrad=r0Res[4], prevP03s=r0Res[5], prevPrads=r0Res[6];
+    double maxErosionTmax=r0Res[0];
+    int overtempStep=-1;
+    double overtempTimeH=Double.NaN;
+    double overtempTmax=Double.NaN;
+    String status="OK";
 
     while (macro<maxErosionSteps && !failed) {
         macro++;
@@ -452,8 +547,10 @@
         if(maxLoss>=failureFraction) failed=true;
 
         // 均匀侵蚀近似
-        double sumS=0.0; for(double s:blockSides) sumS+=s;
-        double geomSide=sumS/blkCount, shrink=(side0-geomSide)*0.5;
+        double geomSide=Double.POSITIVE_INFINITY;
+        for(double s:blockSides) if(s<geomSide) geomSide=s;
+        if(Double.isInfinite(geomSide)) geomSide=side0;
+        double shrink=(side0-geomSide)*0.5;
 
         // 更新外接球参数
         double md3=0.0, zc3=0.5*L0Value;
@@ -507,6 +604,38 @@
             model.component("comp1").geom("geom1").feature("uniZZ").set("intbnd",false);
             model.component("comp1").geom("geom1").run();
 
+            for(int bi=0;bi<blkCount;bi++){
+                String sTag="selBlkLat_"+(bi+1);
+                double nx0,ny0,nz0,nsx,nsy,nsz;
+                if(blkIsHoriz[bi]){nx0=blkX0[bi];ny0=blkY0[bi]+shrink;nz0=blkZ0[bi]+shrink;nsx=blkSX[bi];nsy=geomSide;nsz=geomSide;}
+                else{nx0=blkX0[bi]+shrink;ny0=blkY0[bi]+shrink;nz0=blkZ0[bi];nsx=geomSide;nsy=geomSide;nsz=blkSZ[bi];}
+                double pad=Math.max(1e-5,0.01*geomSide*1e3);
+                try{model.component("comp1").selection(sTag);}catch(Exception e){
+                    model.component("comp1").selection().create(sTag,"Box");
+                    model.component("comp1").selection(sTag).geom("geom1",2);
+                    model.component("comp1").selection(sTag).set("condition","intersects");
+                }
+                if(blkIsHoriz[bi]){
+                    double x0=(nx0+0.10*nsx)*1e3, x1=(nx0+0.90*nsx)*1e3;
+                    if(x1<=x0){x0=nx0*1e3; x1=(nx0+nsx)*1e3;}
+                    model.component("comp1").selection(sTag).set("xmin",x0);
+                    model.component("comp1").selection(sTag).set("xmax",x1);
+                    model.component("comp1").selection(sTag).set("ymin",ny0*1e3-pad);
+                    model.component("comp1").selection(sTag).set("ymax",(ny0+nsy)*1e3+pad);
+                    model.component("comp1").selection(sTag).set("zmin",nz0*1e3-pad);
+                    model.component("comp1").selection(sTag).set("zmax",(nz0+nsz)*1e3+pad);
+                } else {
+                    double z0=(nz0+0.10*nsz)*1e3, z1=(nz0+0.90*nsz)*1e3;
+                    if(z1<=z0){z0=nz0*1e3; z1=(nz0+nsz)*1e3;}
+                    model.component("comp1").selection(sTag).set("xmin",nx0*1e3-pad);
+                    model.component("comp1").selection(sTag).set("xmax",(nx0+nsx)*1e3+pad);
+                    model.component("comp1").selection(sTag).set("ymin",ny0*1e3-pad);
+                    model.component("comp1").selection(sTag).set("ymax",(ny0+nsy)*1e3+pad);
+                    model.component("comp1").selection(sTag).set("zmin",z0);
+                    model.component("comp1").selection(sTag).set("zmax",z1);
+                }
+            }
+
             model.component("comp1").mesh("mesh1").feature("size").set("hauto",5);
             try{model.component("comp1").mesh("mesh1").feature("ftet1");}
             catch(Exception e){model.component("comp1").mesh("mesh1").create("ftet1","FreeTet");}
@@ -515,6 +644,7 @@
         } catch(Exception rebuildEx) {
             System.out.println("  WARN rebuild step "+macro+": "+rebuildEx.getMessage());
             rebuildOk=false; failed=true;
+            status="FAIL_EROSION_REBUILD";
         }
 
         double curP03=prevP03, curPrad=prevPrad, curP03s=prevP03s, curPrads=prevPrads;
@@ -530,11 +660,12 @@
                 double Ic=Math.abs(model.result().numerical("IinZZ").getReal()[0][0]);
                 curP03=model.result().numerical("P03emitZZ").getReal()[0][0];
                 curPrad=model.result().numerical("PradEmitZZ").getReal()[0][0];
-                curPrads=Vwork*Ic;
-                curP03s=(curPrad>1e-10)?curPrads*curP03/curPrad:0.0;
+                curPrads=curPrad;
+                curP03s=curP03;
             } catch(Exception solEx) {
                 System.out.println("  WARN solve step "+macro+": "+solEx.getMessage());
                 failed=true;
+                status="FAIL_EROSION_SOLVE";
             }
         }
 
@@ -543,9 +674,26 @@
         prevP03=curP03; prevPrad=curPrad; prevP03s=curP03s; prevPrads=curPrads;
 
         if (rebuildOk&&curTmax>0) for(int bi=0;bi<blkCount;bi++){
-            double zc=(blkIsHoriz[bi])?(blkZ0[bi]+0.5*side0):(blkZ0[bi]+0.5*blkSZ[bi]);
-            double eta=zc/L0Value;
-            blockTavg[bi]=curTmin+(curTmax-curTmin)*4.0*eta*(1.0-eta);
+            boolean readOk=false;
+            try{
+                double Tint=model.result().numerical("TintBlk_"+(bi+1)).getReal()[0][0];
+                double Ablk=model.result().numerical("AblkLat_"+(bi+1)).getReal()[0][0];
+                if(Ablk>1e-20){blockTavg[bi]=Tint/Ablk; readOk=true;}
+            }catch(Exception e){}
+            if(!readOk){
+                double zc=(blkIsHoriz[bi])?(blkZ0[bi]+0.5*side0):(blkZ0[bi]+0.5*blkSZ[bi]);
+                double eta=zc/L0Value;
+                blockTavg[bi]=curTmin+(curTmax-curTmin)*4.0*eta*(1.0-eta);
+            }
+        }
+
+        if (rebuildOk&&curTmax>maxErosionTmax) maxErosionTmax=curTmax;
+        if (rebuildOk&&curTmax>=tempLimitK) {
+            status="FAIL_OVERTEMP_DURING_EROSION";
+            overtempStep=macro;
+            overtempTimeH=timeS/3600.0;
+            overtempTmax=curTmax;
+            break;
         }
 
         if(macro%5==0||failed)
@@ -565,6 +713,10 @@
     System.out.println("============================================================");
     System.out.println("  Vwork              = "+String.format("%.4f",Vwork)+" V");
     System.out.println("  initialTmax_K      = "+String.format("%.1f",r0Res[0])+" K");
+    System.out.println("  Tmin_K             = "+String.format("%.1f",r0Res[1])+" K");
+    System.out.println("  Tmean_K            = "+String.format("%.1f",r0Tmean)+" K");
+    System.out.println("  U_pct              = "+String.format("%.4f",r0U)+"%");
+    System.out.println("  maxErosionTmax_K   = "+String.format("%.1f",maxErosionTmax)+" K");
     System.out.println("  lifetimeH          = "+String.format("%.4f",lifetimeH)+" h");
     System.out.println("  initialP03sphere_W = "+String.format("%.2f",r0Res[5])+" W");
     System.out.println("  initialPrad_sphere = "+String.format("%.2f",r0Res[6])+" W");
@@ -573,17 +725,27 @@
     System.out.println("  selfViewLoss_pct   = "+String.format("%.2f",svLoss)+"%");
     System.out.println("  failureReached     = "+failed);
     System.out.println("  erosionSteps       = "+macro);
+    System.out.println("  status             = "+status);
     System.out.println("============================================================");
 
-    System.out.println("RESULT_HEADER=Vwork_V,initialTmax_K,lifetimeH,initialP03sphere_W,initialPradSphere_W,lifeAvgP03sphere_W,lifeAvgPradSphere_W,selfViewLoss_pct,failureReached,erosionSteps");
+    System.out.println("RESULT_HEADER=Vwork_V,initialTmax_K,Tmin_K,Tmean_K,U_pct,maxErosionTmax_K,lifetimeH,initialP03sphere_W,initialPradSphere_W,lifeAvgP03sphere_W,lifeAvgPradSphere_W,lifeTotalP03sphere_J,selfViewLoss_pct,failureReached,erosionSteps,overtempStep,overtempTimeH,overtempTmax_K,status");
     System.out.println("RESULT="
         +String.format("%.4f",Vwork)+","
         +String.format("%.1f",r0Res[0])+","
+        +String.format("%.1f",r0Res[1])+","
+        +String.format("%.1f",r0Tmean)+","
+        +String.format("%.4f",r0U)+","
+        +String.format("%.1f",maxErosionTmax)+","
         +String.format("%.4f",lifetimeH)+","
         +String.format("%.2f",r0Res[5])+","
         +String.format("%.2f",r0Res[6])+","
         +String.format("%.2f",avgP03s)+","
         +String.format("%.2f",avgPrads)+","
+        +String.format("%.2f",p03sInt)+","
         +String.format("%.2f",svLoss)+","
-        +failed+","+macro);
+        +failed+","+macro+","
+        +overtempStep+","
+        +String.format("%.4f",overtempTimeH)+","
+        +String.format("%.1f",overtempTmax)+","
+        +status);
 }
