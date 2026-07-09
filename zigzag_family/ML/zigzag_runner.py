@@ -405,6 +405,10 @@ class COMSOLRunner:
         j.result().numerical("volZZ").selection().all()
         j.result().numerical("volZZ").set("expr", ["1"])
 
+        j.result().numerical().create("TintVolZZ", "IntVolume")
+        j.result().numerical("TintVolZZ").selection().all()
+        j.result().numerical("TintVolZZ").set("expr", ["T"])
+
         j.result().numerical().create("IinZZ", "IntSurface")
         j.result().numerical("IinZZ").selection().named("selInZZ")
         j.result().numerical("IinZZ").set("expr",
@@ -600,6 +604,7 @@ class COMSOLRunner:
         result = {
             "solve_ok": False, "applied_V": voltage,
             "Tmax": float('nan'), "Tmin": float('nan'),
+            "Tmean": float('nan'), "U_pct": float('nan'),
             "I": float('nan'), "P03steady": float('nan'),
             "PradSteady": float('nan'), "P03sphere": float('nan'),
             "PradSphere": float('nan'), "vol_err": float('nan'),
@@ -625,8 +630,12 @@ class COMSOLRunner:
             except Exception:
                 Tmin = Tmax * 0.95
 
-            V    = float(j.result().numerical("volZZ").getReal()[0][0])
-            I    = abs(float(j.result().numerical("IinZZ").getReal()[0][0]))
+            V = float(j.result().numerical("volZZ").getReal()[0][0])
+            TintVol = float(j.result().numerical("TintVolZZ").getReal()[0][0])
+            Tmean = TintVol / V if V > 1e-20 else float('nan')
+            U_pct = ((Tmax - Tmin) / Tmean * 100.0
+                     if Tmean > 1e-20 else float('nan'))
+            I = abs(float(j.result().numerical("IinZZ").getReal()[0][0]))
             P03  = float(j.result().numerical("P03emitZZ").getReal()[0][0])
             Prad = float(j.result().numerical("PradEmitZZ").getReal()[0][0])
 
@@ -648,6 +657,7 @@ class COMSOLRunner:
             result.update({
                 "solve_ok": True,
                 "Tmax": Tmax, "Tmin": Tmin,
+                "Tmean": Tmean, "U_pct": U_pct,
                 "I": I,
                 "R": (voltage / I) if I > self.current_tol else float('nan'),
                 "Pelec": voltage * I,
@@ -831,6 +841,7 @@ class COMSOLRunner:
         prev_p03s = r0_res["P03sphere"]
         prev_prads = r0_res["PradSphere"]
         block_tavg = r0_res["block_Tavg"]
+        max_erosion_tmax = r0_res["Tmax"]
 
         while macro < self.max_erosion_steps and not failed:
             macro += 1
@@ -898,6 +909,9 @@ class COMSOLRunner:
                 failed = True
 
             # (e) 梯形积分
+            if r_now["solve_ok"] and r_now["Tmax"] > max_erosion_tmax:
+                max_erosion_tmax = r_now["Tmax"]
+
             cur_p03   = r_now["P03steady"]  if r_now["solve_ok"] else prev_p03
             cur_prad  = r_now["PradSteady"] if r_now["solve_ok"] else prev_prad
             cur_p03s  = r_now["P03sphere"]  if r_now["solve_ok"] else prev_p03s
@@ -907,6 +921,36 @@ class COMSOLRunner:
             prad_int  += 0.5 * (prev_prad  + cur_prad)  * dt
             p03s_int  += 0.5 * (prev_p03s  + cur_p03s)  * dt
             prads_int += 0.5 * (prev_prads + cur_prads) * dt
+
+            if r_now["solve_ok"] and r_now["Tmax"] >= self.temp_limit_K:
+                elapsed = time.time() - t_start
+                lifetime_h = time_s / 3600.0
+                avg_p03s = (p03s_int / time_s) if time_s > 0 else float('nan')
+                avg_prads = (prads_int / time_s) if time_s > 0 else float('nan')
+                sv_loss = ((1.0 - p03s_int / p03_int) * 100.0
+                           if (time_s > 0 and p03_int > 0) else float('nan'))
+                return {
+                    "Vwork_V": Vwork,
+                    "initialTmax_K": r0_res["Tmax"],
+                    "Tmin_K": r0_res["Tmin"],
+                    "Tmean_K": r0_res["Tmean"],
+                    "U_pct": r0_res["U_pct"],
+                    "lifetimeH": lifetime_h,
+                    "initialP03sphere_W": r0_res["P03sphere"],
+                    "initialPradSphere_W": r0_res["PradSphere"],
+                    "lifeAvgP03sphere_W": avg_p03s,
+                    "lifeAvgPradSphere_W": avg_prads,
+                    "lifeTotalP03sphere_J": p03s_int,
+                    "selfViewLoss_pct": sv_loss,
+                    "maxErosionTmax_K": max_erosion_tmax,
+                    "overtempStep": macro,
+                    "overtempTimeH": lifetime_h,
+                    "overtempTmax_K": r_now["Tmax"],
+                    "failureReached": failed,
+                    "erosionSteps": macro,
+                    "status": "FAIL_OVERTEMP_DURING_EROSION",
+                    "elapsed_sec": round(elapsed, 1),
+                }
 
             prev_p03, prev_prad   = cur_p03, cur_prad
             prev_p03s, prev_prads = cur_p03s, cur_prads
@@ -929,12 +973,17 @@ class COMSOLRunner:
         return {
             "Vwork_V":              Vwork,
             "initialTmax_K":        r0_res["Tmax"],
+            "Tmin_K":               r0_res["Tmin"],
+            "Tmean_K":              r0_res["Tmean"],
+            "U_pct":                r0_res["U_pct"],
             "lifetimeH":            lifetime_h,
             "initialP03sphere_W":   r0_res["P03sphere"],
             "initialPradSphere_W":  r0_res["PradSphere"],
             "lifeAvgP03sphere_W":   avg_p03s,
             "lifeAvgPradSphere_W":  avg_prads,
+            "lifeTotalP03sphere_J": p03s_int,
             "selfViewLoss_pct":     sv_loss,
+            "maxErosionTmax_K":     max_erosion_tmax,
             "failureReached":       failed,
             "erosionSteps":         macro,
             "status":               "OK",

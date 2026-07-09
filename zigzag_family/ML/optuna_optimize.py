@@ -89,10 +89,13 @@ def safe_exception_text(exc):
 
 CSV_HEADER = [
     "trial", "N_RUNS", "L_RUN_mm", "z_first_mm", "side_mm",
-    "Vwork_V", "initialTmax_K", "lifetimeH",
+    "Vwork_V", "initialTmax_K", "Tmin_K", "Tmean_K", "U_pct",
+    "maxErosionTmax_K", "lifetimeH",
     "initialP03sphere_W", "initialPradSphere_W",
     "lifeAvgP03sphere_W", "lifeAvgPradSphere_W",
+    "lifeTotalP03sphere_J",
     "selfViewLoss_pct", "failureReached", "erosionSteps",
+    "overtempStep", "overtempTimeH", "overtempTmax_K",
     "status", "elapsed_sec"
 ]
 
@@ -228,13 +231,15 @@ def objective(trial):
 
     if result.get("status") != "OK":
         print(f"  FAILED: {result.get('status')}")
-        finalize_csv({
+        row = {
             "trial": trial_num, "N_RUNS": N_RUNS,
             "L_RUN_mm": L_RUN_mm, "z_first_mm": z_first_mm,
             "side_mm": side_mm,
-            "status": result.get("status", "UNKNOWN"),
-            "elapsed_sec": round(elapsed, 1),
-        })
+        }
+        row.update(result)
+        row["status"] = result.get("status", "UNKNOWN")
+        row["elapsed_sec"] = round(elapsed, 1)
+        finalize_csv(row)
         raise optuna.TrialPruned(result.get("status"))
 
     lifetime = result["lifetimeH"]

@@ -242,6 +242,10 @@ class COMSOLRunner:
         j.result().numerical("volS2S").selection().all()
         j.result().numerical("volS2S").set("expr", ["1"])
 
+        j.result().numerical().create("TintVolS2S", "IntVolume")
+        j.result().numerical("TintVolS2S").selection().all()
+        j.result().numerical("TintVolS2S").set("expr", ["T"])
+
         j.result().numerical().create("IinS2S", "IntSurface")
         j.result().numerical("IinS2S").selection().named("selInS2S")
         j.result().numerical("IinS2S").set("expr",
@@ -555,7 +559,9 @@ class COMSOLRunner:
         result = {
             "solve_ok": False, "search_ok": False, "failure": "",
             "applied_V": voltage, "search_steps": 0,
-            "Tmax": float('nan'), "I": float('nan'), "R": float('nan'),
+            "Tmax": float('nan'), "Tmin": float('nan'),
+            "Tmean": float('nan'), "U_pct": float('nan'),
+            "I": float('nan'), "R": float('nan'),
             "Pelec": float('nan'), "P03steady": float('nan'),
             "PradSteady": float('nan'), "P03sphere": float('nan'),
             "PradSphere": float('nan'), "vol_err": float('nan'),
@@ -583,6 +589,11 @@ class COMSOLRunner:
 
             V = float(
                 j.result().numerical("volS2S").getReal()[0][0])
+            TintVol = float(
+                j.result().numerical("TintVolS2S").getReal()[0][0])
+            Tmean = TintVol / V if V > 1e-20 else float('nan')
+            U_pct = ((Tmax - Tmin) / Tmean * 100.0
+                     if Tmean > 1e-20 else float('nan'))
             I = abs(float(
                 j.result().numerical("IinS2S").getReal()[0][0]))
             P03steady = float(
@@ -622,6 +633,9 @@ class COMSOLRunner:
 
             finite_checks = {
                 "Tmax": Tmax,
+                "Tmin": Tmin,
+                "Tmean": Tmean,
+                "U_pct": U_pct,
                 "volume": V,
                 "current": I,
                 "P03steady": P03steady,
@@ -640,7 +654,9 @@ class COMSOLRunner:
 
             result.update({
                 "solve_ok": True,
-                "Tmax": Tmax, "I": I,
+                "Tmax": Tmax, "Tmin": Tmin,
+                "Tmean": Tmean, "U_pct": U_pct,
+                "I": I,
                 "Pelec": voltage * I,
                 "P03steady": P03steady, "PradSteady": PradSteady,
                 "P03sphere": P03sphere, "PradSphere": PradSphere,
@@ -819,6 +835,7 @@ class COMSOLRunner:
         prev_P03sphere = r0_res["P03sphere"]
         prev_PradSphere = r0_res["PradSphere"]
         Tavg = r0_res["seg_Tavg"]
+        max_erosion_tmax = r0_res["Tmax"]
 
         while macro_step < max_macro_steps and not failed:
             macro_step += 1
@@ -880,6 +897,9 @@ class COMSOLRunner:
                 }
 
             # (e) 梯形积分
+            if r_now["Tmax"] > max_erosion_tmax:
+                max_erosion_tmax = r_now["Tmax"]
+
             cur_P03 = (r_now["P03steady"]
                        if r_now["solve_ok"] else prev_P03)
             cur_Prad = (r_now["PradSteady"]
@@ -895,6 +915,39 @@ class COMSOLRunner:
                 prev_P03sphere + cur_P03sphere) * dt_macro
             prad_sphere_integral += 0.5 * (
                 prev_PradSphere + cur_PradSphere) * dt_macro
+
+            if r_now["Tmax"] >= self.temp_limit_K:
+                elapsed = time.time() - t_start
+                lifetime_h = time_s / 3600.0
+                avg_P03sphere = ((p03_sphere_integral / time_s)
+                                 if time_s > 0 else float('nan'))
+                avg_PradSphere = ((prad_sphere_integral / time_s)
+                                  if time_s > 0 else float('nan'))
+                self_view_loss = (
+                    (1.0 - p03_sphere_integral / p03_integral) * 100.0
+                    if (time_s > 0 and p03_integral > 0) else float('nan'))
+                return {
+                    "Vwork_V": Vwork,
+                    "initialTmax_K": r0_res["Tmax"],
+                    "Tmin_K": r0_res["Tmin"],
+                    "Tmean_K": r0_res["Tmean"],
+                    "U_pct": r0_res["U_pct"],
+                    "lifetimeH": lifetime_h,
+                    "initialP03sphere_W": r0_res["P03sphere"],
+                    "initialPradSphere_W": r0_res["PradSphere"],
+                    "lifeAvgP03sphere_W": avg_P03sphere,
+                    "lifeAvgPradSphere_W": avg_PradSphere,
+                    "lifeTotalP03sphere_J": p03_sphere_integral,
+                    "selfViewLoss_pct": self_view_loss,
+                    "maxErosionTmax_K": max_erosion_tmax,
+                    "overtempStep": macro_step,
+                    "overtempTimeH": lifetime_h,
+                    "overtempTmax_K": r_now["Tmax"],
+                    "failureReached": failed,
+                    "erosionSteps": macro_step,
+                    "status": "FAIL_OVERTEMP_DURING_EROSION",
+                    "elapsed_sec": round(elapsed, 1),
+                }
 
             prev_P03 = cur_P03
             prev_Prad = cur_Prad
@@ -921,12 +974,17 @@ class COMSOLRunner:
         result = {
             "Vwork_V": Vwork,
             "initialTmax_K": r0_res["Tmax"],
+            "Tmin_K": r0_res["Tmin"],
+            "Tmean_K": r0_res["Tmean"],
+            "U_pct": r0_res["U_pct"],
             "lifetimeH": lifetime_h,
             "initialP03sphere_W": r0_res["P03sphere"],
             "initialPradSphere_W": r0_res["PradSphere"],
             "lifeAvgP03sphere_W": avg_P03sphere,
             "lifeAvgPradSphere_W": avg_PradSphere,
+            "lifeTotalP03sphere_J": p03_sphere_integral,
             "selfViewLoss_pct": self_view_loss,
+            "maxErosionTmax_K": max_erosion_tmax,
             "failureReached": failed,
             "erosionSteps": macro_step,
             "status": "OK",
@@ -934,9 +992,11 @@ class COMSOLRunner:
         }
 
         required = [
-            "Vwork_V", "initialTmax_K", "lifetimeH",
+            "Vwork_V", "initialTmax_K", "Tmin_K", "Tmean_K", "U_pct",
+            "maxErosionTmax_K", "lifetimeH",
             "initialP03sphere_W", "initialPradSphere_W",
             "lifeAvgP03sphere_W", "lifeAvgPradSphere_W",
+            "lifeTotalP03sphere_J",
             "selfViewLoss_pct", "erosionSteps",
         ]
         invalid = [k for k in required if not self._finite_number(result[k])]

@@ -83,10 +83,13 @@ def compute_r4(r1_mm, r2_mm, r3_mm):
 
 CSV_HEADER = [
     "trial", "r1_mm", "r2_mm", "r3_mm", "r4_mm",
-    "Vwork_V", "initialTmax_K", "lifetimeH",
+    "Vwork_V", "initialTmax_K", "Tmin_K", "Tmean_K", "U_pct",
+    "maxErosionTmax_K", "lifetimeH",
     "initialP03sphere_W", "initialPradSphere_W",
     "lifeAvgP03sphere_W", "lifeAvgPradSphere_W",
+    "lifeTotalP03sphere_J",
     "selfViewLoss_pct", "failureReached", "erosionSteps",
+    "overtempStep", "overtempTimeH", "overtempTmax_K",
     "status", "elapsed_sec"
 ]
 
