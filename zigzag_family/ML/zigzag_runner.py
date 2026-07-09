@@ -90,6 +90,7 @@ class COMSOLRunner:
 
         # 运行时状态（每次 evaluate 设置）
         self._blocks0 = None
+        self._current_blocks = None
         self._init_side = None
         self._n_blocks = None
 
@@ -297,6 +298,80 @@ class COMSOLRunner:
     #  COMSOL 模型构建
     # ================================================================
 
+    def _block_lateral_bounds_mm(self, block, side):
+        """Return a Box-selection envelope for one block's lateral faces."""
+        _, x0, y0, z0, sx, sy, sz = block
+        x0_mm, x1_mm = x0 * 1e3, (x0 + sx) * 1e3
+        y0_mm, y1_mm = y0 * 1e3, (y0 + sy) * 1e3
+        z0_mm, z1_mm = z0 * 1e3, (z0 + sz) * 1e3
+        side_mm = side * 1e3
+        pad = max(1.0e-5, 0.01 * side_mm)
+
+        tol = max(1.0e-12, 1.0e-6 * side)
+        is_horizontal = abs(sy - side) <= tol and abs(sz - side) <= tol
+        is_vertical = abs(sx - side) <= tol and abs(sy - side) <= tol
+        if is_horizontal and not is_vertical:
+            path_axis = "x"
+        elif is_vertical and not is_horizontal:
+            path_axis = "z"
+        else:
+            path_axis = "x" if sx >= sz else "z"
+
+        # Inset along the path axis so end caps and turn connection faces
+        # do not drive erosion.
+        if path_axis == "x":
+            length_mm = max(x1_mm - x0_mm, 1.0e-9)
+            inset = min(0.10 * length_mm, 0.45 * length_mm)
+            xmin, xmax = x0_mm + inset, x1_mm - inset
+            if xmin >= xmax:
+                center = 0.5 * (x0_mm + x1_mm)
+                half = 0.25 * length_mm
+                xmin, xmax = center - half, center + half
+            return (xmin, xmax, y0_mm - pad, y1_mm + pad,
+                    z0_mm - pad, z1_mm + pad)
+
+        length_mm = max(z1_mm - z0_mm, 1.0e-9)
+        inset = min(0.10 * length_mm, 0.45 * length_mm)
+        zmin, zmax = z0_mm + inset, z1_mm - inset
+        if zmin >= zmax:
+            center = 0.5 * (z0_mm + z1_mm)
+            half = 0.25 * length_mm
+            zmin, zmax = center - half, center + half
+        return (x0_mm - pad, x1_mm + pad, y0_mm - pad, y1_mm + pad,
+                zmin, zmax)
+
+    def _create_or_update_box_selection(self, tag, bounds, recreate=False):
+        comp = self.j.component("comp1")
+        selections = comp.selection()
+        if recreate:
+            self._remove_safe(selections, tag)
+        try:
+            comp.selection(tag)
+        except Exception:
+            selections.create(tag, "Box")
+            comp.selection(tag).geom("geom1", 2)
+            comp.selection(tag).set("condition", "intersects")
+
+        xmin, xmax, ymin, ymax, zmin, zmax = bounds
+        comp.selection(tag).set("xmin", xmin)
+        comp.selection(tag).set("xmax", xmax)
+        comp.selection(tag).set("ymin", ymin)
+        comp.selection(tag).set("ymax", ymax)
+        comp.selection(tag).set("zmin", zmin)
+        comp.selection(tag).set("zmax", zmax)
+
+    def _update_block_side_selections(self, blocks, side, recreate=False):
+        """Create/update per-block lateral-surface selections for erosion."""
+        selections = self.j.component("comp1").selection()
+        if recreate:
+            for i in range(self.MAX_BLOCK_SLOTS):
+                self._remove_safe(selections, f"selBlkLat_{i + 1}")
+
+        for i, block in enumerate(blocks):
+            tag = f"selBlkLat_{i + 1}"
+            bounds = self._block_lateral_bounds_mm(block, side)
+            self._create_or_update_box_selection(tag, bounds, recreate=False)
+
     def _init_model(self, N_RUNS, L_RUN_m, z_first_m):
         """从空白创建完整 COMSOL 模型（含 1V 预热求解）。"""
         if self.model is not None:
@@ -308,6 +383,7 @@ class COMSOLRunner:
         side, blocks, _ = self.compute_side_and_blocks(
             N_RUNS, L_RUN_m, z_first_m)
         self._blocks0 = blocks
+        self._current_blocks = blocks
         self._init_side = side
         self._n_blocks = len(blocks)
         R_env = self.compute_envelope(blocks)
@@ -432,6 +508,26 @@ class COMSOLRunner:
         j.result().numerical("PradEmitZZ").selection().named("selFreeZZ")
         j.result().numerical("PradEmitZZ").set("expr", [self.qrad_expr])
 
+        for i in range(self._n_blocks):
+            int_t_tag = f"TintBlk_{i + 1}"
+            int_a_tag = f"AblkLat_{i + 1}"
+            sel_tag = f"selBlkLat_{i + 1}"
+            try:
+                j.result().numerical().remove(int_t_tag)
+            except Exception:
+                pass
+            j.result().numerical().create(int_t_tag, "IntSurface")
+            j.result().numerical(int_t_tag).selection().named(sel_tag)
+            j.result().numerical(int_t_tag).set("expr", ["T"])
+
+            try:
+                j.result().numerical().remove(int_a_tag)
+            except Exception:
+                pass
+            j.result().numerical().create(int_a_tag, "IntSurface")
+            j.result().numerical(int_a_tag).selection().named(sel_tag)
+            j.result().numerical(int_a_tag).set("expr", ["1"])
+
         # 健全性检查
         san_T = float(j.result().numerical("maxTZZ").getReal()[0][0])
         san_I = abs(float(j.result().numerical("IinZZ").getReal()[0][0]))
@@ -489,6 +585,9 @@ class COMSOLRunner:
         geom.feature("uniZZ").selection("input").set(tags + ["term_in", "term_out"])
         geom.feature("uniZZ").set("intbnd", False)
         geom.run()
+        self._current_blocks = list(blocks)
+        self._update_block_side_selections(
+            blocks, side, recreate=(not geom_only))
 
         if not geom_only:
             # Box selections — 电极面（坐标驱动，geom_only 时无需重建）
@@ -637,6 +736,37 @@ class COMSOLRunner:
     #  求解器
     # ================================================================
 
+    def _fallback_block_tavg(self, block, Tmin, Tmax):
+        _, _, _, z0, _, _, sz = block
+        zc = z0 + 0.5 * sz
+        eta = zc / self.L0
+        return Tmin + (Tmax - Tmin) * 4.0 * eta * (1.0 - eta)
+
+    def _read_block_temperature_averages(self, Tmin, Tmax):
+        """Read per-block lateral-surface average temperatures."""
+        blocks = self._current_blocks or self._blocks0 or []
+        block_Tavg = []
+        for i in range(self._n_blocks):
+            read_ok = False
+            try:
+                Tint = float(self.j.result().numerical(
+                    f"TintBlk_{i + 1}").getReal()[0][0])
+                Ablk = float(self.j.result().numerical(
+                    f"AblkLat_{i + 1}").getReal()[0][0])
+                if Ablk > 1.0e-20:
+                    value = Tint / Ablk
+                    if self._finite_number(value):
+                        block_Tavg.append(value)
+                        read_ok = True
+            except Exception:
+                pass
+
+            if not read_ok:
+                block = blocks[i] if i < len(blocks) else self._blocks0[i]
+                block_Tavg.append(self._fallback_block_tavg(block, Tmin, Tmax))
+
+        return block_Tavg
+
     def _solve_prepared(self, voltage):
         """设电压、求解、提取结果。返回 dict。"""
         j = self.j
@@ -683,15 +813,9 @@ class COMSOLRunner:
             PradSphere = Prad
             P03sphere = P03
 
-            # Per-block 温度：抛物线近似（基于 block z-中心）
-            # 折线 block 的矩形截面内径向温度差较小（~20K），
-            # 轴向分布用抛物线描述，精度与均匀圆柱相当
-            block_Tavg = []
-            for _, x0, y0, z0, sx, sy, sz in self._blocks0:
-                zc = z0 + 0.5 * sz
-                eta = zc / self.L0
-                block_Tavg.append(
-                    Tmin + (Tmax - Tmin) * 4.0 * eta * (1.0 - eta))
+            # Per-block temperatures drive erosion. Prefer COMSOL
+            # lateral-surface integrals; fallback is local.
+            block_Tavg = self._read_block_temperature_averages(Tmin, Tmax)
 
             vol_err = abs(V - self.V0) / self.V0
 
@@ -1096,7 +1220,7 @@ class COMSOLRunner:
             try:
                 # ★ geom_only=True：只重建几何+网格，不重建 S2S/EC/材料 ★
                 # 与 zigzag_baseline.java 侵蚀循环一致，避免反复重建 S2S 导致服务器崩溃
-                self._rebuild(new_blocks, side0, new_Renv, geom_only=True)
+                self._rebuild(new_blocks, geom_side, new_Renv, geom_only=True)
                 r_now = self._solve_prepared(Vwork)
             except ServerDisconnectError:
                 raise  # 断线不静默处理，直接向上抛出
