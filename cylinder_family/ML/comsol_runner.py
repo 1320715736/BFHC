@@ -72,10 +72,7 @@ class COMSOLRunner:
     def _build_expressions(self):
         """构建 Planck f03 黑体谱分数表达式（对应 cylinder_baseline.java）。"""
         x03T = "(c2bb/(lam03*T))"
-        x03Tamb = "(c2bb/(lam03*Tamb))"
-
         series_T_parts = []
-        series_Tamb_parts = []
 
         for n in range(1, 7):  # n = 1..6
             n2, n3, n4 = n * n, n * n * n, n * n * n * n
@@ -83,24 +80,17 @@ class COMSOLRunner:
                 f"exp(-{n}*{x03T})*("
                 f"{x03T}^3/{n}+3*{x03T}^2/{n2}"
                 f"+6*{x03T}/{n3}+6/{n4})")
-            term_Tamb = (
-                f"exp(-{n}*{x03Tamb})*("
-                f"{x03Tamb}^3/{n}+3*{x03Tamb}^2/{n2}"
-                f"+6*{x03Tamb}/{n3}+6/{n4})")
             series_T_parts.append(term_T)
-            series_Tamb_parts.append(term_Tamb)
 
         series_T = "+".join(series_T_parts)
-        series_Tamb = "+".join(series_Tamb_parts)
 
         f03bb_T = f"min(1,max(0,(15/pi^4)*({series_T})))"
-        f03bb_Tamb = f"min(1,max(0,(15/pi^4)*({series_Tamb})))"
 
+        # Effective radiation is scored against a 0 K black surface.
         self.q03_net_out_expr = (
-            f"eps03*sigmaSB*(({f03bb_T})*T^4-({f03bb_Tamb})*Tamb^4)")
+            f"eps03*sigmaSB*(({f03bb_T})*T^4)")
         self.q_rad_net_out_expr = (
-            f"sigmaSB*(epsRest*(T^4-Tamb^4)+(eps03-epsRest)*"
-            f"(({f03bb_T})*T^4-({f03bb_Tamb})*Tamb^4))")
+            f"sigmaSB*(epsRest*T^4+(eps03-epsRest)*(({f03bb_T})*T^4))")
 
     # ================================================================
     #  服务器管理
@@ -179,7 +169,8 @@ class COMSOLRunner:
         j.param().set("eps03", "0.35", "Emissivity 0-3 um band")
         j.param().set("epsRest", "0.15", "Emissivity outside 0-3 um band")
         j.param().set("rhoMassW", "19350[kg/m^3]", "Density of tungsten")
-        j.param().set("Tamb", "293.15[K]", "Ambient temperature")
+        j.param().set("Tamb", "293.15[K]", "Ambient temperature for S2S solve")
+        j.param().set("Telectrode", "293.15[K]", "Copper electrode temperature")
         j.param().set("Vapp", f"{self.voltage_upper}[V]", "Applied DC voltage")
         j.param().set("lam03", "3[um]", "Upper wavelength bound")
         j.param().set("c2bb", "1.438776877e-2[m*K]",
@@ -252,16 +243,16 @@ class COMSOLRunner:
                                            ["ec.Jx*nx+ec.Jy*ny+ec.Jz*nz"])
 
         j.result().numerical().create("AsurfS2S", "IntSurface")
-        j.result().numerical("AsurfS2S").selection().all()
+        j.result().numerical("AsurfS2S").selection().named("selFreeS2S")
         j.result().numerical("AsurfS2S").set("expr", ["1"])
 
         j.result().numerical().create("P03emitS2S", "IntSurface")
-        j.result().numerical("P03emitS2S").selection().all()
+        j.result().numerical("P03emitS2S").selection().named("selFreeS2S")
         j.result().numerical("P03emitS2S").set("expr",
                                                [self.q03_net_out_expr])
 
         j.result().numerical().create("PradEmitS2S", "IntSurface")
-        j.result().numerical("PradEmitS2S").selection().all()
+        j.result().numerical("PradEmitS2S").selection().named("selFreeS2S")
         j.result().numerical("PradEmitS2S").set("expr",
                                                 [self.q_rad_net_out_expr])
 
@@ -422,6 +413,7 @@ class COMSOLRunner:
         # Box 选择
         self._remove_safe(j.component("comp1").selection(), "selInS2S")
         self._remove_safe(j.component("comp1").selection(), "selOutS2S")
+        self._remove_safe(j.component("comp1").selection(), "selFreeS2S")
 
         j.component("comp1").selection().create("selInS2S", "Box")
         j.component("comp1").selection("selInS2S").geom("geom1", 2)
@@ -442,6 +434,17 @@ class COMSOLRunner:
         j.component("comp1").selection("selOutS2S").set("ymax", 10.0)
         j.component("comp1").selection("selOutS2S").set("zmin", 14.999999)
         j.component("comp1").selection("selOutS2S").set("zmax", 15.000001)
+
+        # Free radiation/evaporation surfaces: exclude the two electrode contact faces.
+        j.component("comp1").selection().create("selFreeS2S", "Box")
+        j.component("comp1").selection("selFreeS2S").geom("geom1", 2)
+        j.component("comp1").selection("selFreeS2S").set("condition", "intersects")
+        j.component("comp1").selection("selFreeS2S").set("xmin", -10.0)
+        j.component("comp1").selection("selFreeS2S").set("xmax", 10.0)
+        j.component("comp1").selection("selFreeS2S").set("ymin", -10.0)
+        j.component("comp1").selection("selFreeS2S").set("ymax", 10.0)
+        j.component("comp1").selection("selFreeS2S").set("zmin", 1.0e-6)
+        j.component("comp1").selection("selFreeS2S").set("zmax", 14.999999)
 
         # [Fix-1] 每段侧面 Box 选择（用于精确段平均温度）
         # condition="intersects"：曲面节点只要有一个在 Box 内即被选中
@@ -480,6 +483,17 @@ class COMSOLRunner:
         j.component("comp1").physics("ec").feature("gndS2S").selection(
             ).named("selOutS2S")
 
+        # Electrode contact faces are held at copper room temperature.
+        ht = j.component("comp1").physics("ht")
+        self._remove_safe(ht.feature(), "tempInS2S")
+        self._remove_safe(ht.feature(), "tempOutS2S")
+        ht.create("tempInS2S", "TemperatureBoundary", 2)
+        ht.feature("tempInS2S").selection().named("selInS2S")
+        ht.feature("tempInS2S").set("T0", "Telectrode")
+        ht.create("tempOutS2S", "TemperatureBoundary", 2)
+        ht.feature("tempOutS2S").selection().named("selOutS2S")
+        ht.feature("tempOutS2S").set("T0", "Telectrode")
+
         # S2S 面-面辐射
         self._setup_s2s()
 
@@ -500,7 +514,10 @@ class COMSOLRunner:
     def _setup_s2s(self):
         """设置 S2S 面-面辐射物理场（MultipleSpectralBands，与 cylinder_baseline.java 一致）。"""
         j = self.j
-        eps_rad_multi = "if(comp1.rad.lambda<lam03,eps03,epsRest)"
+        eps_rad_multi = (
+            "if(z<1e-9[m],0,"
+            "if(z>L0-1e-9[m],0,"
+            "if(comp1.rad.lambda<lam03,eps03,epsRest)))")
 
         self._remove_safe(j.component("comp1").physics(), "rad")
         self._remove_safe(j.multiphysics(), "htradLT")
@@ -515,7 +532,6 @@ class COMSOLRunner:
 
         j.component("comp1").physics("rad").create(
             "dsLT", "DiffuseSurface", 2)
-        j.component("comp1").physics("rad").feature("dsLT").selection().all()
         j.component("comp1").physics("rad").feature("dsLT").set(
             "defineSurfaceEmissivityOnEachSide", "0")
         j.component("comp1").physics("rad").feature("dsLT").set(
@@ -539,6 +555,7 @@ class COMSOLRunner:
             "epsilon_ambu", "1")
         j.component("comp1").physics("rad").feature("dsLT").set(
             "epsilon_ambd", "1")
+        j.component("comp1").physics("rad").feature("dsLT").selection().all()
 
         j.multiphysics().create(
             "htradLT",
@@ -601,10 +618,9 @@ class COMSOLRunner:
             PradSteady = float(
                 j.result().numerical("PradEmitS2S").getReal()[0][0])
 
-            # 外接球功率（能量守恒）
-            PradSphere = voltage * I
-            P03sphere = ((PradSphere * P03steady / PradSteady)
-                         if PradSteady > 1e-10 else 0.0)
+            # Effective outward radiation is integrated on free surfaces only.
+            PradSphere = PradSteady
+            P03sphere = P03steady
 
             # [Fix-1] 各段侧面平均温度：优先 IntSurface 算子，失败回退到抛物线
             seg_Tavg = []

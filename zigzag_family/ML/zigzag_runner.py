@@ -96,24 +96,18 @@ class COMSOLRunner:
     def _build_expressions(self):
         """构建 Planck f03 黑体谱分数表达式（6 项级数，对应 zigzag_baseline.java）。"""
         x03T = "(c2bb/(lam03*T))"
-        x03Tamb = "(c2bb/(lam03*Tamb))"
-        parts_T, parts_Tamb = [], []
+        parts_T = []
         for n in range(1, 7):
             n2, n3, n4 = n * n, n ** 3, n ** 4
             parts_T.append(
                 f"exp(-{n}*{x03T})*({x03T}^3/{n}+3*{x03T}^2/{n2}"
                 f"+6*{x03T}/{n3}+6/{n4})")
-            parts_Tamb.append(
-                f"exp(-{n}*{x03Tamb})*({x03Tamb}^3/{n}+3*{x03Tamb}^2/{n2}"
-                f"+6*{x03Tamb}/{n3}+6/{n4})")
         series_T = "+".join(parts_T)
-        series_Tamb = "+".join(parts_Tamb)
         f03T = f"min(1,max(0,(15/pi^4)*({series_T})))"
-        f03Tamb = f"min(1,max(0,(15/pi^4)*({series_Tamb})))"
-        self.q03_expr = f"eps03*sigmaSB*(({f03T})*T^4-({f03Tamb})*Tamb^4)"
+        # Effective radiation is scored against a 0 K black surface.
+        self.q03_expr = f"eps03*sigmaSB*(({f03T})*T^4)"
         self.qrad_expr = (
-            f"sigmaSB*(epsRest*(T^4-Tamb^4)+(eps03-epsRest)*"
-            f"(({f03T})*T^4-({f03Tamb})*Tamb^4))")
+            f"sigmaSB*(epsRest*T^4+(eps03-epsRest)*(({f03T})*T^4))")
 
     # ================================================================
     #  服务器管理
@@ -336,7 +330,8 @@ class COMSOLRunner:
         j.param().set("eps03",   "0.35",  "Emissivity 0-3um")
         j.param().set("epsRest", "0.15",  "Emissivity >3um")
         j.param().set("rhoMassW", "19350[kg/m^3]", "Tungsten density")
-        j.param().set("Tamb",  "293.15[K]", "Ambient temperature")
+        j.param().set("Tamb",  "293.15[K]", "Ambient temperature for S2S solve")
+        j.param().set("Telectrode", "293.15[K]", "Copper electrode temperature")
         j.param().set("Vapp",  "1[V]",      "Applied DC voltage")
         j.param().set("lam03", "3[um]",     "Upper wavelength bound")
         j.param().set("c2bb",  "1.438776877e-2[m*K]",
@@ -415,15 +410,15 @@ class COMSOLRunner:
                                           ["ec.Jx*nx+ec.Jy*ny+ec.Jz*nz"])
 
         j.result().numerical().create("AsurfZZ", "IntSurface")
-        j.result().numerical("AsurfZZ").selection().all()
+        j.result().numerical("AsurfZZ").selection().named("selFreeZZ")
         j.result().numerical("AsurfZZ").set("expr", ["1"])
 
         j.result().numerical().create("P03emitZZ", "IntSurface")
-        j.result().numerical("P03emitZZ").selection().all()
+        j.result().numerical("P03emitZZ").selection().named("selFreeZZ")
         j.result().numerical("P03emitZZ").set("expr", [self.q03_expr])
 
         j.result().numerical().create("PradEmitZZ", "IntSurface")
-        j.result().numerical("PradEmitZZ").selection().all()
+        j.result().numerical("PradEmitZZ").selection().named("selFreeZZ")
         j.result().numerical("PradEmitZZ").set("expr", [self.qrad_expr])
 
         # 健全性检查
@@ -488,6 +483,7 @@ class COMSOLRunner:
             # Box selections — 电极面（坐标驱动，geom_only 时无需重建）
             self._remove_safe(j.component("comp1").selection(), "selInZZ")
             self._remove_safe(j.component("comp1").selection(), "selOutZZ")
+            self._remove_safe(j.component("comp1").selection(), "selFreeZZ")
 
             j.component("comp1").selection().create("selInZZ", "Box")
             j.component("comp1").selection("selInZZ").geom("geom1", 2)
@@ -509,6 +505,25 @@ class COMSOLRunner:
             j.component("comp1").selection("selOutZZ").set("zmin", 14.999999)
             j.component("comp1").selection("selOutZZ").set("zmax", 15.000001)
 
+            xs = [-self.R0, self.R0]
+            ys = [-self.R0, self.R0]
+            for _, x0, y0, _, sx, sy, _ in blocks:
+                xs.extend([x0, x0 + sx])
+                ys.extend([y0, y0 + sy])
+            x_min_mm = min(xs) * 1e3 - 1.0
+            x_max_mm = max(xs) * 1e3 + 1.0
+            y_min_mm = min(ys) * 1e3 - 1.0
+            y_max_mm = max(ys) * 1e3 + 1.0
+            j.component("comp1").selection().create("selFreeZZ", "Box")
+            j.component("comp1").selection("selFreeZZ").geom("geom1", 2)
+            j.component("comp1").selection("selFreeZZ").set("condition", "intersects")
+            j.component("comp1").selection("selFreeZZ").set("xmin", x_min_mm)
+            j.component("comp1").selection("selFreeZZ").set("xmax", x_max_mm)
+            j.component("comp1").selection("selFreeZZ").set("ymin", y_min_mm)
+            j.component("comp1").selection("selFreeZZ").set("ymax", y_max_mm)
+            j.component("comp1").selection("selFreeZZ").set("zmin", 1e-6)
+            j.component("comp1").selection("selFreeZZ").set("zmax", 14.999999)
+
             # EC 边界条件
             ec = j.component("comp1").physics("ec")
             self._remove_safe(ec.feature(), "potZZ")
@@ -518,6 +533,17 @@ class COMSOLRunner:
             ec.feature("potZZ").set("V0", "Vapp")
             ec.create("gndZZ", "Ground", 2)
             ec.feature("gndZZ").selection().named("selOutZZ")
+
+            # Electrode contact faces are held at copper room temperature.
+            ht = j.component("comp1").physics("ht")
+            self._remove_safe(ht.feature(), "tempInZZ")
+            self._remove_safe(ht.feature(), "tempOutZZ")
+            ht.create("tempInZZ", "TemperatureBoundary", 2)
+            ht.feature("tempInZZ").selection().named("selInZZ")
+            ht.feature("tempInZZ").set("T0", "Telectrode")
+            ht.create("tempOutZZ", "TemperatureBoundary", 2)
+            ht.feature("tempOutZZ").selection().named("selOutZZ")
+            ht.feature("tempOutZZ").set("T0", "Telectrode")
 
             # S2S 面-面辐射（MultipleSpectralBands）
             # ★ 只在初始建模时创建，侵蚀循环不重建 ★
@@ -574,10 +600,13 @@ class COMSOLRunner:
 
         j.component("comp1").physics("rad").create("dsZZ", "DiffuseSurface", 2)
         ds = j.component("comp1").physics("rad").feature("dsZZ")
-        ds.selection().all()
+        eps_rad_multi = (
+            "if(z<1e-9[m],0,"
+            "if(z>L0-1e-9[m],0,"
+            "if(comp1.rad.lambda<lam03,eps03,epsRest)))")
         ds.set("defineSurfaceEmissivityOnEachSide", "0")
         ds.set("epsilon_radMulti_mat", "userdef")
-        ds.set("epsilon_radMulti", "if(comp1.rad.lambda<lam03,eps03,epsRest)")
+        ds.set("epsilon_radMulti", eps_rad_multi)
         ds.set("spectralBandNameAmbientEmissivityMulti",
                [["[0, 3["], ["[3, +inf["]])
         ds.set("Tamb",  "Tamb")
@@ -587,6 +616,7 @@ class COMSOLRunner:
         ds.set("epsilon_amb",  "1")
         ds.set("epsilon_ambu", "1")
         ds.set("epsilon_ambd", "1")
+        ds.selection().all()
 
         j.multiphysics().create(
             "htradZZ", "HeatTransferWithSurfaceToSurfaceRadiation", "geom1", 2)
@@ -639,8 +669,8 @@ class COMSOLRunner:
             P03  = float(j.result().numerical("P03emitZZ").getReal()[0][0])
             Prad = float(j.result().numerical("PradEmitZZ").getReal()[0][0])
 
-            PradSphere = voltage * I
-            P03sphere  = (PradSphere * P03 / Prad) if Prad > 1e-10 else 0.0
+            PradSphere = Prad
+            P03sphere = P03
 
             # Per-block 温度：抛物线近似（基于 block z-中心）
             # 折线 block 的矩形截面内径向温度差较小（~20K），
@@ -794,7 +824,7 @@ class COMSOLRunner:
                     "elapsed_sec": round(time.time() - t_start, 1)}
 
         n_blocks = len(blocks)
-        resolve_thr = 0.02 * side  # 几何分辨率阈值
+        resolve_thr = 0.01 * side  # geometry update limit for solver stability
 
         # ---- 建模 ----
         print(f"  Building model: N={N_RUNS} L={L_RUN_m * 1e3:.1f}mm "
@@ -883,8 +913,9 @@ class COMSOLRunner:
                 print(f"  Lifetime cap {self.max_lifetime_h:.0f}h at step {macro}, stopping.")
                 break
 
-            # (d) 重建几何：用 per-block 平均边长近似统一侵蚀
-            geom_side = sum(block_sides) / n_blocks
+            # (d) 重建几何：使用最小 block 边长做保守统一侵蚀。
+            # 平均边长在局部高温侵蚀很不均匀时会产生极小几何变化和求解奇异。
+            geom_side = min(block_sides)
             new_blocks = self.eroded_blocks(self._blocks0, side0, geom_side)
             new_Renv = self.compute_envelope(new_blocks)
             try:
@@ -897,16 +928,52 @@ class COMSOLRunner:
             except Exception as e:
                 if not self._is_server_alive():
                     raise ServerDisconnectError(self._safe_exception_text(e))
-                print(f"  WARN: rebuild failed step {macro}: {self._safe_exception_text(e)}")
-                r_now = {"solve_ok": False,
-                         "P03steady": prev_p03, "PradSteady": prev_prad,
-                         "P03sphere": prev_p03s, "PradSphere": prev_prads,
-                         "Tmax": 0.0, "Tmin": 0.0}
-                failed = True
+                failure = self._safe_exception_text(e)
+                print(f"  WARN: rebuild failed step {macro}: {failure}")
+                return {
+                    "Vwork_V": Vwork,
+                    "initialTmax_K": r0_res["Tmax"],
+                    "Tmin_K": r0_res["Tmin"],
+                    "Tmean_K": r0_res["Tmean"],
+                    "U_pct": r0_res["U_pct"],
+                    "lifetimeH": time_s / 3600.0,
+                    "initialP03sphere_W": r0_res["P03sphere"],
+                    "initialPradSphere_W": r0_res["PradSphere"],
+                    "lifeAvgP03sphere_W": float('nan'),
+                    "lifeAvgPradSphere_W": float('nan'),
+                    "lifeTotalP03sphere_J": p03s_int,
+                    "selfViewLoss_pct": float('nan'),
+                    "maxErosionTmax_K": max_erosion_tmax,
+                    "failureReached": failed,
+                    "erosionSteps": macro,
+                    "status": "FAIL_EROSION_SOLVE",
+                    "failure": failure,
+                    "elapsed_sec": round(time.time() - t_start, 1),
+                }
 
-            if not r_now["solve_ok"] and not failed:
-                print(f"  WARN: solve failed step {macro}")
-                failed = True
+            if not r_now["solve_ok"]:
+                failure = r_now.get("failure", "")
+                print(f"  WARN: solve failed step {macro}: {failure}")
+                return {
+                    "Vwork_V": Vwork,
+                    "initialTmax_K": r0_res["Tmax"],
+                    "Tmin_K": r0_res["Tmin"],
+                    "Tmean_K": r0_res["Tmean"],
+                    "U_pct": r0_res["U_pct"],
+                    "lifetimeH": time_s / 3600.0,
+                    "initialP03sphere_W": r0_res["P03sphere"],
+                    "initialPradSphere_W": r0_res["PradSphere"],
+                    "lifeAvgP03sphere_W": float('nan'),
+                    "lifeAvgPradSphere_W": float('nan'),
+                    "lifeTotalP03sphere_J": p03s_int,
+                    "selfViewLoss_pct": float('nan'),
+                    "maxErosionTmax_K": max_erosion_tmax,
+                    "failureReached": failed,
+                    "erosionSteps": macro,
+                    "status": "FAIL_EROSION_SOLVE",
+                    "failure": failure,
+                    "elapsed_sec": round(time.time() - t_start, 1),
+                }
 
             # (e) 梯形积分
             if r_now["solve_ok"] and r_now["Tmax"] > max_erosion_tmax:
