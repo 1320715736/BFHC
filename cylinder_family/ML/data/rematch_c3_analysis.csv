@@ -1,0 +1,38 @@
+section,key,value,notes
+summary,total_trials,20,C2 current-physics trials only
+summary,OK,3,Passed lifetime overtemperature and U constraints
+summary,PRUNE_U,7,Computed but U exceeded current limit
+summary,PRUNE_LIFETIME,3,Lifetime below current floor
+summary,FAIL_OVERTEMP_DURING_EROSION,7,Exceeded 3273.15 K during erosion
+best,trial,12,Current cylinder lead candidate
+best,radii_mm,"[2.1645, 1.9735, 3.5587, 1.9379, 1.9379, 3.5587, 1.9735, 2.1645]",Eight mirrored segment radii
+best,Vwork_V,1.171875,Selected by max_safe voltage policy
+best,lifetimeH,381.24584081318073,Full erosion lifetime
+best,R_L_pct,157.48811441001945,L_opt / L_ini * 100
+best,eta_L_pct,57.48811441001944,(L_opt - L_ini) / L_ini * 100
+best,lifeTotalP03sphere_J,188770026.83852735,Lifecycle cumulative 0-3 um effective radiation energy
+best,eta_E_pct,78.76342907090952,(E_opt - E_ini) / E_ini * 100
+best,U_pct,142.56014322712423,Lower than B2 baseline U
+best,U_delta_pctpt_vs_B2,-6.13262136803553,Absolute U change against B2
+best,U_relative_reduction_pct_vs_B2,4.12435762071718,Relative U reduction against B2
+best,initialP03_gain_pct_vs_B2,23.76599090716,Initial 0-3 um effective power gain
+best,lifeAvgP03_gain_pct_vs_B2,13.5091557484141,Lifecycle average 0-3 um effective power gain
+best,initialTmax_K,3206.5615644056497,Initial steady-state maximum temperature
+best,maxErosionTmax_K,3259.4487787549874,Maximum temperature during full erosion
+best,overtemp_margin_K,13.7012212450128,3273.15 K - maxErosionTmax_K
+best,erosionSteps,40,Reached failure without overtemperature
+candidate,trial_18,"r=[2.4296,1.9681,3.1626,2.2851]; L=287.7758h; eta_E=62.1195%; U=138.6280%",Best U among OK candidates
+candidate,trial_4,"r=[3.1961,1.5258,3.0604,1.7580]; L=372.8267h; eta_E=63.6875%; U=178.1547%",Near current U limit; not preferred as center
+failure_pattern,PRUNE_U,"high r1/r2 with low r3/r4",Often long-lived but too nonuniform
+failure_pattern,PRUNE_LIFETIME,"very small r1 or r2; or high r4 with weak inner radius",Can lower U but loses lifetime or overheats
+failure_pattern,FAIL_OVERTEMP_DURING_EROSION,"extreme radius imbalance",Reject before reporting as feasible
+next_bounds,r1_mm_min,1.8,Local cylinder expansion range
+next_bounds,r1_mm_max,2.8,Keep trial 12 and 18 neighborhood
+next_bounds,r2_mm_min,1.6,Avoid tiny r2 lifetime failures
+next_bounds,r2_mm_max,2.2,Keep best OK cluster
+next_bounds,r3_mm_min,3.0,Keep high r3 effective-energy region
+next_bounds,r3_mm_max,3.8,Allow trial 12-side expansion
+next_bounds,r4_mm_min,1.5,Derived by volume; prune outside guard
+next_bounds,r4_mm_max,2.5,Derived by volume; prune outside guard
+next_step,recommended_trial_budget,60-80,Use before deciding whether to expand to 150
+next_step,recommended_policy,local_cylinder_expansion,Start from C3 bounds; old first-round trials remain excluded
