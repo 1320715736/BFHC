@@ -13,6 +13,7 @@ import time
 from pathlib import Path
 
 import optuna
+from optuna.trial import TrialState
 
 from comsol_runner import COMSOLRunner
 
@@ -120,6 +121,40 @@ def add_scores(row):
 def prune_with_row(row, message):
     append_csv(row)
     raise optuna.TrialPruned(message)
+
+
+def recover_interrupted_trials(study):
+    """Put interrupted RUNNING trials back into WAITING so Optuna retries them.
+
+    Optuna leaves a trial in RUNNING if the Python/COMSOL process is killed.
+    Without this recovery, a resumed search can allocate a fresh trial and skip
+    the interrupted geometry. Resetting to WAITING preserves the same trial
+    number and parameters, so the next optimize call evaluates that point first.
+    """
+    running_trials = study.get_trials(
+        deepcopy=False,
+        states=(TrialState.RUNNING,),
+    )
+    if not running_trials:
+        return 0
+
+    recovered = 0
+    for frozen in running_trials:
+        if study._storage.set_trial_state_values(
+                frozen._trial_id, TrialState.WAITING):
+            recovered += 1
+            print(f"Recovered interrupted trial #{frozen.number} "
+                  "from RUNNING to WAITING.")
+        else:
+            print(f"WARN: failed to recover RUNNING trial #{frozen.number}.")
+    return recovered
+
+
+def count_finished_trials(study):
+    return sum(
+        1 for trial in study.get_trials(deepcopy=False)
+        if trial.state.is_finished()
+    )
 
 
 def objective(trial):
@@ -254,13 +289,15 @@ def main():
             load_if_exists=True,
         )
 
-        n_remaining = N_TRIALS - len(study.trials)
+        recover_interrupted_trials(study)
+        finished_trials = count_finished_trials(study)
+        n_remaining = N_TRIALS - finished_trials
         if n_remaining <= 0:
-            print(f"Already have {len(study.trials)} trials, target is "
-                  f"{N_TRIALS}. Done.")
+            print(f"Already have {finished_trials} finished trials, "
+                  f"target is {N_TRIALS}. Done.")
         else:
-            print(f"Resuming from {len(study.trials)} trials, running "
-                  f"{n_remaining} more...")
+            print(f"Resuming from {finished_trials} finished trials, "
+                  f"running {n_remaining} more...")
             study.optimize(objective, n_trials=n_remaining)
 
         print("\n" + "=" * 60)
