@@ -2,8 +2,8 @@
 Rematch Optuna search for the 8-segment cylinder family.
 
 This script intentionally does not reuse first-round trials or databases.
-It writes a new C1 study under ``cylinder_family/ML/data`` and evaluates every
-candidate with the current rematch COMSOL runner.
+It writes a C4 local-expansion study under ``cylinder_family/ML/data`` and
+evaluates every candidate with the current rematch COMSOL runner.
 """
 
 import csv
@@ -21,24 +21,34 @@ from comsol_runner import COMSOLRunner
 ML_DIR = Path(r"D:\VScode\project\BFHC\cylinder_family\ML")
 DATA_DIR = ML_DIR / "data"
 
-DB_PATH = DATA_DIR / "rematch_c1_optuna.db"
-CSV_PATH = DATA_DIR / "rematch_c1_trials.csv"
-STUDY_NAME = "cylinder_rematch_c1"
+DB_PATH = DATA_DIR / os.getenv("BFHC_DB_FILE", "rematch_c4_optuna.db")
+CSV_PATH = DATA_DIR / os.getenv("BFHC_CSV_FILE", "rematch_c4_trials.csv")
+STUDY_NAME = os.getenv("BFHC_STUDY_NAME", "cylinder_rematch_c4")
 
 R0_MM = 2.5
 SEG_COUNT = 8
-R_MIN_MM = 0.8
-R_MAX_MM = 4.5
+GEOM_R_MIN_MM = 0.8
+GEOM_R_MAX_MM = 4.5
 TOTAL_SQ = 4.0 * R0_MM**2
+
+# C4 local expansion bounds from the C3 analysis.
+R1_MIN_MM = float(os.getenv("BFHC_R1_MIN_MM", "1.8"))
+R1_MAX_MM = float(os.getenv("BFHC_R1_MAX_MM", "2.8"))
+R2_MIN_MM = float(os.getenv("BFHC_R2_MIN_MM", "1.6"))
+R2_MAX_MM = float(os.getenv("BFHC_R2_MAX_MM", "2.2"))
+R3_MIN_MM = float(os.getenv("BFHC_R3_MIN_MM", "3.0"))
+R3_MAX_MM = float(os.getenv("BFHC_R3_MAX_MM", "3.8"))
+R4_MIN_MM = float(os.getenv("BFHC_R4_MIN_MM", "1.5"))
+R4_MAX_MM = float(os.getenv("BFHC_R4_MAX_MM", "2.5"))
 
 # Current rematch official cylinder baseline.
 BASELINE_LIFETIME_H = 242.07911958397654
 BASELINE_E_J = 105597676.11285222
 BASELINE_U_PCT = 148.69276459515976
 
-# C1 is deliberately small. Override from PowerShell if needed:
-#   $env:BFHC_N_TRIALS='30'
-N_TRIALS = int(os.getenv("BFHC_N_TRIALS", "30"))
+# C4 is a local expansion run. Override from PowerShell if needed:
+#   $env:BFHC_N_TRIALS='80'
+N_TRIALS = int(os.getenv("BFHC_N_TRIALS", "80"))
 MIN_LIFETIME_RATIO = float(os.getenv("BFHC_MIN_LIFETIME_RATIO", "0.50"))
 MIN_LIFETIME_H = BASELINE_LIFETIME_H * MIN_LIFETIME_RATIO
 MAX_U_RATIO = float(os.getenv("BFHC_MAX_U_RATIO", "1.20"))
@@ -72,12 +82,20 @@ def finite_number(value):
 
 def compute_r4(r1_mm, r2_mm, r3_mm):
     remainder = TOTAL_SQ - r1_mm**2 - r2_mm**2 - r3_mm**2
-    if remainder < R_MIN_MM**2:
+    if remainder < GEOM_R_MIN_MM**2:
         return None
     r4 = math.sqrt(remainder)
-    if r4 > R_MAX_MM:
+    if r4 > GEOM_R_MAX_MM:
+        return None
+    if r4 < R4_MIN_MM or r4 > R4_MAX_MM:
         return None
     return r4
+
+
+def feasible_suggest_float(trial, name, lower, upper):
+    if lower > upper:
+        raise optuna.TrialPruned(f"No feasible range for {name}.")
+    return trial.suggest_float(name, lower, upper)
 
 
 def init_csv():
@@ -165,19 +183,19 @@ def objective(trial):
     t_start = time.time()
     trial_num = trial.number
 
-    r1 = trial.suggest_float("r1_mm", R_MIN_MM, R_MAX_MM)
+    r1 = trial.suggest_float("r1_mm", R1_MIN_MM, R1_MAX_MM)
 
-    r2_max_sq = TOTAL_SQ - r1**2 - 2 * R_MIN_MM**2
-    r2_min_sq = TOTAL_SQ - r1**2 - 2 * R_MAX_MM**2
-    r2_lo = max(R_MIN_MM, math.sqrt(max(0.0, r2_min_sq)))
-    r2_hi = min(R_MAX_MM, math.sqrt(max(R_MIN_MM**2, r2_max_sq)))
-    r2 = trial.suggest_float("r2_mm", r2_lo, r2_hi)
+    r2_min_sq = TOTAL_SQ - r1**2 - (R3_MAX_MM**2 + R4_MAX_MM**2)
+    r2_max_sq = TOTAL_SQ - r1**2 - (R3_MIN_MM**2 + R4_MIN_MM**2)
+    r2_lo = max(R2_MIN_MM, math.sqrt(max(0.0, r2_min_sq)))
+    r2_hi = min(R2_MAX_MM, math.sqrt(max(0.0, r2_max_sq)))
+    r2 = feasible_suggest_float(trial, "r2_mm", r2_lo, r2_hi)
 
-    r3_max_sq = TOTAL_SQ - r1**2 - r2**2 - R_MIN_MM**2
-    r3_min_sq = TOTAL_SQ - r1**2 - r2**2 - R_MAX_MM**2
-    r3_lo = max(R_MIN_MM, math.sqrt(max(0.0, r3_min_sq)))
-    r3_hi = min(R_MAX_MM, math.sqrt(max(R_MIN_MM**2, r3_max_sq)))
-    r3 = trial.suggest_float("r3_mm", r3_lo, r3_hi)
+    r3_min_sq = TOTAL_SQ - r1**2 - r2**2 - R4_MAX_MM**2
+    r3_max_sq = TOTAL_SQ - r1**2 - r2**2 - R4_MIN_MM**2
+    r3_lo = max(R3_MIN_MM, math.sqrt(max(0.0, r3_min_sq)))
+    r3_hi = min(R3_MAX_MM, math.sqrt(max(0.0, r3_max_sq)))
+    r3 = feasible_suggest_float(trial, "r3_mm", r3_lo, r3_hi)
 
     r4 = compute_r4(r1, r2, r3)
     if r4 is None:
@@ -266,11 +284,16 @@ def main():
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     init_csv()
 
-    print("BFHC cylinder rematch C1 search")
+    print("BFHC cylinder rematch C4 local search")
     print(f"CSV output:       {CSV_PATH}")
     print(f"Optuna DB:        sqlite:///{DB_PATH}")
     print(f"Study name:       {STUDY_NAME}")
     print(f"Trials target:    {N_TRIALS}")
+    print("Radius bounds:    "
+          f"r1=[{R1_MIN_MM}, {R1_MAX_MM}] mm, "
+          f"r2=[{R2_MIN_MM}, {R2_MAX_MM}] mm, "
+          f"r3=[{R3_MIN_MM}, {R3_MAX_MM}] mm, "
+          f"r4=[{R4_MIN_MM}, {R4_MAX_MM}] mm")
     print(f"Lifetime floor:   {MIN_LIFETIME_H:.4f} h "
           f"({MIN_LIFETIME_RATIO * 100.0:.1f}% of baseline)")
     print(f"U limit:          {MAX_U_PCT:.4f}% "
@@ -301,7 +324,7 @@ def main():
             study.optimize(objective, n_trials=n_remaining)
 
         print("\n" + "=" * 60)
-        print("  C1 SEARCH COMPLETE")
+        print("  C4 SEARCH COMPLETE")
         print("=" * 60)
         try:
             best = study.best_trial
