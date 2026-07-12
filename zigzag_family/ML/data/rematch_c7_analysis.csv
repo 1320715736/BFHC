@@ -1,0 +1,47 @@
+section,key,value,notes
+summary,total_trials,20,Completed C6 small-search trials
+summary,FAIL_EROSION_SOLVE,2,C6 status count
+summary,FAIL_Z_OVERLAP,2,C6 status count
+summary,OK,2,C6 status count
+summary,PRUNE_LIFETIME,14,C6 status count
+summary,ok_rate_pct,10.0,OK trials divided by total trials
+summary,pareto_count,2,Non-dominated by eta_E/R_L/U among OK trials
+summary,cap_limited_ok_count,2,OK candidates that stopped at runner max_lifetime_h
+best,trial,19,C7 lead zigzag candidate by objectiveScore
+best,geometry,N=12; L_RUN_mm=89.0993; z_first_mm=2.1050; side_mm=0.5038,Main zigzag geometry parameters
+best,Vwork_V,100.0,Selected by max_safe voltage policy
+best,objectiveScore,1340.3886373039438,Current BO scalar score
+best,lifetimeH,202.53173235708715,Current lifecycle length; cap-limited if failureReached=False
+best,R_L_pct,83.6634455318355,L_opt / L_ini * 100
+best,eta_L_pct,-16.336554468164493,(L_opt - L_ini) / L_ini * 100
+best,lifeTotalP03sphere_J,1521016927.9865444,Lifecycle cumulative 0-3 um effective radiation energy
+best,eta_E_pct,1340.3886373039438,(E_opt - E_ini) / E_ini * 100
+best,U_pct,97.29239542463802,Full-domain steady-state temperature uniformity
+best,U_relative_reduction_pct_vs_B2,34.56817102733116,Relative U reduction against B2
+best,maxErosionTmax_K,2910.191879518723,Maximum temperature during full erosion loop
+best,overtemp_margin_K,362.9581204812771,3273.15 K - maxErosionTmax_K
+best,failureReached,False,False means lifetime is truncated by runner cap
+compare_cylinder68,E_gain_pct,524.1884744085982,Against C5 cylinder lead trial 68
+compare_cylinder68,life_ratio_pct,53.532277910631706,Against C5 cylinder lead trial 68
+compare_cylinder68,U_reduction_pct,23.413950313519166,Against C5 cylinder lead trial 68
+top_objective,rank_1,19,obj=1340.3886; eta_E=1340.3886%; R_L=83.6634%; U=97.2924%; cap_limited=True; N=12; L_RUN_mm=89.0993; z_first_mm=2.1050; side_mm=0.5038
+top_objective,rank_2,13,obj=889.7971; eta_E=889.7971%; R_L=82.6176%; U=94.7090%; cap_limited=True; N=8; L_RUN_mm=182.2193; z_first_mm=1.1874; side_mm=0.4322
+status_ranges,FAIL_EROSION_SOLVE_N_RUNS,min=6.0000; median=7.0000; mean=7.0000; max=8.0000,Distribution by status
+status_ranges,FAIL_EROSION_SOLVE_L_RUN_mm,min=148.1980; median=191.5004; mean=191.5004; max=234.8029,Distribution by status
+status_ranges,FAIL_EROSION_SOLVE_side_mm,min=0.4395; median=0.4591; mean=0.4591; max=0.4787,Distribution by status
+status_ranges,FAIL_Z_OVERLAP_N_RUNS,min=14.0000; median=15.0000; mean=15.0000; max=16.0000,Distribution by status
+status_ranges,FAIL_Z_OVERLAP_L_RUN_mm,min=20.3548; median=26.3578; mean=26.3578; max=32.3608,Distribution by status
+status_ranges,FAIL_Z_OVERLAP_side_mm,min=0.7190; median=0.8389; mean=0.8389; max=0.9589,Distribution by status
+status_ranges,OK_N_RUNS,min=8.0000; median=10.0000; mean=10.0000; max=12.0000,Distribution by status
+status_ranges,OK_L_RUN_mm,min=89.0993; median=135.6593; mean=135.6593; max=182.2193,Distribution by status
+status_ranges,OK_side_mm,min=0.4322; median=0.4680; mean=0.4680; max=0.5038,Distribution by status
+status_ranges,PRUNE_LIFETIME_N_RUNS,min=4.0000; median=8.0000; mean=9.2857; max=16.0000,Distribution by status
+status_ranges,PRUNE_LIFETIME_L_RUN_mm,min=54.8742; median=143.5689; mean=155.1248; max=274.0476,Distribution by status
+status_ranges,PRUNE_LIFETIME_side_mm,min=0.2986; median=0.4142; mean=0.5023; max=0.8798,Distribution by status
+decision,current_lead,trial_19,Zigzag now beats cylinder trial 68 on energy and U
+decision,not_final_without_recheck,true,trial 19 is cap-limited; actual failure lifetime is not measured
+next_step,recommended,C8,"Re-evaluate trial 19 with higher max_lifetime_h, then local BO"
+next_bounds,N_RUNS,"8,10,12,14",Keep around C6 OK cluster and trial 19
+next_bounds,L_RUN_mm,70-120,Center around trial 19 L=89.10 mm
+next_bounds,z_first_mm,1.6-2.5,Center around trial 19 z_first=2.105 mm
+next_bounds,max_lifetime_h,500,Needed to measure actual failure or stronger lower bound
