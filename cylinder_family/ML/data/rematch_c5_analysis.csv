@@ -1,0 +1,48 @@
+section,key,value,notes
+summary,total_trials,80,Completed C4 local-expansion trials
+summary,FAIL_OVERTEMP_DURING_EROSION,23,C4 status count
+summary,OK,57,C4 status count
+summary,ok_rate_pct,71.25,OK trials divided by total trials
+summary,pareto_count,16,Non-dominated by eta_E/R_L/U among OK trials
+best,trial,68,C5 lead cylinder candidate by objectiveScore
+best,radii_mm,"[1.9064, 1.9424, 3.6475, 2.0709, 2.0709, 3.6475, 1.9424, 1.9064]",Eight mirrored segment radii
+best,Vwork_V,1.171875,Selected by max_safe voltage policy
+best,objectiveScore,130.76181255488152,Current BO scalar score
+best,lifetimeH,378.33572614862254,Full erosion lifetime
+best,R_L_pct,156.2859807152343,L_opt / L_ini * 100
+best,eta_L_pct,56.285980715234295,(L_opt - L_ini) / L_ini * 100
+best,lifeTotalP03sphere_J,243679111.41385093,Lifecycle cumulative 0-3 um effective radiation energy
+best,eta_E_pct,130.76181255488152,(E_opt - E_ini) / E_ini * 100
+best,U_pct,127.03670684533598,Full-domain steady-state temperature uniformity
+best,U_delta_pctpt_vs_B2,-21.656057749823773,Absolute U change against B2
+best,U_relative_reduction_pct_vs_B2,14.56429827556567,Relative U reduction against B2
+best,initialP03sphere_W,215.95999424026604,Initial 0-3 um effective power
+best,lifeAvgP03sphere_W,178.9115787410802,Lifecycle average 0-3 um effective power
+best,maxErosionTmax_K,3220.3735801615658,Maximum temperature during full erosion
+best,overtemp_margin_K,52.77641983843432,3273.15 K - maxErosionTmax_K
+best_tradeoff,lowest_U_trial,31,U=123.7726%; eta_E=119.0058%; R_L=135.5042%
+best_tradeoff,longest_life_trial,50,R_L=206.5440%; eta_E=76.9328%; U=166.1182%
+top_objective,rank_1,68,"obj=130.7618; eta_E=130.7618%; R_L=156.2860%; U=127.0367%; r=[1.9064, 1.9424, 3.6475, 2.0709]"
+top_objective,rank_2,36,"obj=127.6029; eta_E=127.6029%; R_L=148.7287%; U=126.6272%; r=[1.9865, 1.9347, 3.5532, 2.1645]"
+top_objective,rank_3,70,"obj=127.3922; eta_E=127.3922%; R_L=155.3038%; U=127.3814%; r=[1.9077, 1.9515, 3.6439, 2.0674]"
+top_objective,rank_4,79,"obj=127.0418; eta_E=127.0418%; R_L=157.5419%; U=127.3630%; r=[1.8657, 1.9738, 3.6715, 2.0357]"
+top_objective,rank_5,59,"obj=126.5783; eta_E=126.5783%; R_L=152.8749%; U=126.5344%; r=[1.8957, 1.9786, 3.6203, 2.0940]"
+top_objective,rank_6,22,"obj=124.8282; eta_E=124.8282%; R_L=151.8452%; U=126.2050%; r=[1.8786, 2.0036, 3.6133, 2.0978]"
+top_objective,rank_7,45,"obj=120.3006; eta_E=120.3006%; R_L=150.7485%; U=126.0871%; r=[1.8473, 2.0454, 3.6129, 2.0858]"
+top_objective,rank_8,31,"obj=119.0058; eta_E=119.0058%; R_L=135.5042%; U=123.7726%; r=[2.0184, 1.9993, 3.3772, 2.3502]"
+top_objective,rank_9,46,"obj=118.2724; eta_E=118.2724%; R_L=150.8502%; U=126.5687%; r=[1.8513, 2.0449, 3.6169, 2.0759]"
+top_objective,rank_10,62,"obj=117.9650; eta_E=117.9650%; R_L=148.9173%; U=126.2914%; r=[1.8667, 2.0413, 3.5971, 2.1000]"
+ok_ranges,r1_mm,min=1.8019; median=1.9696; mean=2.0183; max=2.7661,OK trial distribution
+ok_ranges,r2_mm,min=1.7279; median=1.9993; mean=1.9972; max=2.1882,OK trial distribution
+ok_ranges,r3_mm,min=3.0605; median=3.5971; mean=3.5582; max=3.7773,OK trial distribution
+ok_ranges,r4_mm,min=1.6158; median=2.0562; mean=2.0473; max=2.3586,OK trial distribution
+ok_ranges,U_pct,min=123.7726; median=129.5121; mean=133.4042; max=166.1182,OK trial distribution
+ok_ranges,eta_E_pct,min=64.0996; median=101.3032; mean=100.8964; max=130.7618,OK trial distribution
+failure_pattern,FAIL_OVERTEMP_DURING_EROSION,23,Only failure class observed in C4
+failure_pattern,overtempTimeH,min=8.9483; median=49.8786; mean=95.9748; max=320.0000,Failed trials exceed 3273.15 K during erosion
+failure_pattern,overtempTmax_K,min=3273.1803; median=3275.5195; mean=3276.1324; max=3281.0839,Failed trials exceed 3273.15 K during erosion
+failure_pattern,interpretation,late-life overheating dominates C4 failures,Keep full lifecycle overtemperature checks
+decision,expand_to_150_now,no,"Archive trial 68 as cylinder lead, then compare zigzag in C6"
+decision,reason,C4 already gives a strong cylinder lead and stable OK cluster,"Best trial appears late, so later cylinder refinement remains useful"
+next_step,recommended,C6,Run zigzag rematch objective on current physics before more cylinder-only budget
+next_step,cylinder_followup,Use trial 68 neighborhood for 150-run refinement if zigzag underperforms,"Candidate center: r=[1.9064,1.9424,3.6475,2.0709] mm"
