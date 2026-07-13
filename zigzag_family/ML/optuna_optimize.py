@@ -1,8 +1,8 @@
-"""Rematch Optuna search for the zigzag family.
+"""C8 local Optuna search for the zigzag family.
 
-This C6 script intentionally does not reuse first-round trials or databases.
-It evaluates every candidate with the current rematch COMSOL runner and scores
-against the official B2 cylinder baseline.
+This script intentionally does not reuse first-round or C6 trials/databases.
+It searches the verified trial-19 neighborhood with the current rematch COMSOL
+runner and scores against the official B2 cylinder baseline.
 """
 
 import csv
@@ -20,33 +20,36 @@ from zigzag_runner import COMSOLRunner
 ML_DIR = Path(r"D:\VScode\project\BFHC\zigzag_family\ML")
 DATA_DIR = ML_DIR / "data"
 
-DB_PATH = DATA_DIR / os.getenv("BFHC_DB_FILE", "rematch_c6_optuna.db")
-CSV_PATH = DATA_DIR / os.getenv("BFHC_CSV_FILE", "rematch_c6_trials.csv")
-STUDY_NAME = os.getenv("BFHC_STUDY_NAME", "zigzag_rematch_c6")
+DB_PATH = DATA_DIR / os.getenv("BFHC_DB_FILE", "rematch_c8_local_optuna.db")
+CSV_PATH = DATA_DIR / os.getenv("BFHC_CSV_FILE", "rematch_c8_local_trials.csv")
+STUDY_NAME = os.getenv("BFHC_STUDY_NAME", "zigzag_rematch_c8_local")
 
 N_RUNS_CHOICES = [
     int(item) for item in os.getenv(
-        "BFHC_N_RUNS_CHOICES", "4,6,8,10,12,14,16").split(",")
+        "BFHC_N_RUNS_CHOICES", "8,10,12,14").split(",")
     if item.strip()
 ]
-L_RUN_MIN_MM = float(os.getenv("BFHC_L_RUN_MIN_MM", "20.0"))
-L_RUN_MAX_MM = float(os.getenv("BFHC_L_RUN_MAX_MM", "300.0"))
-Z_FIRST_MIN_MM = float(os.getenv("BFHC_Z_FIRST_MIN_MM", "0.6"))
-Z_FIRST_MAX_MM = float(os.getenv("BFHC_Z_FIRST_MAX_MM", "3.0"))
+L_RUN_MIN_MM = float(os.getenv("BFHC_L_RUN_MIN_MM", "70.0"))
+L_RUN_MAX_MM = float(os.getenv("BFHC_L_RUN_MAX_MM", "120.0"))
+Z_FIRST_MIN_MM = float(os.getenv("BFHC_Z_FIRST_MIN_MM", "1.6"))
+Z_FIRST_MAX_MM = float(os.getenv("BFHC_Z_FIRST_MAX_MM", "2.5"))
 
-# Reference zigzag candidate used only as the first queued geometry.
-REFERENCE_N_RUNS = int(os.getenv("BFHC_REFERENCE_N_RUNS", "8"))
-REFERENCE_L_RUN_MM = float(os.getenv("BFHC_REFERENCE_L_RUN_MM", "104.0"))
-REFERENCE_Z_FIRST_MM = float(os.getenv("BFHC_REFERENCE_Z_FIRST_MM", "0.8"))
+# Verified C8 trial-19 candidate used as the first queued geometry.
+REFERENCE_N_RUNS = int(os.getenv("BFHC_REFERENCE_N_RUNS", "12"))
+REFERENCE_L_RUN_MM = float(os.getenv(
+    "BFHC_REFERENCE_L_RUN_MM", "89.09934228871522"))
+REFERENCE_Z_FIRST_MM = float(os.getenv(
+    "BFHC_REFERENCE_Z_FIRST_MM", "2.10495899560028"))
 
 # Current rematch official cylinder baseline.
 BASELINE_LIFETIME_H = 242.07911958397654
 BASELINE_E_J = 105597676.11285222
 BASELINE_U_PCT = 148.69276459515976
 
-# C6 is a small validation search. Override from PowerShell if needed:
+# C8 local search. Override from PowerShell if needed:
 #   $env:BFHC_N_TRIALS='30'
 N_TRIALS = int(os.getenv("BFHC_N_TRIALS", "20"))
+MAX_LIFETIME_H = float(os.getenv("BFHC_MAX_LIFETIME_H", "500.0"))
 MIN_LIFETIME_RATIO = float(os.getenv("BFHC_MIN_LIFETIME_RATIO", "0.50"))
 MIN_LIFETIME_H = BASELINE_LIFETIME_H * MIN_LIFETIME_RATIO
 MAX_U_RATIO = float(os.getenv("BFHC_MAX_U_RATIO", "1.20"))
@@ -58,13 +61,14 @@ runner: COMSOLRunner | None = None
 
 CSV_HEADER = [
     "trial", "N_RUNS", "L_RUN_mm", "z_first_mm", "side_mm",
-    "pathLength_mm", "Vwork_V", "initialTmax_K", "Tmin_K", "Tmean_K",
-    "U_pct", "maxErosionTmax_K", "lifetimeH", "R_L_pct", "eta_L_pct",
+    "pathLength_mm", "maxLifetimeCap_h", "Vwork_V", "initialTmax_K",
+    "Tmin_K", "Tmean_K", "U_pct", "maxErosionTmax_K", "lifetimeH",
+    "R_L_pct", "eta_L_pct",
     "initialP03sphere_W", "initialPradSphere_W",
     "lifeAvgP03sphere_W", "lifeAvgPradSphere_W",
     "lifeTotalP03sphere_J", "eta_E_pct",
     "objectiveScore", "uPenalty_pctpt", "U_limit_pct",
-    "selfViewLoss_pct", "failureReached", "erosionSteps",
+    "selfViewLoss_pct", "failureReached", "capLimited", "erosionSteps",
     "overtempStep", "overtempTimeH", "overtempTmax_K",
     "runnerStatus", "status", "voltagePolicy", "voltageObjective",
     "voltageCandidateCount", "voltageMaxSafe_V", "voltageScanSummary",
@@ -114,6 +118,25 @@ def add_scores(row):
         "uPenalty_pctpt": u_penalty,
         "U_limit_pct": MAX_U_PCT,
     })
+    return row
+
+
+def bool_value(value):
+    if isinstance(value, bool):
+        return value
+    return str(value).strip().lower() == "true"
+
+
+def add_cap_status(row):
+    lifetime_h = row.get("lifetimeH")
+    cap_limited = False
+    if finite_number(lifetime_h):
+        cap_limited = (
+            not bool_value(row.get("failureReached"))
+            and float(lifetime_h) >= MAX_LIFETIME_H - 1e-6
+        )
+    row["capLimited"] = cap_limited
+    row["maxLifetimeCap_h"] = MAX_LIFETIME_H
     return row
 
 
@@ -181,6 +204,7 @@ def objective(trial):
         "z_first_mm": z_first_mm,
         "side_mm": side * 1e3,
         "pathLength_mm": path_len * 1e3,
+        "maxLifetimeCap_h": MAX_LIFETIME_H,
         "U_limit_pct": MAX_U_PCT,
     }
 
@@ -220,6 +244,7 @@ def objective(trial):
         row["status"] = "PRUNE_INVALID_METRIC"
         prune_with_row(row, "Invalid metric(s): " + ", ".join(invalid))
 
+    row = add_cap_status(row)
     row = add_scores(row)
     lifetime_h = float(row["lifetimeH"])
     u_pct = float(row["U_pct"])
@@ -254,7 +279,7 @@ def main():
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     init_csv()
 
-    print("BFHC zigzag rematch C6 small search")
+    print("BFHC zigzag rematch C8 local search")
     print(f"CSV output:       {CSV_PATH}")
     print(f"Optuna DB:        sqlite:///{DB_PATH}")
     print(f"Study name:       {STUDY_NAME}")
@@ -264,6 +289,7 @@ def main():
           f"zf=[{Z_FIRST_MIN_MM}, {Z_FIRST_MAX_MM}] mm")
     print(f"Reference queued: N={REFERENCE_N_RUNS}, "
           f"L={REFERENCE_L_RUN_MM} mm, zf={REFERENCE_Z_FIRST_MM} mm")
+    print(f"Lifetime cap:     {MAX_LIFETIME_H:.1f} h")
     print(f"Lifetime floor:   {MIN_LIFETIME_H:.4f} h "
           f"({MIN_LIFETIME_RATIO * 100.0:.1f}% of B2 baseline)")
     print(f"U limit:          {MAX_U_PCT:.4f}% "
@@ -272,7 +298,9 @@ def main():
     print()
 
     runner = COMSOLRunner()
+    runner.max_lifetime_h = MAX_LIFETIME_H
     runner.start()
+    runner.max_lifetime_h = MAX_LIFETIME_H
 
     try:
         study = optuna.create_study(
@@ -301,7 +329,7 @@ def main():
             study.optimize(objective, n_trials=n_remaining)
 
         print("\n" + "=" * 60)
-        print("  C6 SEARCH COMPLETE")
+        print("  C8 LOCAL SEARCH COMPLETE")
         print("=" * 60)
         try:
             best = study.best_trial
