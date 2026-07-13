@@ -1,0 +1,13 @@
+BFHC zigzag C10 C8-local trial 19 verification
+CSV output:       D:\VScode\project\BFHC\zigzag_family\ML\data\rematch_c10_trial19_1000h_verify.csv
+Geometry:         N=12, L=92.0111 mm, z_first=2.2666 mm
+Computed side:    0.4958 mm
+Path length:      1118.1336 mm
+Lifetime cap:     1000.0 h
+Erosion steps cap:150
+
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+  Building model: N=12 L=92.0mm zf=2.27mm side=0.4958mm nblk=25
+COMSOL disconnected.

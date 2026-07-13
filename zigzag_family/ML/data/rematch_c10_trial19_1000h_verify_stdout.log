@@ -1,0 +1,43 @@
+BFHC zigzag C10 C8-local trial 19 verification
+CSV output:       D:\VScode\project\BFHC\zigzag_family\ML\data\rematch_c10_trial19_1000h_verify.csv
+Geometry:         N=12, L=92.0111 mm, z_first=2.2666 mm
+Computed side:    0.4958 mm
+Path length:      1118.1336 mm
+Lifetime cap:     1000.0 h
+Erosion steps cap:150
+
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+  Building model: N=12 L=92.0mm zf=2.27mm side=0.4958mm nblk=25
+  Model init OK: sanity Tmax=512.0K I=2.2505A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2868.9K P03sph=2494.2W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0377
+  STEP=10 t=100.00h loss=0.0657
+  STEP=15 t=150.00h loss=0.0881
+  STEP=20 t=200.00h loss=0.1065
+  STEP=25 t=250.00h loss=0.1223
+  STEP=30 t=300.00h loss=0.1360
+  STEP=35 t=350.00h loss=0.1481
+  STEP=40 t=400.00h loss=0.1589
+  STEP=45 t=450.00h loss=0.1687
+  STEP=50 t=500.00h loss=0.1776
+  STEP=55 t=550.00h loss=0.1858
+  STEP=60 t=600.00h loss=0.1934
+  STEP=65 t=646.99h loss=0.2000
+  STEP=66 t=647.04h loss=0.2000
+
+============================================================
+  C10 VERIFY COMPLETE
+============================================================
+Status:          OK
+Lifetime:        647.0447245635105 h
+failureReached:  True
+capLimited:      False
+stepLimited:     False
+eta_E:           4105.123549821167%
+R_L:             267.2864663732605%
+U:               97.09806128500239%
+COMSOL disconnected.

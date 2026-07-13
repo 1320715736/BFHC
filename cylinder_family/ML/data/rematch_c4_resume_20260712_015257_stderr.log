@@ -1,0 +1,8 @@
+[I 2026-07-12 01:54:07,913] Using an existing study with name 'cylinder_rematch_c4' instead of creating a new one.
+[I 2026-07-12 02:13:53,537] Trial 73 finished with value: 95.29583699988254 and parameters: {'r1_mm': 2.0745618834966244, 'r2_mm': 1.922135383462695, 'r3_mm': 3.6391630851501495}. Best is trial 68 with value: 130.76181255488152.
+[I 2026-07-12 02:18:28,406] Trial 74 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-12 02:41:09,875] Trial 75 finished with value: 111.05908938754135 and parameters: {'r1_mm': 1.9985599195663095, 'r2_mm': 1.9965716362918686, 'r3_mm': 3.4866057985964445}. Best is trial 68 with value: 130.76181255488152.
+[I 2026-07-12 02:47:47,262] Trial 76 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-12 02:53:37,166] Trial 77 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-12 03:03:34,386] Trial 78 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-12 03:20:57,319] Trial 79 finished with value: 127.04184085107877 and parameters: {'r1_mm': 1.8656837671883681, 'r2_mm': 1.9737686943796124, 'r3_mm': 3.6714506131562015}. Best is trial 68 with value: 130.76181255488152.

@@ -1,0 +1,56 @@
+Resuming disconnected CSV trial #126: {'N_RUNS': 10, 'L_RUN_mm': 95.56139278653293, 'z_first_mm': 1.7295175542011458}
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+  Building model: N=10 L=95.6mm zf=1.73mm side=0.5325mm nblk=21
+  Model init OK: sanity Tmax=533.2K I=2.5651A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3031.4K P03sph=2779.0W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=18.22h loss=0.1000
+  STEP=10 t=40.38h loss=0.2000
+  STEP=11 t=45.35h loss=0.2200
+Recovered trial #126: status=OK, lifetime=45.35h, AvgP03=2652.05W
+COMSOL disconnected.
+Continuing normal Optuna run...
+CSV output:     D:\VScode\project\BFHC\zigzag_family\ML\data\trials.csv
+Optuna DB:      sqlite:///D:\VScode\project\BFHC\zigzag_family\ML\data\optuna.db
+Trials:         150
+Search space:   N_RUNS ∈ [4, 6, 8, 10, 12, 14, 16]
+                L_RUN ∈ [20.0, 300.0] mm
+                z_first ∈ [0.6, 3.0] mm
+Zigzag ref:     N=8 L=104.0mm zf=0.8mm
+Life constraint: cylinder baseline 115.5037h × 30% = 34.65h
+Zigzag Java ref: lifetime=7.1277h (reference only, not the constraint)
+
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up failed (non-fatal): Exception:
+	com.comsol.util.exceptions.FlException: 未连接到服务器。
+Messages:
+	Not connected to a server
+
+Resuming from 127 trials, running 23 more...
+
+============================================================
+Trial 127: N_RUNS=10  L_RUN=99.0mm  z_first=1.73mm  side=0.5234mm  path=1003.5mm
+============================================================
+  Building model: N=10 L=99.0mm zf=1.73mm side=0.5234mm nblk=21
+  SERVER_DISCONNECT: params saved to D:\VScode\project\BFHC\zigzag_family\ML\data\failed_trial.json
+
+COMSOL server disconnected. Optimization paused.
+Retry params saved to: D:\VScode\project\BFHC\zigzag_family\ML\data\failed_trial.json
+Re-run the script to resume from the interrupted trial.
+
+============================================================
+  OPTIMIZATION COMPLETE
+============================================================
+Best trial:     #21
+Best value:     2848.70 W (lifeAvgP03sphere)
+Best params:    N_RUNS=10  L_RUN=99.5mm  z_first=2.04mm
+Best side:      0.5219 mm
+Best path len:  1009.3 mm
+
+Total trials:   128
+Results saved:  D:\VScode\project\BFHC\zigzag_family\ML\data\trials.csv
+COMSOL disconnected.

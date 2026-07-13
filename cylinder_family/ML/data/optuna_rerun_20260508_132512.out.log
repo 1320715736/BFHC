@@ -1,0 +1,2123 @@
+CSV output:     D:\VScode\project\BFHC\cylinder_family\ML\data\trials.csv
+Optuna DB:      sqlite:///D:\VScode\project\BFHC\cylinder_family\ML\data\optuna.db
+Trials:         151
+Search space:   r1,r2,r3 ∈ [0.8, 4.5] mm
+Baseline:       Lifetime=115.5h, min=34.65h
+
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+Resuming from 1 trials, running 150 more...
+
+============================================================
+Trial 0: r = [2.500, 2.500, 2.500, 2.500, 2.500, 2.500, 2.500, 2.500] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3825.9K, I=1024.9998A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.6348V Tmax=3196.2K P03sph=504.1W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=44.41h loss=0.0989
+  STEP=10 t=94.41h loss=0.1746
+  STEP=13 t=115.50h loss=0.2000
+  Vwork=0.6348V  Tmax=3196.2K  Lifetime=115.50h  AvgP03=428.57W  [431s]
+
+============================================================
+Trial 1: r = [2.866, 1.299, 3.590, 1.487, 1.487, 3.590, 1.299, 2.866] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3117.8K, I=551.2699A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0742V Tmax=3220.7K P03sph=579.5W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=20.71h loss=0.0874
+  STEP=10 t=45.15h loss=0.1745
+  STEP=12 t=52.45h loss=0.2000
+  Vwork=1.0742V  Tmax=3220.7K  Lifetime=52.45h  AvgP03=523.05W  [280s]
+
+============================================================
+Trial 2: r = [3.996, 1.456, 1.742, 1.969, 1.969, 1.742, 1.456, 3.996] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3393.9K, I=630.8146A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8789V Tmax=3199.6K P03sph=496.9W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=20.71h loss=0.0740
+  STEP=10 t=41.33h loss=0.1479
+  STEP=15 t=55.48h loss=0.2000
+  Vwork=0.8789V  Tmax=3199.6K  Lifetime=55.48h  AvgP03=451.06W  [393s]
+
+============================================================
+Trial 3: r = [2.344, 3.258, 1.789, 2.386, 2.386, 1.789, 3.258, 2.344] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3591.2K, I=840.5950A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7812V Tmax=3229.9K P03sph=561.3W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=23.71h loss=0.0832
+  STEP=10 t=54.90h loss=0.1543
+  STEP=15 t=80.26h loss=0.2000
+  Vwork=0.7812V  Tmax=3229.9K  Lifetime=80.26h  AvgP03=481.72W  [271s]
+
+============================================================
+Trial 4: r = [1.264, 2.042, 4.205, 1.246, 1.246, 4.205, 2.042, 1.264] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3092.3K, I=482.6978A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.1230V Tmax=3267.0K P03sph=538.8W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=19.63h loss=0.0996
+  STEP=10 t=60.66h loss=0.1981
+  STEP=12 t=62.03h loss=0.2004
+  Vwork=1.1230V  Tmax=3267.0K  Lifetime=62.03h  AvgP03=452.09W  [287s]
+
+============================================================
+Trial 5: r = [2.476, 0.807, 1.828, 3.857, 3.857, 1.828, 0.807, 2.476] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3010.8K, I=354.0542A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.1719V Tmax=3262.2K P03sph=415.6W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=12.83h loss=0.1000
+  STEP=10 t=41.38h loss=0.2000
+  STEP=11 t=46.28h loss=0.2116
+  Vwork=1.1719V  Tmax=3262.2K  Lifetime=46.28h  AvgP03=347.01W  [247s]
+
+============================================================
+Trial 6: r = [0.856, 1.881, 4.394, 1.193, 1.193, 4.394, 1.881, 0.856] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3128.1K, I=340.7952A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0742V Tmax=3260.6K P03sph=350.5W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=16.53h loss=0.1000
+  STEP=10 t=29.12h loss=0.2000
+  STEP=11 t=29.12h loss=0.2000
+  Vwork=1.0742V  Tmax=3260.6K  Lifetime=29.12h  AvgP03=316.14W  [266s]
+
+============================================================
+Trial 7: r = [3.167, 1.995, 1.679, 2.858, 2.858, 1.679, 1.995, 3.167] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3513.0K, I=790.4421A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8301V Tmax=3237.9K P03sph=577.1W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=21.05h loss=0.1000
+  STEP=10 t=60.65h loss=0.1992
+  STEP=12 t=61.34h loss=0.2003
+  Vwork=0.8301V  Tmax=3237.9K  Lifetime=61.34h  AvgP03=501.63W  [267s]
+
+============================================================
+Trial 8: r = [1.282, 3.044, 2.184, 3.053, 3.053, 2.184, 3.044, 1.282] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3623.1K, I=629.3108A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7812V Tmax=3206.2K P03sph=420.2W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=27.20h loss=0.0998
+  STEP=10 t=67.33h loss=0.1998
+  STEP=12 t=68.57h loss=0.2021
+  Vwork=0.7812V  Tmax=3206.2K  Lifetime=68.57h  AvgP03=365.43W  [203s]
+
+============================================================
+Trial 9: r = [4.357, 1.471, 1.583, 1.159, 1.159, 1.583, 1.471, 4.357] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3468.2K, I=456.4975A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8789V Tmax=3223.2K P03sph=357.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=20.94h loss=0.1000
+  WARN: erosion mesh hauto=4 failed, retrying hauto=5...
+  NOTE: erosion mesh OK with hauto=5 (fallback)
+  STEP=10 t=48.54h loss=0.1999
+  STEP=12 t=48.59h loss=0.2001
+  Vwork=0.8789V  Tmax=3223.2K  Lifetime=48.59h  AvgP03=320.72W  [391s]
+
+============================================================
+Trial 10: r = [3.258, 0.861, 3.133, 1.956, 1.956, 3.133, 0.861, 3.258] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=2957.2K, I=396.7367A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.2207V Tmax=3268.2K P03sph=494.2W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=12.51h loss=0.1000
+  STEP=10 t=36.45h loss=0.2000
+  STEP=11 t=36.45h loss=0.2000
+  Vwork=1.2207V  Tmax=3268.2K  Lifetime=36.45h  AvgP03=423.70W  [248s]
+
+============================================================
+Trial 11: r = [3.170, 2.577, 0.976, 2.713, 2.713, 0.976, 2.577, 3.170] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3206.1K, I=460.4552A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0254V Tmax=3245.8K P03sph=450.6W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=18.36h loss=0.1000
+  STEP=10 t=59.60h loss=0.1962
+  STEP=12 t=63.98h loss=0.2023
+  Vwork=1.0254V  Tmax=3245.8K  Lifetime=63.98h  AvgP03=378.20W  [243s]
+
+============================================================
+Trial 12: r = [3.278, 1.442, 1.192, 3.279, 3.279, 1.192, 1.442, 3.278] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3174.3K, I=515.8204A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0254V Tmax=3212.0K P03sph=505.9W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=20.95h loss=0.0999
+  STEP=10 t=61.45h loss=0.1982
+  STEP=12 t=62.99h loss=0.2006
+  Vwork=1.0254V  Tmax=3212.0K  Lifetime=62.99h  AvgP03=439.95W  [233s]
+
+============================================================
+Trial 13: r = [1.945, 4.338, 0.806, 1.323, 1.323, 0.806, 4.338, 1.945] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3138.3K, I=320.7527A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0742V Tmax=3256.8K P03sph=328.7W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=5.78h loss=0.0609
+  STEP=10 t=10.74h loss=0.1217
+  STEP=15 t=14.95h loss=0.1825
+  STEP=17 t=16.03h loss=0.2000
+  Vwork=1.0742V  Tmax=3256.8K  Lifetime=16.03h  AvgP03=311.91W  [337s]
+
+============================================================
+Trial 14: r = [3.673, 1.170, 2.707, 1.677, 1.677, 2.707, 1.170, 3.673] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3099.2K, I=529.8166A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.1230V Tmax=3259.0K P03sph=592.9W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=11.91h loss=0.0697
+  STEP=10 t=30.19h loss=0.1395
+  STEP=15 t=51.81h loss=0.2000
+  Vwork=1.1230V  Tmax=3259.0K  Lifetime=51.81h  AvgP03=505.90W  [352s]
+
+============================================================
+Trial 15: r = [3.851, 1.102, 2.716, 1.255, 1.255, 2.716, 1.102, 3.851] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3082.7K, I=438.6377A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.1230V Tmax=3264.3K P03sph=486.9W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=10.43h loss=0.0877
+  STEP=10 t=19.48h loss=0.1754
+  STEP=13 t=21.76h loss=0.2000
+  Vwork=1.1230V  Tmax=3264.3K  Lifetime=21.76h  AvgP03=450.84W  [400s]
+
+============================================================
+Trial 16: r = [3.699, 1.231, 2.802, 1.396, 1.396, 2.802, 1.231, 3.699] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3165.1K, I=511.0085A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0254V Tmax=3203.3K P03sph=499.7W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=20.19h loss=0.0881
+  STEP=10 t=39.59h loss=0.1762
+  STEP=13 t=44.68h loss=0.2003
+  Vwork=1.0254V  Tmax=3203.3K  Lifetime=44.68h  AvgP03=458.92W  [303s]
+
+============================================================
+Trial 17: r = [2.894, 1.744, 3.336, 1.566, 1.566, 3.336, 1.744, 2.894] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3456.1K, I=694.8967A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8789V Tmax=3245.7K P03sph=548.9W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=19.49h loss=0.0999
+  STEP=10 t=41.82h loss=0.1998
+  STEP=12 t=41.90h loss=0.2001
+  Vwork=0.8789V  Tmax=3245.7K  Lifetime=41.90h  AvgP03=496.66W  [261s]
+
+============================================================
+Trial 18: r = [2.031, 3.996, 1.386, 1.728, 1.728, 1.386, 3.996, 2.031] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3429.6K, I=599.1785A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8789V Tmax=3218.3K P03sph=471.8W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=16.61h loss=0.0802
+  STEP=10 t=32.73h loss=0.1604
+  STEP=14 t=40.58h loss=0.2001
+  Vwork=0.8789V  Tmax=3218.3K  Lifetime=40.58h  AvgP03=437.77W  [315s]
+
+============================================================
+Trial 19: r = [4.446, 1.098, 1.345, 1.489, 1.489, 1.345, 1.098, 4.446] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3207.5K, I=419.2551A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0254V Tmax=3247.1K P03sph=406.3W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=8.95h loss=0.0738
+  STEP=10 t=16.76h loss=0.1475
+  STEP=14 t=21.70h loss=0.2000
+  Vwork=1.0254V  Tmax=3247.1K  Lifetime=21.70h  AvgP03=379.11W  [378s]
+
+============================================================
+Trial 20: r = [3.623, 1.706, 2.176, 2.057, 2.057, 2.176, 1.706, 3.623] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3541.1K, I=772.0401A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8301V Tmax=3259.2K P03sph=563.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=14.76h loss=0.0829
+  STEP=10 t=31.38h loss=0.1659
+  STEP=14 t=38.79h loss=0.2001
+  Vwork=0.8301V  Tmax=3259.2K  Lifetime=38.79h  AvgP03=509.51W  [387s]
+
+============================================================
+Trial 21: r = [3.649, 1.633, 2.199, 2.046, 2.046, 2.199, 1.633, 3.649] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3495.3K, I=742.9672A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8301V Tmax=3218.2K P03sph=541.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=20.78h loss=0.0798
+  STEP=10 t=44.34h loss=0.1596
+  STEP=14 t=57.33h loss=0.2000
+  Vwork=0.8301V  Tmax=3218.2K  Lifetime=57.33h  AvgP03=491.13W  [372s]
+
+============================================================
+Trial 22: r = [2.870, 2.197, 3.125, 1.473, 1.473, 3.125, 2.197, 2.870] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3701.3K, I=726.9857A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7812V Tmax=3262.7K P03sph=487.1W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=18.93h loss=0.0998
+  STEP=10 t=45.91h loss=0.1996
+  STEP=12 t=46.11h loss=0.2001
+  Vwork=0.7812V  Tmax=3262.7K  Lifetime=46.11h  AvgP03=429.72W  [239s]
+
+============================================================
+Trial 23: r = [3.525, 1.282, 2.401, 2.274, 2.274, 2.401, 1.282, 3.525] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3295.7K, I=614.3170A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3260.5K P03sph=564.8W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=18.87h loss=0.1000
+  STEP=10 t=57.93h loss=0.1990
+  STEP=12 t=61.15h loss=0.2043
+  Vwork=0.9766V  Tmax=3260.5K  Lifetime=61.15h  AvgP03=482.14W  [378s]
+
+============================================================
+Trial 24: r = [4.163, 0.996, 1.954, 1.691, 1.691, 1.954, 0.996, 4.163] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3067.3K, I=438.4395A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.1230V Tmax=3239.0K P03sph=486.2W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=12.63h loss=0.0588
+  STEP=10 t=27.03h loss=0.1177
+  STEP=15 t=42.22h loss=0.1766
+  STEP=17 t=48.19h loss=0.2000
+  Vwork=1.1230V  Tmax=3239.0K  Lifetime=48.19h  AvgP03=432.33W  [360s]
+
+============================================================
+Trial 25: r = [2.823, 1.663, 3.469, 1.492, 1.492, 3.469, 1.663, 2.823] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3399.4K, I=653.5240A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8789V Tmax=3190.8K P03sph=515.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=32.47h loss=0.0999
+  STEP=10 t=69.35h loss=0.1998
+  STEP=12 t=69.48h loss=0.2001
+  Vwork=0.8789V  Tmax=3190.8K  Lifetime=69.48h  AvgP03=465.63W  [259s]
+
+============================================================
+Trial 26: r = [3.508, 1.307, 2.610, 2.043, 2.043, 2.610, 1.307, 3.508] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3255.7K, I=621.6880A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3221.4K P03sph=571.1W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=28.05h loss=0.0999
+  STEP=10 t=76.77h loss=0.1830
+  STEP=12 t=92.20h loss=0.2000
+  Vwork=0.9766V  Tmax=3221.4K  Lifetime=92.20h  AvgP03=481.33W  [281s]
+
+============================================================
+Trial 27: r = [4.124, 1.551, 1.957, 1.326, 1.326, 1.957, 1.551, 4.124] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3491.4K, I=546.9938A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8789V Tmax=3256.9K P03sph=429.9W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=15.68h loss=0.1000
+  STEP=10 t=35.08h loss=0.1998
+  STEP=12 t=35.15h loss=0.2001
+  Vwork=0.8789V  Tmax=3256.9K  Lifetime=35.15h  AvgP03=388.38W  [273s]
+
+============================================================
+Trial 28: r = [1.998, 2.333, 3.607, 1.599, 1.599, 3.607, 2.333, 1.998] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3554.7K, I=740.8245A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8301V Tmax=3254.0K P03sph=540.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=19.03h loss=0.0998
+  STEP=10 t=42.72h loss=0.1997
+  STEP=12 t=42.82h loss=0.2001
+  Vwork=0.8301V  Tmax=3254.0K  Lifetime=42.82h  AvgP03=484.30W  [269s]
+
+============================================================
+Trial 29: r = [2.558, 2.624, 2.427, 2.385, 2.385, 2.427, 2.624, 2.558] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3838.7K, I=1021.6342A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.6348V Tmax=3192.9K P03sph=502.5W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=43.04h loss=0.1000
+  STEP=10 t=93.04h loss=0.1834
+  STEP=13 t=105.10h loss=0.2000
+  Vwork=0.6348V  Tmax=3192.9K  Lifetime=105.10h  AvgP03=438.10W  [596s]
+
+============================================================
+Trial 30: r = [3.402, 1.884, 2.236, 2.207, 2.207, 2.236, 1.884, 3.402] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3631.5K, I=856.3297A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7812V Tmax=3262.8K P03sph=572.8W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=16.24h loss=0.0854
+  STEP=10 t=35.58h loss=0.1707
+  STEP=13 t=43.02h loss=0.2000
+  Vwork=0.7812V  Tmax=3262.8K  Lifetime=43.02h  AvgP03=513.30W  [570s]
+
+============================================================
+Trial 31: r = [3.358, 1.818, 2.200, 2.362, 2.362, 2.200, 1.818, 3.358] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3577.2K, I=845.0747A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7812V Tmax=3222.9K P03sph=564.8W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=23.41h loss=0.0770
+  STEP=10 t=52.12h loss=0.1540
+  STEP=14 t=71.41h loss=0.2001
+  Vwork=0.7812V  Tmax=3222.9K  Lifetime=71.41h  AvgP03=494.89W  [467s]
+
+============================================================
+Trial 32: r = [4.003, 1.346, 2.061, 1.709, 1.709, 2.061, 1.346, 4.003] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3329.0K, I=586.7507A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3215.2K P03sph=498.5W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=17.16h loss=0.0787
+  STEP=10 t=34.56h loss=0.1575
+  STEP=14 t=44.07h loss=0.2000
+  Vwork=0.9277V  Tmax=3215.2K  Lifetime=44.07h  AvgP03=459.40W  [357s]
+
+============================================================
+Trial 33: r = [3.004, 2.153, 2.340, 2.421, 2.421, 2.340, 2.153, 3.004] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3737.2K, I=971.0065A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.6836V Tmax=3193.0K P03sph=533.5W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=37.86h loss=0.0889
+  STEP=10 t=85.69h loss=0.1765
+  STEP=13 t=100.83h loss=0.2000
+  Vwork=0.6836V  Tmax=3193.0K  Lifetime=100.83h  AvgP03=466.26W  [659s]
+
+============================================================
+Trial 34: r = [3.818, 1.142, 2.609, 1.522, 1.522, 2.609, 1.142, 3.818] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3099.3K, I=496.1004A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.1230V Tmax=3265.6K P03sph=553.6W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=9.69h loss=0.0750
+  STEP=10 t=19.81h loss=0.1500
+  STEP=14 t=26.27h loss=0.2000
+  Vwork=1.1230V  Tmax=3265.6K  Lifetime=26.27h  AvgP03=506.89W  [409s]
+
+============================================================
+Trial 35: r = [3.478, 1.942, 2.297, 1.964, 1.964, 2.297, 1.942, 3.478] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3656.3K, I=838.1287A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7812V Tmax=3269.2K P03sph=560.5W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=16.47h loss=0.0988
+  STEP=10 t=36.55h loss=0.1977
+  STEP=12 t=37.10h loss=0.2000
+  Vwork=0.7812V  Tmax=3269.2K  Lifetime=37.10h  AvgP03=506.87W  [388s]
+
+============================================================
+Trial 36: r = [2.328, 2.789, 2.869, 1.890, 1.890, 2.869, 2.789, 2.328] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3786.3K, I=904.7141A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.6836V Tmax=3205.1K P03sph=496.8W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=32.65h loss=0.1000
+  STEP=10 t=77.83h loss=0.1988
+  STEP=12 t=78.53h loss=0.2000
+  Vwork=0.6836V  Tmax=3205.1K  Lifetime=78.53h  AvgP03=442.30W  [587s]
+
+============================================================
+Trial 37: r = [3.457, 1.947, 2.088, 2.213, 2.213, 2.088, 1.947, 3.457] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3651.7K, I=853.0914A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7324V Tmax=3186.3K P03sph=519.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=34.51h loss=0.0880
+  STEP=10 t=74.42h loss=0.1760
+  STEP=13 t=86.67h loss=0.2001
+  Vwork=0.7324V  Tmax=3186.3K  Lifetime=86.67h  AvgP03=465.55W  [635s]
+
+============================================================
+Trial 38: r = [2.701, 2.383, 1.838, 2.941, 2.941, 1.838, 2.383, 2.701] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3624.0K, I=888.1920A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7812V Tmax=3269.5K P03sph=594.3W steps=12
+  Phase 2: erosion loop...
+  WARN: solve failed step 5: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	辐射度
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/(comp1.rad.Tu_band1*(comp1.rad.lambdar*k_B_const)),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/(comp1.rad.Tu_band1*(comp1.rad.lambdar*k_B_const)),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算表达式。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1)-comp1.rad.Ju_band1)*dvol
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1-comp1.rad.Ju_band1)*test(comp1.rad.Ju_band1))*(dvol)
+
+  FAILED: FAIL_EROSION_SOLVE
+
+============================================================
+Trial 39: r = [3.103, 2.112, 2.286, 2.384, 2.384, 2.286, 2.112, 3.103] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3720.9K, I=948.2608A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7324V Tmax=3266.1K P03sph=577.6W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=18.18h loss=0.0886
+  STEP=10 t=40.35h loss=0.1771
+  STEP=13 t=46.80h loss=0.2000
+  Vwork=0.7324V  Tmax=3266.1K  Lifetime=46.80h  AvgP03=509.99W  [635s]
+
+============================================================
+Trial 40: r = [3.078, 2.130, 1.675, 2.860, 2.860, 1.675, 2.130, 3.078] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3538.7K, I=807.4760A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8301V Tmax=3262.5K P03sph=590.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=16.96h loss=0.0999
+  STEP=10 t=49.55h loss=0.1999
+  STEP=11 t=49.61h loss=0.2000
+  Vwork=0.8301V  Tmax=3262.5K  Lifetime=49.61h  AvgP03=512.54W  [328s]
+
+============================================================
+Trial 41: r = [3.045, 2.132, 1.597, 2.939, 2.939, 1.597, 2.132, 3.045] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3505.0K, I=775.3856A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8301V Tmax=3229.0K P03sph=566.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=22.47h loss=0.0999
+  STEP=10 t=65.29h loss=0.1962
+  STEP=12 t=68.06h loss=0.2003
+  Vwork=0.8301V  Tmax=3229.0K  Lifetime=68.06h  AvgP03=488.39W  [287s]
+
+============================================================
+Trial 42: r = [2.386, 2.285, 1.839, 3.271, 3.271, 1.839, 2.285, 2.386] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3588.9K, I=856.6525A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7812V Tmax=3242.6K P03sph=572.6W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=22.89h loss=0.1000
+  STEP=10 t=65.86h loss=0.1966
+  STEP=11 t=68.16h loss=0.2000
+  Vwork=0.7812V  Tmax=3242.6K  Lifetime=68.16h  AvgP03=488.02W  [478s]
+
+============================================================
+Trial 43: r = [3.121, 1.778, 1.469, 3.152, 3.152, 1.469, 1.778, 3.121] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3376.6K, I=677.0394A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3264.1K P03sph=579.5W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=14.68h loss=0.1000
+  STEP=10 t=43.58h loss=0.1998
+  STEP=12 t=43.79h loss=0.2003
+  Vwork=0.9277V  Tmax=3264.1K  Lifetime=43.79h  AvgP03=502.20W  [304s]
+
+============================================================
+Trial 44: r = [2.687, 2.075, 2.960, 2.171, 2.171, 2.960, 2.075, 2.687] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3636.7K, I=932.9020A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7324V Tmax=3197.2K P03sph=566.2W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=38.43h loss=0.0954
+  STEP=10 t=88.22h loss=0.1794
+  STEP=13 t=103.31h loss=0.2000
+  Vwork=0.7324V  Tmax=3197.2K  Lifetime=103.31h  AvgP03=495.79W  [359s]
+
+============================================================
+Trial 45: r = [3.283, 1.459, 1.682, 3.044, 3.044, 1.682, 1.459, 3.283] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3335.5K, I=658.7501A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3225.3K P03sph=563.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=23.77h loss=0.0867
+  STEP=10 t=67.31h loss=0.1709
+  STEP=13 t=90.70h loss=0.2000
+  Vwork=0.9277V  Tmax=3225.3K  Lifetime=90.70h  AvgP03=475.69W  [313s]
+
+============================================================
+Trial 46: r = [2.935, 2.454, 2.491, 2.040, 2.040, 2.491, 2.454, 2.935] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3841.8K, I=963.0336A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.6836V Tmax=3253.4K P03sph=530.4W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=21.34h loss=0.1000
+  STEP=10 t=50.98h loss=0.2000
+  STEP=12 t=51.00h loss=0.2000
+  Vwork=0.6836V  Tmax=3253.4K  Lifetime=51.00h  AvgP03=474.24W  [497s]
+
+============================================================
+Trial 47: r = [2.227, 2.733, 1.172, 3.347, 3.347, 1.172, 2.733, 2.227] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3271.4K, I=554.9852A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3235.7K P03sph=510.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=17.32h loss=0.0997
+  STEP=10 t=54.79h loss=0.1989
+  STEP=11 t=55.45h loss=0.2000
+  Vwork=0.9766V  Tmax=3235.7K  Lifetime=55.45h  AvgP03=435.15W  [234s]
+
+============================================================
+Trial 48: r = [3.188, 2.013, 2.024, 2.586, 2.586, 2.024, 2.013, 3.188] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3627.3K, I=891.4948A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7812V Tmax=3268.7K P03sph=596.8W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=18.39h loss=0.0994
+  STEP=10 t=49.73h loss=0.1988
+  STEP=12 t=50.25h loss=0.2000
+  Vwork=0.7812V  Tmax=3268.7K  Lifetime=50.25h  AvgP03=519.17W  [388s]
+
+============================================================
+Trial 49: r = [1.567, 3.127, 1.976, 2.977, 2.977, 1.976, 3.127, 1.567] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3519.9K, I=735.0791A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8301V Tmax=3238.9K P03sph=535.3W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=18.16h loss=0.1000
+  STEP=10 t=40.59h loss=0.2000
+  STEP=12 t=40.95h loss=0.2013
+  Vwork=0.8301V  Tmax=3238.9K  Lifetime=40.95h  AvgP03=478.44W  [230s]
+
+============================================================
+Trial 50: r = [3.171, 1.908, 1.786, 2.848, 2.848, 1.786, 1.908, 3.171] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3526.4K, I=809.6557A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8301V Tmax=3253.4K P03sph=591.4W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=18.66h loss=0.0999
+  STEP=10 t=53.16h loss=0.1999
+  STEP=12 t=53.29h loss=0.2002
+  Vwork=0.8301V  Tmax=3253.4K  Lifetime=53.29h  AvgP03=516.48W  [362s]
+
+============================================================
+Trial 51: r = [3.170, 1.999, 1.560, 2.918, 2.918, 1.560, 1.999, 3.170] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3467.2K, I=743.6213A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8789V Tmax=3272.9K P03sph=589.8W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=14.36h loss=0.1000
+  WARN: solve failed step 7: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	辐射度
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算表达式。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1)-comp1.rad.Ju_band1)*dvol
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1-comp1.rad.Ju_band1)*test(comp1.rad.Ju_band1))*(dvol)
+
+  FAILED: FAIL_EROSION_SOLVE
+
+============================================================
+Trial 52: r = [2.783, 1.875, 1.761, 3.261, 3.261, 1.761, 1.875, 2.783] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3503.1K, I=791.6587A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8301V Tmax=3234.5K P03sph=578.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=24.68h loss=0.1000
+  STEP=10 t=70.68h loss=0.1917
+  STEP=12 t=77.13h loss=0.2001
+  Vwork=0.8301V  Tmax=3234.5K  Lifetime=77.13h  AvgP03=493.20W  [343s]
+
+============================================================
+Trial 53: r = [2.563, 2.227, 1.845, 3.173, 3.173, 1.845, 2.227, 2.563] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3593.5K, I=867.6638A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7812V Tmax=3244.0K P03sph=580.1W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=21.90h loss=0.1000
+  STEP=10 t=63.18h loss=0.1980
+  STEP=12 t=64.69h loss=0.2004
+  Vwork=0.7812V  Tmax=3244.0K  Lifetime=64.69h  AvgP03=498.47W  [291s]
+
+============================================================
+Trial 54: r = [3.363, 2.061, 1.688, 2.568, 2.568, 1.688, 2.061, 3.363] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3544.8K, I=799.2633A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8301V Tmax=3265.3K P03sph=583.7W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=17.53h loss=0.0999
+  STEP=10 t=49.64h loss=0.1998
+  STEP=12 t=49.79h loss=0.2001
+  Vwork=0.8301V  Tmax=3265.3K  Lifetime=49.79h  AvgP03=506.95W  [251s]
+
+============================================================
+Trial 55: r = [3.130, 1.586, 1.290, 3.320, 3.320, 1.290, 1.586, 3.130] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3253.2K, I=575.5344A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3217.8K P03sph=528.1W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=21.12h loss=0.1000
+  STEP=10 t=62.36h loss=0.1977
+  STEP=11 t=63.88h loss=0.2000
+  Vwork=0.9766V  Tmax=3217.8K  Lifetime=63.88h  AvgP03=458.85W  [237s]
+
+============================================================
+Trial 56: r = [3.012, 2.482, 2.047, 2.361, 2.361, 2.047, 2.482, 3.012] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3761.2K, I=955.1851A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.6836V Tmax=3200.9K P03sph=525.3W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=34.23h loss=0.0867
+  STEP=10 t=79.03h loss=0.1734
+  STEP=13 t=95.31h loss=0.2000
+  Vwork=0.6836V  Tmax=3200.9K  Lifetime=95.31h  AvgP03=461.03W  [366s]
+
+============================================================
+Trial 57: r = [3.227, 2.222, 2.114, 2.276, 2.276, 2.114, 2.222, 3.227] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3743.7K, I=929.0900A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.6836V Tmax=3177.7K P03sph=511.1W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=42.90h loss=0.0929
+  STEP=10 t=92.87h loss=0.1778
+  STEP=13 t=108.00h loss=0.2001
+  Vwork=0.6836V  Tmax=3177.7K  Lifetime=108.00h  AvgP03=454.62W  [532s]
+
+============================================================
+Trial 58: r = [3.792, 2.101, 1.878, 1.636, 1.636, 1.878, 2.101, 3.792] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3702.8K, I=725.6929A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7324V Tmax=3171.5K P03sph=442.5W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=40.61h loss=0.1000
+  STEP=10 t=90.41h loss=0.1884
+  STEP=12 t=98.55h loss=0.2001
+  Vwork=0.7324V  Tmax=3171.5K  Lifetime=98.55h  AvgP03=397.97W  [336s]
+
+============================================================
+Trial 59: r = [3.341, 1.832, 1.502, 2.868, 2.868, 1.502, 1.832, 3.341] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3411.7K, I=696.7088A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8789V Tmax=3218.3K P03sph=551.2W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=23.19h loss=0.0999
+  STEP=10 t=66.34h loss=0.1963
+  STEP=12 t=68.96h loss=0.2001
+  Vwork=0.8789V  Tmax=3218.3K  Lifetime=68.96h  AvgP03=480.65W  [262s]
+
+============================================================
+Trial 60: r = [2.759, 3.435, 1.904, 1.401, 1.401, 1.904, 3.435, 2.759] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3769.8K, I=666.9478A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7324V Tmax=3204.9K P03sph=408.4W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=31.71h loss=0.0999
+  STEP=10 t=78.76h loss=0.1942
+  STEP=11 t=82.65h loss=0.2000
+  Vwork=0.7324V  Tmax=3204.9K  Lifetime=82.65h  AvgP03=358.93W  [270s]
+
+============================================================
+Trial 61: r = [3.610, 1.722, 2.240, 1.996, 1.996, 2.240, 1.722, 3.610] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3545.6K, I=771.3651A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8301V Tmax=3261.1K P03sph=562.4W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=14.91h loss=0.0863
+  STEP=10 t=31.83h loss=0.1725
+  STEP=13 t=37.68h loss=0.2000
+  Vwork=0.8301V  Tmax=3261.1K  Lifetime=37.68h  AvgP03=512.04W  [323s]
+
+============================================================
+Trial 62: r = [3.642, 1.929, 2.262, 1.702, 1.702, 2.262, 1.929, 3.642] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3655.0K, I=759.3438A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7812V Tmax=3243.2K P03sph=507.6W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=20.35h loss=0.0999
+  STEP=10 t=46.49h loss=0.1996
+  STEP=12 t=46.61h loss=0.2000
+  Vwork=0.7812V  Tmax=3243.2K  Lifetime=46.61h  AvgP03=458.72W  [325s]
+
+============================================================
+Trial 63: r = [3.404, 1.720, 1.992, 2.547, 2.547, 1.992, 1.720, 3.404] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3505.3K, I=798.7827A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8301V Tmax=3235.1K P03sph=582.8W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=19.99h loss=0.0863
+  STEP=10 t=48.95h loss=0.1726
+  STEP=13 t=60.94h loss=0.2002
+  Vwork=0.8301V  Tmax=3235.1K  Lifetime=60.94h  AvgP03=508.27W  [337s]
+
+============================================================
+Trial 64: r = [2.927, 1.537, 2.589, 2.714, 2.714, 2.589, 1.537, 2.927] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3487.1K, I=765.7091A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8301V Tmax=3217.5K P03sph=558.7W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=25.97h loss=0.1000
+  STEP=10 t=72.86h loss=0.1889
+  WARN: solve failed step 11: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	辐射度
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算表达式。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1)-comp1.rad.Ju_band1)*dvol
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1-comp1.rad.Ju_band1)*test(comp1.rad.Ju_band1))*(dvol)
+
+  FAILED: FAIL_EROSION_SOLVE
+
+============================================================
+Trial 65: r = [3.584, 0.960, 2.140, 2.580, 2.580, 2.140, 0.960, 3.584] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3098.0K, I=449.1316A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0742V Tmax=3207.6K P03sph=468.6W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=26.49h loss=0.1000
+  STEP=10 t=74.50h loss=0.1856
+  STEP=12 t=86.61h loss=0.2000
+  Vwork=1.0742V  Tmax=3207.6K  Lifetime=86.61h  AvgP03=399.76W  [308s]
+
+============================================================
+Trial 66: r = [3.256, 1.378, 2.234, 2.740, 2.740, 2.234, 1.378, 3.256] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3371.3K, I=679.2968A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3259.7K P03sph=581.5W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=17.89h loss=0.0998
+  STEP=10 t=55.83h loss=0.1992
+  STEP=11 t=56.32h loss=0.2000
+  Vwork=0.9277V  Tmax=3259.7K  Lifetime=56.32h  AvgP03=496.52W  [277s]
+
+============================================================
+Trial 67: r = [3.108, 2.035, 2.374, 2.359, 2.359, 2.374, 2.035, 3.108] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3693.8K, I=934.3808A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7324V Tmax=3243.1K P03sph=568.7W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=21.96h loss=0.0863
+  STEP=10 t=50.43h loss=0.1725
+  STEP=13 t=61.12h loss=0.2002
+  Vwork=0.7324V  Tmax=3243.1K  Lifetime=61.12h  AvgP03=500.82W  [530s]
+
+============================================================
+Trial 68: r = [0.848, 1.627, 3.683, 2.841, 2.841, 3.683, 1.627, 0.848] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3577.4K, I=364.3367A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8301V Tmax=3211.1K P03sph=264.5W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=33.24h loss=0.1000
+  STEP=10 t=79.07h loss=0.2000
+  STEP=11 t=85.38h loss=0.2200
+  Vwork=0.8301V  Tmax=3211.1K  Lifetime=85.38h  AvgP03=226.27W  [252s]
+
+============================================================
+Trial 69: r = [3.944, 1.873, 1.723, 1.723, 1.723, 1.723, 1.873, 3.944] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3618.1K, I=687.6740A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7812V Tmax=3204.6K P03sph=459.3W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=27.30h loss=0.1000
+  STEP=10 t=62.28h loss=0.2000
+  STEP=12 t=62.31h loss=0.2000
+  Vwork=0.7812V  Tmax=3204.6K  Lifetime=62.31h  AvgP03=418.50W  [548s]
+
+============================================================
+Trial 70: r = [3.760, 2.283, 2.010, 1.268, 1.268, 2.010, 2.283, 3.760] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3738.5K, I=603.9287A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7812V Tmax=3262.7K P03sph=405.9W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=19.62h loss=0.0999
+  STEP=10 t=51.81h loss=0.1998
+  STEP=12 t=52.10h loss=0.2005
+  Vwork=0.7812V  Tmax=3262.7K  Lifetime=52.10h  AvgP03=354.20W  [318s]
+
+============================================================
+Trial 71: r = [3.499, 1.682, 2.155, 2.298, 2.298, 2.155, 1.682, 3.499] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3507.7K, I=787.9126A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8301V Tmax=3239.7K P03sph=574.8W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=17.98h loss=0.0732
+  STEP=10 t=39.31h loss=0.1464
+  STEP=15 t=56.47h loss=0.2001
+  Vwork=0.8301V  Tmax=3239.7K  Lifetime=56.47h  AvgP03=504.90W  [461s]
+
+============================================================
+Trial 72: r = [3.045, 1.761, 2.481, 2.544, 2.544, 2.481, 1.761, 3.045] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3564.6K, I=854.0194A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7812V Tmax=3216.1K P03sph=570.8W steps=12
+  Phase 2: erosion loop...
+  WARN: solve failed step 5: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	辐射度
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算表达式。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1)-comp1.rad.Ju_band1)*dvol
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1-comp1.rad.Ju_band1)*test(comp1.rad.Ju_band1))*(dvol)
+
+  FAILED: FAIL_EROSION_SOLVE
+
+============================================================
+Trial 73: r = [3.616, 1.966, 2.287, 1.681, 1.681, 2.287, 1.966, 3.616] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3670.8K, I=759.6644A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7812V Tmax=3255.0K P03sph=508.1W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=18.42h loss=0.0999
+  STEP=10 t=42.46h loss=0.1997
+  STEP=12 t=42.58h loss=0.2001
+  Vwork=0.7812V  Tmax=3255.0K  Lifetime=42.58h  AvgP03=458.32W  [310s]
+
+============================================================
+Trial 74: r = [2.858, 1.518, 3.101, 2.216, 2.216, 3.101, 1.518, 2.858] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3378.1K, I=736.3677A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3270.0K P03sph=631.3W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=15.01h loss=0.0999
+  STEP=10 t=45.06h loss=0.1999
+  STEP=12 t=45.65h loss=0.2012
+  Vwork=0.9277V  Tmax=3270.0K  Lifetime=45.65h  AvgP03=544.10W  [265s]
+
+============================================================
+Trial 75: r = [2.868, 1.411, 3.208, 2.120, 2.120, 3.208, 1.411, 2.868] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3305.1K, I=681.1749A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3270.7K P03sph=628.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=14.02h loss=0.0999
+  STEP=10 t=41.98h loss=0.1999
+  STEP=11 t=42.01h loss=0.2000
+  Vwork=0.9766V  Tmax=3270.7K  Lifetime=42.01h  AvgP03=541.09W  [259s]
+
+============================================================
+Trial 76: r = [2.605, 1.249, 3.869, 1.299, 1.299, 3.869, 1.249, 2.605] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3072.4K, I=496.8641A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.1230V Tmax=3249.7K P03sph=554.8W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=15.56h loss=0.0960
+  STEP=10 t=29.40h loss=0.1920
+  STEP=11 t=30.42h loss=0.2000
+  Vwork=1.1230V  Tmax=3249.7K  Lifetime=30.42h  AvgP03=507.75W  [274s]
+
+============================================================
+Trial 77: r = [2.447, 1.549, 3.156, 2.579, 2.579, 3.156, 1.549, 2.447] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3482.8K, I=759.8847A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8301V Tmax=3213.7K P03sph=554.1W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=25.36h loss=0.1000
+  STEP=10 t=70.85h loss=0.1924
+  STEP=12 t=76.52h loss=0.2000
+  Vwork=0.8301V  Tmax=3213.7K  Lifetime=76.52h  AvgP03=476.80W  [233s]
+
+============================================================
+Trial 78: r = [2.832, 1.418, 3.275, 2.061, 2.061, 3.275, 1.418, 2.832] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3293.2K, I=676.6563A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3259.1K P03sph=623.6W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=15.69h loss=0.0999
+  STEP=10 t=46.67h loss=0.1998
+  STEP=12 t=47.42h loss=0.2014
+  Vwork=0.9766V  Tmax=3259.1K  Lifetime=47.42h  AvgP03=539.56W  [281s]
+
+============================================================
+Trial 79: r = [2.843, 1.485, 3.295, 1.964, 1.964, 3.295, 1.485, 2.843] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3290.9K, I=696.1920A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3257.4K P03sph=642.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=17.09h loss=0.1000
+  STEP=10 t=52.41h loss=0.2000
+  STEP=12 t=53.22h loss=0.2015
+  Vwork=0.9766V  Tmax=3257.4K  Lifetime=53.22h  AvgP03=550.79W  [295s]
+
+============================================================
+Trial 80: r = [2.851, 1.392, 3.259, 2.077, 2.077, 3.259, 1.392, 2.851] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3285.5K, I=668.0140A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3251.3K P03sph=615.4W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=16.59h loss=0.1000
+  STEP=10 t=49.58h loss=0.2000
+  STEP=12 t=50.48h loss=0.2018
+  Vwork=0.9766V  Tmax=3251.3K  Lifetime=50.48h  AvgP03=530.48W  [300s]
+
+============================================================
+Trial 81: r = [2.838, 1.395, 3.309, 2.012, 2.012, 3.309, 1.395, 2.838] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3269.1K, I=664.3697A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3235.3K P03sph=611.7W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=19.41h loss=0.1000
+  STEP=10 t=57.57h loss=0.2000
+  STEP=11 t=59.52h loss=0.2034
+  Vwork=0.9766V  Tmax=3235.3K  Lifetime=59.52h  AvgP03=526.35W  [292s]
+
+============================================================
+Trial 82: r = [2.877, 1.044, 3.264, 2.230, 2.230, 3.264, 1.044, 2.877] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3134.0K, I=497.7346A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0742V Tmax=3243.0K P03sph=521.8W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=16.07h loss=0.0999
+  STEP=10 t=50.21h loss=0.1999
+  STEP=12 t=54.87h loss=0.2089
+  Vwork=1.0742V  Tmax=3243.0K  Lifetime=54.87h  AvgP03=442.86W  [275s]
+
+============================================================
+Trial 83: r = [2.658, 1.389, 3.420, 2.076, 2.076, 3.420, 1.389, 2.658] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3286.7K, I=662.0324A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3252.4K P03sph=609.8W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=16.06h loss=0.1000
+  STEP=10 t=46.82h loss=0.2000
+  STEP=11 t=46.83h loss=0.2000
+  Vwork=0.9766V  Tmax=3252.4K  Lifetime=46.83h  AvgP03=529.49W  [274s]
+
+============================================================
+Trial 84: r = [2.668, 1.188, 3.440, 2.154, 2.154, 3.440, 1.188, 2.668] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3209.3K, I=573.3029A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0254V Tmax=3246.7K P03sph=564.5W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=15.92h loss=0.0998
+  STEP=10 t=48.87h loss=0.1998
+  STEP=11 t=48.98h loss=0.2000
+  Vwork=1.0254V  Tmax=3246.7K  Lifetime=48.98h  AvgP03=483.30W  [228s]
+
+============================================================
+Trial 85: r = [2.814, 1.426, 3.273, 2.082, 2.082, 3.273, 1.426, 2.814] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3302.6K, I=680.4004A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3268.4K P03sph=627.3W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=14.36h loss=0.1000
+  STEP=10 t=42.15h loss=0.2000
+  STEP=11 t=44.09h loss=0.2047
+  Vwork=0.9766V  Tmax=3268.4K  Lifetime=44.09h  AvgP03=543.22W  [298s]
+
+============================================================
+Trial 86: r = [2.508, 1.409, 3.072, 2.700, 2.700, 3.072, 1.409, 2.508] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3438.0K, I=690.5483A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8789V Tmax=3246.7K P03sph=547.3W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=17.56h loss=0.0998
+  STEP=10 t=54.53h loss=0.1998
+  STEP=11 t=54.66h loss=0.2000
+  Vwork=0.8789V  Tmax=3246.7K  Lifetime=54.66h  AvgP03=471.20W  [299s]
+
+============================================================
+Trial 87: r = [2.148, 0.849, 3.643, 2.528, 2.528, 3.643, 0.849, 2.148] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3073.6K, I=386.1043A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.1230V Tmax=3257.2K P03sph=427.6W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=15.89h loss=0.1000
+  STEP=10 t=47.59h loss=0.2000
+  STEP=11 t=47.59h loss=0.2000
+  Vwork=1.1230V  Tmax=3257.2K  Lifetime=47.59h  AvgP03=361.79W  [303s]
+
+============================================================
+Trial 88: r = [2.771, 1.305, 3.296, 2.181, 2.181, 3.296, 1.305, 2.771] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3271.9K, I=634.0251A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3237.1K P03sph=583.3W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=18.12h loss=0.1000
+  STEP=10 t=54.98h loss=0.2000
+  STEP=12 t=55.75h loss=0.2013
+  Vwork=0.9766V  Tmax=3237.1K  Lifetime=55.75h  AvgP03=500.99W  [395s]
+
+============================================================
+Trial 89: r = [2.948, 1.458, 3.412, 1.595, 1.595, 3.412, 1.458, 2.948] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3250.3K, I=624.4076A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3215.4K P03sph=573.2W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=23.11h loss=0.0913
+  STEP=10 t=49.72h loss=0.1826
+  STEP=12 t=54.92h loss=0.2000
+  Vwork=0.9766V  Tmax=3215.4K  Lifetime=54.92h  AvgP03=520.55W  [382s]
+
+============================================================
+Trial 90: r = [2.842, 1.214, 3.534, 1.719, 1.719, 3.534, 1.214, 2.842] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3103.5K, I=553.9120A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.1230V Tmax=3270.1K P03sph=621.6W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=12.38h loss=0.1000
+  STEP=10 t=34.83h loss=0.2000
+  STEP=11 t=34.84h loss=0.2000
+  Vwork=1.1230V  Tmax=3270.1K  Lifetime=34.84h  AvgP03=541.05W  [357s]
+
+============================================================
+Trial 91: r = [2.858, 1.209, 3.216, 2.242, 2.242, 3.216, 1.209, 2.858] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3234.8K, I=587.9194A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0254V Tmax=3272.4K P03sph=579.6W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=12.72h loss=0.0999
+  STEP=10 t=39.28h loss=0.1999
+  STEP=11 t=39.33h loss=0.2000
+  Vwork=1.0254V  Tmax=3272.4K  Lifetime=39.33h  AvgP03=497.30W  [320s]
+
+============================================================
+Trial 92: r = [2.720, 1.086, 3.540, 1.973, 1.973, 3.540, 1.086, 2.720] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3114.2K, I=513.0504A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0742V Tmax=3220.7K P03sph=538.1W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=19.71h loss=0.0999
+  STEP=10 t=59.36h loss=0.1983
+  STEP=12 t=60.87h loss=0.2007
+  Vwork=1.0742V  Tmax=3220.7K  Lifetime=60.87h  AvgP03=460.75W  [308s]
+
+============================================================
+Trial 93: r = [2.447, 1.328, 3.731, 1.825, 1.825, 3.731, 1.328, 2.447] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3194.5K, I=599.3453A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0254V Tmax=3230.1K P03sph=590.9W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=19.01h loss=0.0999
+  STEP=10 t=53.44h loss=0.1999
+  STEP=12 t=53.69h loss=0.2004
+  Vwork=1.0254V  Tmax=3230.1K  Lifetime=53.69h  AvgP03=521.11W  [297s]
+
+============================================================
+Trial 94: r = [2.819, 1.531, 3.389, 1.796, 1.796, 3.389, 1.531, 2.819] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3284.9K, I=688.3911A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9690V Tmax=3240.6K P03sph=627.1W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=20.72h loss=0.0851
+  STEP=10 t=56.23h loss=0.1702
+  STEP=12 t=72.74h loss=0.2000
+  Vwork=0.9690V  Tmax=3240.6K  Lifetime=72.74h  AvgP03=539.38W  [378s]
+
+============================================================
+Trial 95: r = [2.625, 1.515, 3.356, 2.133, 2.133, 3.356, 1.515, 2.625] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3355.3K, I=724.4940A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3248.1K P03sph=620.5W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=17.78h loss=0.1000
+  STEP=10 t=51.94h loss=0.2000
+  STEP=11 t=52.99h loss=0.2021
+  Vwork=0.9277V  Tmax=3248.1K  Lifetime=52.99h  AvgP03=535.12W  [363s]
+
+============================================================
+Trial 96: r = [2.612, 1.506, 3.037, 2.585, 2.585, 3.037, 1.506, 2.612] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3461.4K, I=749.9092A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8789V Tmax=3271.7K P03sph=595.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=14.25h loss=0.1000
+  STEP=10 t=42.55h loss=0.2000
+  STEP=11 t=42.55h loss=0.2000
+  Vwork=0.8789V  Tmax=3271.7K  Lifetime=42.55h  AvgP03=508.74W  [372s]
+
+============================================================
+Trial 97: r = [2.305, 1.611, 3.358, 2.412, 2.412, 3.358, 1.611, 2.305] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3475.3K, I=772.7936A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8301V Tmax=3208.7K P03sph=563.2W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=27.76h loss=0.1000
+  STEP=10 t=74.22h loss=0.1934
+  STEP=12 t=82.80h loss=0.2054
+  Vwork=0.8301V  Tmax=3208.7K  Lifetime=82.80h  AvgP03=485.03W  [389s]
+
+============================================================
+Trial 98: r = [2.960, 0.935, 3.526, 1.712, 1.712, 3.526, 0.935, 2.960] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=2961.2K, I=422.1603A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.2207V Tmax=3263.7K P03sph=528.2W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=12.31h loss=0.0999
+  STEP=10 t=35.94h loss=0.1999
+  STEP=12 t=37.97h loss=0.2058
+  Vwork=1.2207V  Tmax=3263.7K  Lifetime=37.97h  AvgP03=454.23W  [318s]
+
+============================================================
+Trial 99: r = [2.688, 1.475, 3.204, 2.309, 2.309, 3.204, 1.475, 2.688] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3383.7K, I=722.7419A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8789V Tmax=3198.6K P03sph=571.8W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=28.35h loss=0.1000
+  STEP=10 t=76.31h loss=0.1874
+  STEP=13 t=88.35h loss=0.2022
+  Vwork=0.8789V  Tmax=3198.6K  Lifetime=88.35h  AvgP03=491.04W  [399s]
+
+============================================================
+Trial 100: r = [2.551, 1.145, 2.915, 2.947, 2.947, 2.915, 1.145, 2.551] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3315.7K, I=549.3319A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3202.8K P03sph=469.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=24.70h loss=0.0999
+  STEP=10 t=71.69h loss=0.1865
+  STEP=13 t=84.89h loss=0.2014
+  Vwork=0.9277V  Tmax=3202.8K  Lifetime=84.89h  AvgP03=397.47W  [622s]
+
+============================================================
+Trial 101: r = [2.824, 1.421, 3.331, 1.978, 1.978, 3.331, 1.421, 2.824] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3269.8K, I=670.1117A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3236.2K P03sph=617.2W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=19.62h loss=0.0999
+  STEP=10 t=58.54h loss=0.1994
+  STEP=12 t=59.66h loss=0.2013
+  Vwork=0.9766V  Tmax=3236.2K  Lifetime=59.66h  AvgP03=532.92W  [372s]
+
+============================================================
+Trial 102: r = [2.814, 1.280, 3.373, 2.018, 2.018, 3.373, 1.280, 2.814] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3218.8K, I=612.8341A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0254V Tmax=3255.4K P03sph=604.5W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=14.91h loss=0.1000
+  STEP=10 t=43.96h loss=0.2000
+  STEP=11 t=43.97h loss=0.2000
+  Vwork=1.0254V  Tmax=3255.4K  Lifetime=43.97h  AvgP03=520.47W  [375s]
+
+============================================================
+Trial 103: r = [2.995, 1.412, 3.489, 1.364, 1.364, 3.489, 1.412, 2.995] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3240.3K, I=556.9628A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3202.5K P03sph=509.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=26.43h loss=0.0999
+  STEP=10 t=52.73h loss=0.1998
+  STEP=12 t=52.81h loss=0.2001
+  Vwork=0.9766V  Tmax=3202.5K  Lifetime=52.81h  AvgP03=464.46W  [381s]
+
+============================================================
+Trial 104: r = [2.637, 1.339, 3.758, 1.460, 1.460, 3.758, 1.339, 2.637] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3131.5K, I=556.8537A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0742V Tmax=3236.3K P03sph=585.5W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=18.74h loss=0.0916
+  STEP=10 t=39.69h loss=0.1831
+  STEP=11 t=43.49h loss=0.2000
+  Vwork=1.0742V  Tmax=3236.3K  Lifetime=43.49h  AvgP03=530.45W  [360s]
+
+============================================================
+Trial 105: r = [2.777, 1.520, 3.775, 0.854, 0.854, 3.775, 1.520, 2.777] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3369.0K, I=366.3054A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3211.3K P03sph=307.3W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=43.24h loss=0.1000
+  STEP=10 t=93.24h loss=0.1848
+  STEP=12 t=104.32h loss=0.2000
+  Vwork=0.9277V  Tmax=3211.3K  Lifetime=104.32h  AvgP03=265.34W  [362s]
+
+============================================================
+Trial 106: r = [2.398, 1.247, 4.050, 1.135, 1.135, 4.050, 1.247, 2.398] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3085.9K, I=447.8246A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0742V Tmax=3203.6K P03sph=466.3W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=25.95h loss=0.1000
+  STEP=10 t=47.87h loss=0.1998
+  STEP=12 t=47.94h loss=0.2001
+  Vwork=1.0742V  Tmax=3203.6K  Lifetime=47.94h  AvgP03=426.74W  [366s]
+
+============================================================
+Trial 107: r = [2.889, 1.602, 3.232, 1.908, 1.908, 3.232, 1.602, 2.889] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3346.8K, I=733.5991A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3241.7K P03sph=628.2W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=21.09h loss=0.0839
+  STEP=10 t=57.80h loss=0.1678
+  STEP=12 t=77.23h loss=0.2000
+  Vwork=0.9277V  Tmax=3241.7K  Lifetime=77.23h  AvgP03=536.74W  [392s]
+
+============================================================
+Trial 108: r = [2.897, 1.642, 3.239, 1.849, 1.849, 3.239, 1.642, 2.897] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3376.6K, I=735.2165A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3267.8K P03sph=629.6W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=15.93h loss=0.0887
+  STEP=10 t=37.93h loss=0.1773
+  STEP=13 t=44.42h loss=0.2000
+  Vwork=0.9277V  Tmax=3267.8K  Lifetime=44.42h  AvgP03=559.18W  [399s]
+
+============================================================
+Trial 109: r = [2.753, 1.655, 3.035, 2.340, 2.340, 3.035, 1.655, 2.753] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3469.0K, I=806.4189A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8301V Tmax=3206.4K P03sph=588.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=29.21h loss=0.1000
+  STEP=10 t=77.69h loss=0.1866
+  STEP=13 t=90.83h loss=0.2025
+  Vwork=0.8301V  Tmax=3206.4K  Lifetime=90.83h  AvgP03=503.90W  [426s]
+
+============================================================
+Trial 110: r = [2.922, 1.590, 3.128, 2.037, 2.037, 3.128, 1.590, 2.922] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3356.2K, I=750.0427A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3251.2K P03sph=642.9W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=20.60h loss=0.0999
+  STEP=10 t=64.08h loss=0.1935
+  STEP=11 t=68.88h loss=0.2000
+  Vwork=0.9277V  Tmax=3251.2K  Lifetime=68.88h  AvgP03=541.37W  [379s]
+
+============================================================
+Trial 111: r = [2.931, 1.551, 3.134, 2.045, 2.045, 3.134, 1.551, 2.931] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3343.2K, I=731.4754A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3237.9K P03sph=626.6W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=22.31h loss=0.0999
+  STEP=10 t=66.79h loss=0.1929
+  STEP=12 t=72.46h loss=0.2005
+  Vwork=0.9277V  Tmax=3237.9K  Lifetime=72.46h  AvgP03=533.95W  [334s]
+
+============================================================
+Trial 112: r = [2.911, 1.570, 3.200, 1.955, 1.955, 3.200, 1.570, 2.911] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3326.2K, I=729.5414A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3223.5K P03sph=624.6W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=26.29h loss=0.0930
+  STEP=10 t=74.19h loss=0.1689
+  STEP=15 t=109.85h loss=0.2005
+  Vwork=0.9277V  Tmax=3223.5K  Lifetime=109.85h  AvgP03=516.88W  [424s]
+
+============================================================
+Trial 113: r = [3.053, 1.481, 3.102, 1.966, 1.966, 3.102, 1.481, 3.053] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3292.7K, I=692.9531A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3259.3K P03sph=639.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=18.48h loss=0.1000
+  STEP=10 t=59.21h loss=0.1971
+  STEP=12 t=61.68h loss=0.2007
+  Vwork=0.9766V  Tmax=3259.3K  Lifetime=61.68h  AvgP03=541.91W  [370s]
+
+============================================================
+Trial 114: r = [3.066, 1.617, 2.983, 2.022, 2.022, 2.983, 1.617, 3.066] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3384.0K, I=759.1685A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8789V Tmax=3205.7K P03sph=600.8W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=29.01h loss=0.0799
+  STEP=10 t=76.10h loss=0.1550
+  STEP=15 t=117.91h loss=0.2000
+  Vwork=0.8789V  Tmax=3205.7K  Lifetime=117.91h  AvgP03=506.03W  [450s]
+
+============================================================
+Trial 115: r = [0.972, 1.754, 2.766, 3.650, 3.650, 2.766, 1.754, 0.972] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3659.2K, I=433.7697A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.7812V Tmax=3202.1K P03sph=290.6W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=30.80h loss=0.1000
+  STEP=10 t=78.34h loss=0.1954
+  STEP=12 t=90.94h loss=0.2180
+  Vwork=0.7812V  Tmax=3202.1K  Lifetime=90.94h  AvgP03=245.80W  [330s]
+
+============================================================
+Trial 116: r = [3.067, 1.481, 3.082, 1.975, 1.975, 3.082, 1.481, 3.067] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3296.0K, I=699.4629A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3262.4K P03sph=645.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=17.98h loss=0.0999
+  STEP=10 t=57.89h loss=0.1974
+  STEP=12 t=60.09h loss=0.2007
+  Vwork=0.9766V  Tmax=3262.4K  Lifetime=60.09h  AvgP03=541.84W  [391s]
+
+============================================================
+Trial 117: r = [3.038, 1.669, 3.107, 1.826, 1.826, 3.107, 1.669, 3.038] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3413.9K, I=740.0585A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8789V Tmax=3223.5K P03sph=585.2W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=23.61h loss=0.0913
+  STEP=10 t=53.57h loss=0.1826
+  STEP=12 t=59.93h loss=0.2000
+  Vwork=0.8789V  Tmax=3223.5K  Lifetime=59.93h  AvgP03=527.30W  [358s]
+
+============================================================
+Trial 118: r = [3.235, 1.488, 3.245, 1.338, 1.338, 3.245, 1.488, 3.235] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3327.0K, I=564.0709A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3201.5K P03sph=478.7W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=27.41h loss=0.0999
+  STEP=10 t=56.66h loss=0.1997
+  STEP=12 t=56.79h loss=0.2001
+  Vwork=0.9277V  Tmax=3201.5K  Lifetime=56.79h  AvgP03=434.92W  [388s]
+
+============================================================
+Trial 119: r = [2.967, 1.805, 3.162, 1.717, 1.717, 3.162, 1.805, 2.967] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3499.9K, I=751.8834A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8301V Tmax=3209.3K P03sph=547.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=28.74h loss=0.0999
+  STEP=10 t=63.77h loss=0.1997
+  STEP=12 t=63.91h loss=0.2000
+  Vwork=0.8301V  Tmax=3209.3K  Lifetime=63.91h  AvgP03=496.31W  [350s]
+
+============================================================
+Trial 120: r = [3.140, 1.345, 2.969, 2.126, 2.126, 2.969, 1.345, 3.140] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3278.6K, I=649.3654A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3244.2K P03sph=597.7W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=18.67h loss=0.0998
+  STEP=10 t=57.25h loss=0.1988
+  STEP=11 t=58.01h loss=0.2000
+  Vwork=0.9766V  Tmax=3244.2K  Lifetime=58.01h  AvgP03=513.46W  [306s]
+
+============================================================
+Trial 121: r = [2.883, 1.486, 3.383, 1.742, 1.742, 3.383, 1.486, 2.883] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3258.4K, I=661.8044A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3225.0K P03sph=609.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=22.75h loss=0.0851
+  STEP=10 t=57.91h loss=0.1702
+  STEP=13 t=73.19h loss=0.2000
+  Vwork=0.9766V  Tmax=3225.0K  Lifetime=73.19h  AvgP03=532.12W  [425s]
+
+============================================================
+Trial 122: r = [2.726, 1.591, 3.083, 2.352, 2.352, 3.083, 1.591, 2.726] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3445.3K, I=780.1322A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8789V Tmax=3259.6K P03sph=618.7W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=16.70h loss=0.0997
+  STEP=10 t=49.82h loss=0.1995
+  STEP=11 t=50.06h loss=0.2000
+  Vwork=0.8789V  Tmax=3259.6K  Lifetime=50.06h  AvgP03=531.88W  [287s]
+
+============================================================
+Trial 123: r = [3.015, 1.467, 3.287, 1.718, 1.718, 3.287, 1.467, 3.015] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3260.1K, I=651.8840A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3226.3K P03sph=599.4W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=21.10h loss=0.0852
+  STEP=10 t=49.71h loss=0.1704
+  STEP=12 t=61.08h loss=0.2000
+  Vwork=0.9766V  Tmax=3226.3K  Lifetime=61.08h  AvgP03=532.73W  [392s]
+
+============================================================
+Trial 124: r = [2.547, 1.206, 2.864, 2.976, 2.976, 2.864, 1.206, 2.547] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3352.9K, I=583.6012A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3239.5K P03sph=499.1W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=17.43h loss=0.1000
+  WARN: solve failed step 8: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	辐射度
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算表达式。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1)-comp1.rad.Ju_band1)*dvol
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1-comp1.rad.Ju_band1)*test(comp1.rad.Ju_band1))*(dvol)
+
+  FAILED: FAIL_EROSION_SOLVE
+
+============================================================
+Trial 125: r = [2.805, 1.693, 3.179, 2.039, 2.039, 3.179, 1.693, 2.805] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3404.4K, I=785.0447A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8789V Tmax=3226.3K P03sph=622.1W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=26.80h loss=0.0896
+  STEP=10 t=74.44h loss=0.1629
+  STEP=15 t=119.41h loss=0.2000
+  STEP=16 t=120.21h loss=0.2005
+  Vwork=0.8789V  Tmax=3226.3K  Lifetime=120.21h  AvgP03=512.28W  [470s]
+
+============================================================
+Trial 126: r = [3.073, 1.547, 3.243, 1.627, 1.627, 3.243, 1.547, 3.073] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3332.5K, I=657.5910A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3219.0K P03sph=560.9W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=23.11h loss=0.0949
+  STEP=10 t=49.08h loss=0.1897
+  STEP=11 t=52.05h loss=0.2000
+  Vwork=0.9277V  Tmax=3219.0K  Lifetime=52.05h  AvgP03=511.75W  [389s]
+
+============================================================
+Trial 127: r = [2.886, 1.436, 3.465, 1.614, 1.614, 3.465, 1.436, 2.886] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3224.5K, I=620.1964A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0254V Tmax=3261.1K P03sph=611.7W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=15.09h loss=0.0887
+  STEP=10 t=33.40h loss=0.1775
+  STEP=13 t=38.25h loss=0.2000
+  Vwork=1.0254V  Tmax=3261.1K  Lifetime=38.25h  AvgP03=551.84W  [399s]
+
+============================================================
+Trial 128: r = [3.288, 1.279, 3.313, 1.255, 1.255, 3.313, 1.279, 3.288] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3170.9K, I=492.6489A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0254V Tmax=3211.6K P03sph=481.2W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=22.72h loss=0.0999
+  STEP=10 t=43.84h loss=0.1998
+  STEP=11 t=43.89h loss=0.2000
+  Vwork=1.0254V  Tmax=3211.6K  Lifetime=43.89h  AvgP03=438.63W  [377s]
+
+============================================================
+Trial 129: r = [2.882, 1.141, 3.569, 1.628, 1.628, 3.569, 1.141, 2.882] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3042.1K, I=511.9881A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.1719V Tmax=3270.3K P03sph=609.4W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=11.99h loss=0.1000
+  STEP=10 t=33.91h loss=0.2000
+  STEP=12 t=34.32h loss=0.2013
+  Vwork=1.1719V  Tmax=3270.3K  Lifetime=34.32h  AvgP03=529.75W  [308s]
+
+============================================================
+Trial 130: r = [3.176, 1.346, 3.040, 1.965, 1.965, 3.040, 1.346, 3.176] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3236.3K, I=636.5521A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0254V Tmax=3272.5K P03sph=628.7W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=14.74h loss=0.0998
+  STEP=10 t=45.47h loss=0.1996
+  STEP=12 t=45.90h loss=0.2005
+  Vwork=1.0254V  Tmax=3272.5K  Lifetime=45.90h  AvgP03=538.23W  [244s]
+
+============================================================
+Trial 131: r = [3.156, 1.459, 3.048, 1.904, 1.904, 3.048, 1.459, 3.156] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3270.6K, I=678.6607A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3238.2K P03sph=625.1W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=20.19h loss=0.0845
+  STEP=10 t=60.74h loss=0.1611
+  STEP=14 t=100.71h loss=0.2000
+  Vwork=0.9766V  Tmax=3238.2K  Lifetime=100.71h  AvgP03=512.81W  [268s]
+
+============================================================
+Trial 132: r = [2.981, 1.359, 3.448, 1.543, 1.543, 3.448, 1.359, 2.981] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3176.0K, I=583.8998A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0254V Tmax=3212.3K P03sph=574.4W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=22.67h loss=0.0880
+  STEP=10 t=49.04h loss=0.1759
+  STEP=13 t=56.34h loss=0.2000
+  Vwork=1.0254V  Tmax=3212.3K  Lifetime=56.34h  AvgP03=518.58W  [271s]
+
+============================================================
+Trial 133: r = [2.899, 1.300, 3.509, 1.611, 1.611, 3.509, 1.300, 2.899] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3112.4K, I=574.4043A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0742V Tmax=3210.3K P03sph=604.8W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=26.27h loss=0.0874
+  STEP=10 t=74.28h loss=0.1572
+  STEP=15 t=124.28h loss=0.1950
+  STEP=16 t=132.91h loss=0.2000
+  Vwork=1.0742V  Tmax=3210.3K  Lifetime=132.91h  AvgP03=494.64W  [321s]
+
+============================================================
+Trial 134: r = [3.065, 1.429, 3.124, 1.952, 1.952, 3.124, 1.429, 3.065] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3266.7K, I=674.9011A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3233.3K P03sph=621.6W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=22.47h loss=0.0999
+  STEP=10 t=67.12h loss=0.1929
+  STEP=12 t=73.17h loss=0.2009
+  Vwork=0.9766V  Tmax=3233.3K  Lifetime=73.17h  AvgP03=526.17W  [247s]
+
+============================================================
+Trial 135: r = [2.722, 1.045, 2.857, 2.887, 2.887, 2.857, 1.045, 2.722] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3231.3K, I=503.2751A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.0254V Tmax=3270.0K P03sph=495.1W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=12.52h loss=0.0999
+  STEP=10 t=41.43h loss=0.1999
+  STEP=12 t=42.86h loss=0.2029
+  Vwork=1.0254V  Tmax=3270.0K  Lifetime=42.86h  AvgP03=415.87W  [439s]
+
+============================================================
+Trial 136: r = [3.186, 1.603, 3.228, 1.364, 1.364, 3.228, 1.603, 3.186] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3403.2K, I=595.3624A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3272.7K P03sph=506.7W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=14.60h loss=0.0999
+  STEP=10 t=30.74h loss=0.1998
+  STEP=12 t=30.81h loss=0.2002
+  Vwork=0.9277V  Tmax=3272.7K  Lifetime=30.81h  AvgP03=459.12W  [268s]
+
+============================================================
+Trial 137: r = [2.806, 1.349, 3.020, 2.488, 2.488, 3.020, 1.349, 2.806] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3359.6K, I=668.0445A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3248.4K P03sph=571.8W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=16.85h loss=0.1000
+  STEP=10 t=51.71h loss=0.2000
+  STEP=11 t=51.71h loss=0.2000
+  Vwork=0.9277V  Tmax=3248.4K  Lifetime=51.71h  AvgP03=490.62W  [266s]
+
+============================================================
+Trial 138: r = [2.993, 1.248, 2.922, 2.438, 2.438, 2.922, 1.248, 2.993] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3293.7K, I=616.6343A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3257.9K P03sph=567.4W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=15.20h loss=0.1000
+  STEP=10 t=47.51h loss=0.2000
+  STEP=11 t=50.20h loss=0.2053
+  Vwork=0.9766V  Tmax=3257.9K  Lifetime=50.20h  AvgP03=479.12W  [272s]
+
+============================================================
+Trial 139: r = [3.325, 1.519, 3.190, 1.211, 1.211, 3.190, 1.519, 3.325] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3371.7K, I=525.8119A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3235.8K P03sph=445.6W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=21.20h loss=0.0999
+  STEP=10 t=45.42h loss=0.1997
+  STEP=11 t=45.51h loss=0.2000
+  Vwork=0.9277V  Tmax=3235.8K  Lifetime=45.51h  AvgP03=398.76W  [254s]
+
+============================================================
+Trial 140: r = [2.935, 1.637, 3.419, 1.419, 1.419, 3.419, 1.637, 2.935] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3398.8K, I=620.2300A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3271.4K P03sph=528.6W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=14.96h loss=0.0999
+  STEP=10 t=31.30h loss=0.1998
+  STEP=12 t=31.34h loss=0.2000
+  Vwork=0.9277V  Tmax=3271.4K  Lifetime=31.34h  AvgP03=479.94W  [287s]
+
+============================================================
+Trial 141: r = [2.608, 3.578, 2.174, 0.819, 0.819, 2.174, 3.578, 2.608] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3654.8K, I=361.6901A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8301V Tmax=3247.2K P03sph=263.5W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=38.39h loss=0.1000
+  STEP=10 t=88.39h loss=0.1710
+  STEP=15 t=119.90h loss=0.2008
+  Vwork=0.8301V  Tmax=3247.2K  Lifetime=119.90h  AvgP03=218.84W  [281s]
+
+============================================================
+Trial 142: r = [2.693, 1.417, 3.333, 2.152, 2.152, 3.333, 1.417, 2.693] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3318.3K, I=678.2319A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3210.7K P03sph=579.9W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=24.42h loss=0.0999
+  STEP=10 t=69.29h loss=0.1939
+  STEP=12 t=74.34h loss=0.2009
+  Vwork=0.9277V  Tmax=3210.7K  Lifetime=74.34h  AvgP03=503.29W  [227s]
+
+============================================================
+Trial 143: r = [2.843, 1.570, 3.474, 1.543, 1.543, 3.474, 1.570, 2.843] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3329.9K, I=645.3081A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3213.6K P03sph=550.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=25.54h loss=0.0999
+  STEP=10 t=53.59h loss=0.1997
+  STEP=12 t=53.68h loss=0.2000
+  Vwork=0.9277V  Tmax=3213.6K  Lifetime=53.68h  AvgP03=499.81W  [260s]
+
+============================================================
+Trial 144: r = [2.772, 1.707, 3.355, 1.773, 1.773, 3.355, 1.707, 2.772] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3409.3K, I=743.0624A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8789V Tmax=3217.8K P03sph=587.5W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=26.60h loss=0.0962
+  STEP=10 t=60.49h loss=0.1922
+  STEP=12 t=63.56h loss=0.2000
+  Vwork=0.8789V  Tmax=3217.8K  Lifetime=63.56h  AvgP03=525.67W  [262s]
+
+============================================================
+Trial 145: r = [3.095, 1.506, 3.273, 1.563, 1.563, 3.273, 1.506, 3.095] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3307.0K, I=633.2357A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3270.3K P03sph=581.6W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=13.96h loss=0.0963
+  STEP=10 t=28.59h loss=0.1924
+  STEP=12 t=29.76h loss=0.2000
+  Vwork=0.9766V  Tmax=3270.3K  Lifetime=29.76h  AvgP03=530.60W  [274s]
+
+============================================================
+Trial 146: r = [2.619, 1.366, 3.131, 2.544, 2.544, 3.131, 1.366, 2.619] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3382.7K, I=672.7675A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3270.8K P03sph=576.3W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=13.71h loss=0.1000
+  STEP=10 t=41.93h loss=0.2000
+  STEP=11 t=42.94h loss=0.2023
+  Vwork=0.9277V  Tmax=3270.8K  Lifetime=42.94h  AvgP03=495.33W  [246s]
+
+============================================================
+Trial 147: r = [2.882, 1.458, 3.075, 2.261, 2.261, 3.075, 1.458, 2.882] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3362.9K, I=712.7630A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9277V Tmax=3254.2K P03sph=610.5W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=16.87h loss=0.0999
+  STEP=10 t=51.26h loss=0.1998
+  STEP=11 t=51.38h loss=0.2000
+  Vwork=0.9277V  Tmax=3254.2K  Lifetime=51.38h  AvgP03=525.59W  [206s]
+
+============================================================
+Trial 148: r = [1.783, 4.278, 1.692, 0.809, 0.809, 1.692, 4.278, 1.783] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3457.9K, I=340.2266A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.8789V Tmax=3179.0K P03sph=264.8W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0834
+  STEP=10 t=100.00h loss=0.1419
+  STEP=15 t=150.00h loss=0.1853
+  STEP=19 t=171.59h loss=0.2009
+  Vwork=0.8789V  Tmax=3179.0K  Lifetime=171.59h  AvgP03=224.93W  [356s]
+
+============================================================
+Trial 149: r = [2.508, 1.302, 3.585, 2.040, 2.040, 3.585, 1.302, 2.508] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=3244.1K, I=613.0924A
+  Phase 1: voltage search...
+  PHASE1: Vwork=0.9766V Tmax=3209.8K P03sph=563.3W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=23.31h loss=0.1000
+  STEP=10 t=66.05h loss=0.1978
+  STEP=12 t=71.53h loss=0.2063
+  Vwork=0.9766V  Tmax=3209.8K  Lifetime=71.53h  AvgP03=486.97W  [269s]
+
+============================================================
+  OPTIMIZATION COMPLETE
+============================================================
+Best trial:     #108
+Best value:     559.18 W (lifeAvgP03sphere)
+Best params:    r1=2.897  r2=1.642  r3=3.239 mm
+Full radii (mm): [2.897, 1.642, 3.239, 1.849, 1.849, 3.239, 1.642, 2.897]
+
+Total trials:   150
+Results saved:  D:\VScode\project\BFHC\cylinder_family\ML\data\trials.csv
+COMSOL disconnected.

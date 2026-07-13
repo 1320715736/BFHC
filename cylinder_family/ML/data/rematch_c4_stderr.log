@@ -1,0 +1,61 @@
+[I 2026-07-11 03:10:46,363] A new study created in RDB with name: cylinder_rematch_c4
+[I 2026-07-11 03:25:11,926] Trial 0 finished with value: 64.97947119829011 and parameters: {'r1_mm': 2.504209635165475, 'r2_mm': 1.9005654803416379, 'r3_mm': 3.2498747663099166}. Best is trial 0 with value: 64.97947119829011.
+[I 2026-07-11 03:43:54,904] Trial 1 finished with value: 115.06384319025558 and parameters: {'r1_mm': 1.9029923667405568, 'r2_mm': 2.0424157994940186, 'r3_mm': 3.546293093018464}. Best is trial 1 with value: 115.06384319025558.
+[I 2026-07-11 04:05:43,828] Trial 2 finished with value: 82.31048443757125 and parameters: {'r1_mm': 2.110731712870309, 'r2_mm': 1.9713052434873537, 'r3_mm': 3.6401784484204445}. Best is trial 1 with value: 115.06384319025558.
+[I 2026-07-11 04:23:38,474] Trial 3 finished with value: 83.35785109886918 and parameters: {'r1_mm': 2.153134363901934, 'r2_mm': 1.9639996919820948, 'r3_mm': 3.5261017606419385}. Best is trial 1 with value: 115.06384319025558.
+[I 2026-07-11 04:28:53,334] Trial 4 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-11 04:42:56,205] Trial 5 finished with value: 90.80982496890964 and parameters: {'r1_mm': 2.339299047844433, 'r2_mm': 1.8845203937875938, 'r3_mm': 3.3143009882607535}. Best is trial 1 with value: 115.06384319025558.
+[I 2026-07-11 04:47:54,120] Trial 6 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-11 05:05:50,009] Trial 7 finished with value: 112.3535771397128 and parameters: {'r1_mm': 1.9415349059946523, 'r2_mm': 2.0688517535483064, 'r3_mm': 3.426321074511981}. Best is trial 1 with value: 115.06384319025558.
+[I 2026-07-11 05:27:12,832] Trial 8 finished with value: 114.0384241414522 and parameters: {'r1_mm': 2.039882837736797, 'r2_mm': 1.9989532293860324, 'r3_mm': 3.364989670352292}. Best is trial 1 with value: 115.06384319025558.
+[I 2026-07-11 05:34:45,678] Trial 9 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-11 05:49:15,716] Trial 10 finished with value: 76.68029198063687 and parameters: {'r1_mm': 2.7661488760308486, 'r2_mm': 1.745286253779486, 'r3_mm': 3.0604566617485975}. Best is trial 1 with value: 115.06384319025558.
+[I 2026-07-11 06:08:57,809] Trial 11 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-11 06:24:39,905] Trial 12 finished with value: 94.75207415336318 and parameters: {'r1_mm': 1.806019004429555, 'r2_mm': 2.188178579455334, 'r3_mm': 3.590559592928244}. Best is trial 1 with value: 115.06384319025558.
+[I 2026-07-11 06:42:04,078] Trial 13 finished with value: 97.0434631098652 and parameters: {'r1_mm': 2.205330663135496, 'r2_mm': 1.8248884895615074, 'r3_mm': 3.6446262439868025}. Best is trial 1 with value: 115.06384319025558.
+[I 2026-07-11 07:03:23,502] Trial 14 finished with value: 114.2138050636489 and parameters: {'r1_mm': 1.9681057592359599, 'r2_mm': 2.008074115818934, 'r3_mm': 3.499420507229299}. Best is trial 1 with value: 115.06384319025558.
+[I 2026-07-11 07:20:49,646] Trial 15 finished with value: 100.82512677163665 and parameters: {'r1_mm': 1.9244381854867316, 'r2_mm': 2.084129971578982, 'r3_mm': 3.509165127731999}. Best is trial 1 with value: 115.06384319025558.
+[I 2026-07-11 07:37:47,502] Trial 16 finished with value: 81.09095383741392 and parameters: {'r1_mm': 2.2625903649493107, 'r2_mm': 1.9078181776122942, 'r3_mm': 3.5112190003356947}. Best is trial 1 with value: 115.06384319025558.
+[I 2026-07-11 07:46:32,135] Trial 17 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-11 07:58:36,207] Trial 18 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-11 08:19:02,918] Trial 19 finished with value: 64.0996286568118 and parameters: {'r1_mm': 2.0625605063978276, 'r2_mm': 2.1847457886079753, 'r3_mm': 3.4618733243469046}. Best is trial 1 with value: 115.06384319025558.
+[I 2026-07-11 08:32:11,818] Trial 20 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-11 08:57:51,759] Trial 21 finished with value: 88.55101975751946 and parameters: {'r1_mm': 2.0044649861197827, 'r2_mm': 1.9813822470783564, 'r3_mm': 3.722582348165931}. Best is trial 1 with value: 115.06384319025558.
+[I 2026-07-11 09:18:00,817] Trial 22 finished with value: 124.82818165067235 and parameters: {'r1_mm': 1.8785545569579214, 'r2_mm': 2.0035942212805673, 'r3_mm': 3.6132860871865278}. Best is trial 22 with value: 124.82818165067235.
+[I 2026-07-11 09:25:47,443] Trial 23 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-11 09:32:53,802] Trial 24 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-11 09:58:36,396] Trial 25 finished with value: 86.01107601846782 and parameters: {'r1_mm': 1.9684554237825542, 'r2_mm': 2.031868825997166, 'r3_mm': 3.686816761967111}. Best is trial 22 with value: 124.82818165067235.
+[I 2026-07-11 10:20:57,066] Trial 26 finished with value: 67.25479620389557 and parameters: {'r1_mm': 2.1027082970507847, 'r2_mm': 2.1201450292933894, 'r3_mm': 3.4613092818354527}. Best is trial 22 with value: 124.82818165067235.
+[I 2026-07-11 10:26:48,806] Trial 27 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-11 10:47:41,056] Trial 28 finished with value: 72.75801462199468 and parameters: {'r1_mm': 2.1835631304667324, 'r2_mm': 2.0191851085348715, 'r3_mm': 3.5447096014647235}. Best is trial 22 with value: 124.82818165067235.
+[I 2026-07-11 10:54:07,776] Trial 29 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-11 11:10:23,470] Trial 30 finished with value: 94.56528628389027 and parameters: {'r1_mm': 2.2942615453178465, 'r2_mm': 1.842872784903949, 'r3_mm': 3.49022313620701}. Best is trial 22 with value: 124.82818165067235.
+[I 2026-07-11 11:28:48,305] Trial 31 finished with value: 119.0057779769655 and parameters: {'r1_mm': 2.018404093807521, 'r2_mm': 1.9993309685218363, 'r3_mm': 3.37717661066063}. Best is trial 22 with value: 124.82818165067235.
+[I 2026-07-11 11:44:07,514] Trial 32 finished with value: 111.0499254474717 and parameters: {'r1_mm': 1.969636285821873, 'r2_mm': 2.059311175621967, 'r3_mm': 3.3921927030334587}. Best is trial 22 with value: 124.82818165067235.
+[I 2026-07-11 11:58:54,591] Trial 33 finished with value: 101.44082817831533 and parameters: {'r1_mm': 2.099470772714864, 'r2_mm': 1.95667953941348, 'r3_mm': 3.4678018020034234}. Best is trial 22 with value: 124.82818165067235.
+[I 2026-07-11 12:02:34,558] Trial 34 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-11 12:17:27,551] Trial 35 finished with value: 70.53227273206453 and parameters: {'r1_mm': 2.1402995764598796, 'r2_mm': 2.106083428290491, 'r3_mm': 3.2281025434125428}. Best is trial 22 with value: 124.82818165067235.
+[I 2026-07-11 12:35:22,845] Trial 36 finished with value: 127.60287969412285 and parameters: {'r1_mm': 1.9865060081869466, 'r2_mm': 1.934746080855281, 'r3_mm': 3.5532259518412808}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 12:54:20,679] Trial 37 finished with value: 91.26438376080006 and parameters: {'r1_mm': 2.050551039543043, 'r2_mm': 1.9219592839434714, 'r3_mm': 3.7444579219079026}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 13:01:45,984] Trial 38 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-11 13:19:47,227] Trial 39 finished with value: 97.74507753694276 and parameters: {'r1_mm': 1.9980718893777059, 'r2_mm': 1.9571445345431222, 'r3_mm': 3.6632661979342536}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 13:29:31,299] Trial 40 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-11 13:47:27,288] Trial 41 finished with value: 110.00773676601703 and parameters: {'r1_mm': 1.9317287373226997, 'r2_mm': 1.9986711239614696, 'r3_mm': 3.6070381432704686}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 14:04:15,026] Trial 42 finished with value: 102.60883723262239 and parameters: {'r1_mm': 1.9793294491385884, 'r2_mm': 2.0619006359422807, 'r3_mm': 3.4287695795606083}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 14:21:55,418] Trial 43 finished with value: 85.5704476154119 and parameters: {'r1_mm': 2.060133385733227, 'r2_mm': 2.0082108342013205, 'r3_mm': 3.5598957611828363}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 14:27:08,438] Trial 44 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-11 14:41:12,670] Trial 45 finished with value: 120.30055234167021 and parameters: {'r1_mm': 1.8472934117208126, 'r2_mm': 2.0454431446423897, 'r3_mm': 3.612930811148395}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 14:55:05,399] Trial 46 finished with value: 118.27241895382059 and parameters: {'r1_mm': 1.8512928528692438, 'r2_mm': 2.044857117054496, 'r3_mm': 3.616865667400786}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 15:08:22,358] Trial 47 finished with value: 101.15436929141663 and parameters: {'r1_mm': 1.8018536854539118, 'r2_mm': 2.096128903829834, 'r3_mm': 3.7041707105160837}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 15:21:47,203] Trial 48 finished with value: 115.18735349549694 and parameters: {'r1_mm': 1.8445407779121257, 'r2_mm': 2.055823291509599, 'r3_mm': 3.624193221613856}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 15:27:37,904] Trial 49 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-11 15:43:19,954] Trial 50 finished with value: 72.57639861918963 and parameters: {'r1_mm': 2.5298894414807744, 'r2_mm': 1.7279244170199863, 'r3_mm': 3.605987630192017}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 15:57:07,223] Trial 51 finished with value: 112.48597808324996 and parameters: {'r1_mm': 1.8505570634108837, 'r2_mm': 2.0501538584459573, 'r3_mm': 3.6374152226231278}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 16:11:20,478] Trial 52 finished with value: 109.28202066744265 and parameters: {'r1_mm': 1.8496277748727048, 'r2_mm': 2.047840340198139, 'r3_mm': 3.659163070450491}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 16:29:41,344] Trial 53 finished with value: 111.6117761783062 and parameters: {'r1_mm': 1.9168211305693068, 'r2_mm': 1.9942735046029214, 'r3_mm': 3.6297430471479264}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 16:42:09,941] Trial 54 finished with value: 98.2957984530546 and parameters: {'r1_mm': 1.8367149057496674, 'r2_mm': 2.150392680515565, 'r3_mm': 3.5741328032078514}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 16:56:26,441] Trial 55 finished with value: 85.42311069610884 and parameters: {'r1_mm': 1.9336193689560353, 'r2_mm': 2.0915268580093853, 'r3_mm': 3.6159894378643607}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 17:00:45,887] Trial 56 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-11 17:19:46,675] Trial 57 finished with value: 100.99778260412282 and parameters: {'r1_mm': 2.0194756786719434, 'r2_mm': 1.912312164906363, 'r3_mm': 3.692121602492813}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 17:38:00,815] Trial 58 finished with value: 101.30323240022294 and parameters: {'r1_mm': 1.9531512851808825, 'r2_mm': 2.0269761315294352, 'r3_mm': 3.572218306677018}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 17:56:26,716] Trial 59 finished with value: 126.57827129052957 and parameters: {'r1_mm': 1.8956952988470817, 'r2_mm': 1.97856186909743, 'r3_mm': 3.6203054022000143}. Best is trial 36 with value: 127.60287969412285.

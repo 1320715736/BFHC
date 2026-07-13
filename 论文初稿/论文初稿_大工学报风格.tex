@@ -1,0 +1,253 @@
+\documentclass[10pt,twocolumn]{ctexart}
+\usepackage[a4paper,top=2.0cm,bottom=2.0cm,left=1.75cm,right=1.75cm,columnsep=0.75cm]{geometry}
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{amsmath,amssymb}
+\usepackage{caption}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{indentfirst}
+\usepackage{balance}
+\usepackage{stfloats}
+\usepackage{url}
+
+\setCJKmainfont{Microsoft YaHei}
+\setmainfont{Times New Roman}
+\setmonofont{Consolas}
+\zihao{-5}
+\linespread{1.05}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0pt}
+\setlength{\abovedisplayskip}{4pt}
+\setlength{\belowdisplayskip}{4pt}
+\captionsetup{font=small,labelsep=space}
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
+
+\titleformat{\section}{\bfseries\zihao{4}}{\thesection}{0.5em}{}
+\titleformat{\subsection}{\bfseries\zihao{-4}}{\thesubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{0.8em}{0.4em}
+\titlespacing*{\subsection}{0pt}{0.6em}{0.3em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{第XX卷 第X期}
+\fancyhead[C]{大连理工大学学报}
+\fancyhead[R]{Vol.XX, No.X}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newcommand{\figpath}{../提交文件/初赛提交版本/技术文档/latex_figures}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+\twocolumn[
+\begin{@twocolumnfalse}
+\begin{center}
+{\zihao{-5} 第XX卷 第X期 \hfill 大连理工大学学报 \hfill Vol.XX, No.X}\\
+{\zihao{-5} 2026年X月 \hfill Journal of Dalian University of Technology \hfill XXX. 2026}\\
+\vspace{1mm}
+{\zihao{-5} 文章编号:1000-8608(2026)XX-0001-08}\\
+\vspace{4mm}
+{\zihao{3}\bfseries 寿命约束下钨温控部件的多物理场仿真与贝叶斯构型优化}\\
+\vspace{3mm}
+{\zihao{-4} XXX，XXX，XXX}\\
+\vspace{1mm}
+{\zihao{5}(XXX大学 XXX学院，XXX 000000)}
+\end{center}
+
+\noindent{\bfseries 摘要:} 针对半导体设备高温热控部件在辐射效率、温度上限和退蚀寿命之间难以兼顾的问题，建立了纯钨温控部件的电热耦合、双波段 S2S 辐射和表面退蚀寿命一体化仿真流程，并结合 Optuna TPE 贝叶斯优化开展小样本构型搜索。以直径 5 mm、高度 15 mm 的圆柱钨坯为基线，构造了轴向 8 段圆柱簇和 zigzag 长路径折返构型两类参数化结构，在体积守恒、电极位置固定、最高温度小于 3273.15 K、寿命不低于基线 30\% 等约束下，最大化生命周期平均 0--3 $\mu$m 外接球净辐射功率。结果表明：均匀圆柱基线平均功率为 428.57 W，寿命为 115.50 h；圆柱簇最优可行解平均功率为 559.64 W，提升 30.58\%；zigzag 最优可行解平均功率为 2848.70 W，提升 564.8\%，寿命为 82.39 h。随机森林和 SHAP 分析表明，圆柱簇的增益来自粗细交替的截面重分配，zigzag 构型中水平折返长度是同时影响功率和寿命的主导变量。该方法可为昂贵多物理场仿真驱动的高温部件构型优化提供样本高效的设计流程。
+
+\vspace{1mm}
+\noindent{\bfseries 关键词:} 钨温控部件；多物理场仿真；贝叶斯优化；S2S 辐射；退蚀寿命；SHAP
+
+\vspace{1mm}
+\noindent{\bfseries 中图分类号:} TK124；O242.2；TP391 \quad {\bfseries 文献标识码:} A \quad {\bfseries DOI:} 待定
+
+\vspace{2mm}
+\noindent{\bfseries Multiphysics Simulation and Bayesian Configuration Optimization of Tungsten Thermal-Control Components under Lifetime Constraint}
+
+\noindent XXX, XXX, XXX
+
+\noindent{\bfseries Abstract:} To improve radiative performance of high-temperature thermal-control components in semiconductor equipment, an integrated simulation and optimization workflow is developed for pure tungsten structures. The model couples electric conduction, Joule heating, dual-band surface-to-surface radiation and temperature-driven surface erosion. Two parameterized configurations, an eight-segment cylindrical family and a zigzag long-path family, are optimized by Optuna TPE Bayesian optimization under volume conservation, fixed electrode positions, temperature and lifetime constraints. The baseline cylinder gives a lifecycle-averaged 0--3 $\mu$m radiation power of 428.57 W and a lifetime of 115.50 h. The best feasible cylindrical design reaches 559.64 W, while the best feasible zigzag design reaches 2848.70 W with a lifetime of 82.39 h. Random forest and SHAP analyses indicate that alternating cross-sectional redistribution benefits the cylindrical family, whereas the horizontal run length dominates the power-lifetime tradeoff of the zigzag family.
+
+\vspace{1mm}
+\noindent{\bfseries Key words:} tungsten thermal-control component; multiphysics simulation; Bayesian optimization; surface-to-surface radiation; erosion lifetime; SHAP
+
+\vspace{1mm}
+\noindent{\zihao{6} 收稿日期:2026-05-10；修回日期:待定。基金项目:待补充。作者简介:XXX，E-mail:待补充；通信作者:XXX，E-mail:待补充。}
+\vspace{4mm}
+\end{@twocolumnfalse}
+]
+
+\section{引言}
+半导体快速热处理、化学气相沉积和物理气相沉积等设备依赖高精度热控部件提供稳定热环境。此类部件通常工作在高温、高功率密度和有限空间中，既要提高有效辐射输出，又要避免局部超温和快速退蚀失效。钨具有高熔点和较好的高温稳定性，但其电阻率、热导率、比热容及表面蒸发速率均随温度显著变化。尤其在 2000 K 以上，蒸发速率对温度呈指数敏感，局部热点会迅速压缩寿命。因此，高温钨部件设计不是简单提高温度或减小截面，而是在辐射功率、温度约束、材料用量和寿命之间寻找折中。
+
+传统构型设计多依赖经验方案和有限次数仿真验证。对于包含导电、传热、面-面辐射和几何退蚀更新的多物理场问题，单次候选评估需要经历工作电压搜索、多次稳态求解、网格重建及寿命积分，计算成本较高。若采用均匀网格扫参，评估次数会随变量数迅速增加，难以在有限周期内完成有效搜索。贝叶斯优化适合低维、昂贵、确定性强的黑箱优化问题，能够根据已有样本自适应选择下一组候选，从而减少低价值试算。
+
+本文以直径 5 mm、高度 15 mm 的纯钨圆柱坯料为研究对象，建立统一的电热辐射退蚀寿命评估流程；在体积守恒、电极位置固定、温度上限和寿命下限约束下，分别研究轴向截面重分配和长路径折返两类构型；最后通过 Pareto 分析、随机森林和 SHAP 方法解释几何参数对辐射功率及寿命的影响。
+
+\section{数值模型与评价指标}
+钨结构两端分别施加电压和接地，电流通过结构产生焦耳热。设电势为 $V$，电导率为 $\sigma_e(T)=1/\rho_e(T)$，稳态导电和热传导方程为
+\begin{equation}
+\nabla\cdot\left(\sigma_e(T)\nabla V\right)=0,\quad q_J=\sigma_e(T)|\nabla V|^2,
+\end{equation}
+\begin{equation}
+\nabla\cdot(k(T)\nabla T)+q_J=0.
+\end{equation}
+密度取 $19350\ \mathrm{kg/m^3}$。电阻率、热导率和比热容采用温度相关工程拟合，所有候选构型使用同一组材料参数，避免不同结构之间因材料口径变化造成偏差。辐射模型按 0--3 $\mu$m 与其余波段分离，发射率分别取 $\varepsilon_{03}=0.35$ 和 $\varepsilon_\mathrm{rest}=0.15$。设 $f_{03}(T)$ 为黑体在 0--3 $\mu$m 波段内能量占比，则局部净辐射通量为
+\begin{equation}
+q_{03}=\varepsilon_{03}\sigma\left[f_{03}(T)T^4-f_{03}(T_\mathrm{amb})T_\mathrm{amb}^4\right].
+\end{equation}
+复杂构型的外接球有效功率采用能量守恒缩放估计：
+\begin{equation}
+P_{03,\mathrm{sphere}}=V_\mathrm{work}|I_\mathrm{in}|\frac{P_{03,\mathrm{surface}}}{P_{\mathrm{rad,surface}}}.
+\end{equation}
+
+高温退蚀由表面质量损失率 $\gamma(T)=A\exp(-B/T)$ 描述，其中 $A=3.9\times10^9\ \mathrm{kg/(m^2s)}$，$B=1.023\times10^5\ \mathrm K$。圆柱簇按分段表面平均温度更新半径，zigzag 方截面构型按边长收缩更新。当任一关键尺度损失达到初始值的 20\% 时判为失效。每个候选先在不超过 100 V 的范围内搜索满足最高温度 $3273.15\ \mathrm K$ 的工作电压，再在该电压下推进退蚀寿命循环。优化目标为最大化生命周期平均 0--3 $\mu$m 外接球净辐射功率，主要约束见表\ref{tab:constraints}。
+
+\begin{table}[!htbp]
+\centering
+\caption{优化约束与实现方式}
+\label{tab:constraints}
+\scriptsize
+\begin{tabularx}{\columnwidth}{lY}
+\toprule
+约束 & 实现方式 \\
+\midrule
+体积守恒 & 与初始圆柱坯料体积一致 \\
+温度上限 & 初始稳态最高温度小于 3273.15 K \\
+电压上限 & 工作电压不超过 100 V \\
+寿命下限 & 寿命不低于均匀圆柱基线的 30\%，即 34.65 h \\
+电极与连通性 & 电极位置固定，结构保持连续 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{参数化构型与优化方法}
+圆柱簇将 15 mm 钨棒沿轴向划分为 8 个等长段，采用对称半径向量
+\begin{equation}
+\mathbf r=[r_1,r_2,r_3,r_4,r_4,r_3,r_2,r_1].
+\end{equation}
+原始半径为 $r_0=2.5\ \mathrm{mm}$，体积守恒给出
+\begin{equation}
+2(r_1^2+r_2^2+r_3^2+r_4^2)=8r_0^2.
+\end{equation}
+故独立变量为 $r_1,r_2,r_3$，$r_4$ 由体积守恒反算。该构型主要考察轴向截面积重分配对局部电阻、温度和寿命的影响。
+
+为提高拓扑自由度，进一步构造 zigzag 长路径折返构型。其独立变量为水平折返段数 $N_\mathrm{RUNS}$、每段水平长度 $L_\mathrm{RUN}$ 和第一段高度 $z_\mathrm{first}$；末段高度满足 $z_\mathrm{last}=L_0-z_\mathrm{first}$，方截面边长由总体积和路径长度自动反算。相比圆柱簇，zigzag 通过拉长导电路径提高电阻，并在体积守恒下增大总表面积，从而提升有效辐射输出。
+
+优化器采用 Optuna TPE。每次 trial 由 Python 调用 COMSOL 完成电压搜索、稳态电热辐射求解和退蚀寿命积分，并记录几何参数、工作电压、最高温度、寿命及辐射功率。优化后使用 Pareto 前沿描述功率-寿命折中；随机森林和 SHAP 仅用于解释变量影响与辅助下一轮候选筛选，最终排序仍以 COMSOL 生命周期仿真为准。
+
+\section{结果与分析}
+\subsection{圆柱簇优化结果}
+均匀圆柱基线的工作电压为 0.6348 V，初始最高温度为 3196.2 K，寿命为 115.50 h，生命周期平均 0--3 $\mu$m 外接球净辐射功率为 428.57 W。圆柱簇完成 150 组贝叶斯优化 trial，满足寿命约束的最优可行解为 Trial 122，其前 4 段半径为 $[1.592,3.706,1.737,2.391]\ \mathrm{mm}$。该结构工作电压提高到 0.9766 V，初始最高温度为 3270.0 K，寿命为 35.27 h，平均功率达到 559.64 W，较基线提升 30.58\%。
+
+图\ref{fig:cyl-pareto}给出了圆柱簇寿命-功率 Pareto 前沿。Trial 122 位于高功率端且接近寿命约束边界，说明圆柱簇最优解主要通过利用寿命下限换取高辐射输出。高性能候选呈现粗细交替特征：较细段提高局部电阻和温度，较粗段提供导电和散热缓冲。随机森林分析显示，独立变量中 $r_1$ 对功率影响最大，重要性为 0.671；$r_2$ 和 $r_3$ 的重要性分别为 0.219 和 0.110。SHAP 结果进一步表明，圆柱簇并非越细越优，而是需要在局部热点和退蚀寿命之间形成可控折中。
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\columnwidth]{\figpath/cylinder_pareto_front.png}
+\caption{圆柱簇寿命-功率 Pareto 前沿}
+\label{fig:cyl-pareto}
+\end{figure}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\columnwidth]{\figpath/cylinder_shap_summary_p03.png}
+\caption{圆柱簇功率目标的 SHAP 分析}
+\label{fig:cyl-shap}
+\end{figure}
+
+\subsection{zigzag 长路径构型结果}
+zigzag 参数搜索同样完成 150 组 trial，其中 136 组具有完整后处理指标。满足寿命约束的最优候选为 Trial 21：$N_\mathrm{RUNS}=10$，$L_\mathrm{RUN}=99.53\ \mathrm{mm}$，$z_\mathrm{first}=2.04\ \mathrm{mm}$，由体积守恒得到方截面边长 $0.522\ \mathrm{mm}$。该结构可在 100 V 下工作，初始最高温度为 2978.0 K，寿命为 82.39 h，生命周期平均 0--3 $\mu$m 外接球净辐射功率为 2848.70 W。
+
+图\ref{fig:zig-pareto}表明，zigzag 可行候选整体位于比圆柱簇更高的功率区间。其原因是长路径显著提高导电电阻，并在等体积条件下增加外表面积，使结构在温度仍满足约束时获得更大的辐射输出。图\ref{fig:zig-shap}的 SHAP 分析显示，$L_\mathrm{RUN}$ 是影响功率输出的主导变量，其次为 $N_\mathrm{RUNS}$，$z_\mathrm{first}$ 主要调节端部留白和温度分布。寿命代理模型也显示 $L_\mathrm{RUN}$ 为核心变量，说明 zigzag 的本质是围绕路径长度、截面边长和折返密度寻找功率-寿命折中。
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\columnwidth]{\figpath/zigzag_pareto_front.png}
+\caption{zigzag 寿命-功率 Pareto 前沿}
+\label{fig:zig-pareto}
+\end{figure}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\columnwidth]{\figpath/zigzag_shap_summary_p03.png}
+\caption{zigzag 功率目标的 SHAP 分析}
+\label{fig:zig-shap}
+\end{figure}
+
+\subsection{综合对比与计算效率}
+三类结构的核心指标见表\ref{tab:perf}。圆柱簇证明了低维截面重分配可稳定提升辐射功率，但最优解贴近寿命下限；zigzag 则通过路径重构显著提高性能上限，平均功率约为圆柱簇最优解的 5.1 倍，同时保留更大寿命裕度。
+
+\begin{table}[!htbp]
+\centering
+\caption{基线与最优候选性能对比}
+\label{tab:perf}
+\scriptsize
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lccc}
+\toprule
+指标 & 均匀圆柱 & 圆柱簇 Trial 122 & zigzag Trial 21 \\
+\midrule
+工作电压/V & 0.6348 & 0.9766 & 100 \\
+初始最高温度/K & 3196.2 & 3270.0 & 2978.0 \\
+寿命/h & 115.50 & 35.27 & 82.39 \\
+平均 0--3 $\mu$m 功率/W & 428.57 & 559.64 & 2848.70 \\
+相对基线提升 & 0 & 30.58\% & 564.8\% \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+计算效率方面，圆柱簇 150 条记录平均单次耗时约 291 s，总计算时间约 12 h；zigzag 完整样本平均单次耗时约 514 s，累计约 19.4 h。若使用粗网格扫参，圆柱簇 3 个独立变量以每维 20 个点计算需约 8000 次生命周期评估，zigzag 粗扫也会超过万次。贝叶斯优化将评估集中到 Pareto 前沿附近，在不降低单次物理模型精度的情况下减少了无效试算。
+
+\begin{table}[!htbp]
+\centering
+\caption{代理模型交叉验证结果}
+\label{tab:rf}
+\scriptsize
+\begin{tabularx}{\columnwidth}{llc}
+\toprule
+构型 & 预测目标 & 5-fold $R^2$ \\
+\midrule
+圆柱簇 & 平均 0--3 $\mu$m 功率 & 0.550$\pm$0.262 \\
+圆柱簇 & 寿命 & 0.040$\pm$0.233 \\
+zigzag & 平均 0--3 $\mu$m 功率 & 0.543$\pm$0.303 \\
+zigzag & 寿命 & 0.305$\pm$0.414 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+表\ref{tab:rf}显示，功率代理模型能捕捉主要趋势，寿命模型精度较低。这与寿命受局部温度、热点位置和指数退蚀速率共同影响有关。因此，代理模型在本文中只作为解释和候选建议工具，不替代高保真生命周期仿真。
+
+\section{结论}
+本文建立了钨温控部件的电热耦合、双波段 S2S 辐射和退蚀寿命一体化仿真流程，并结合贝叶斯优化开展寿命约束下的构型搜索。主要结论如下：
+
+(1) 圆柱簇通过轴向截面积重分配形成粗细交替结构，在寿命不低于基线 30\% 的约束下，将生命周期平均 0--3 $\mu$m 外接球净辐射功率由 428.57 W 提高到 559.64 W。
+
+(2) zigzag 长路径构型通过拉长导电路径和增加有效辐射面积，将平均功率提高到 2848.70 W，相对基线提升 564.8\%，寿命仍达到 82.39 h。
+
+(3) 可解释性分析表明，圆柱簇高性能解来自端部细化和中段加粗的协同；zigzag 构型中水平折返长度是功率-寿命折中的主导变量。
+
+(4) 对于单次评估成本高的多物理场寿命优化问题，Optuna TPE 贝叶斯优化能够在约 150 次高保真评估内定位高性能可行解，适合低维参数化拓扑构型搜索。
+
+后续应进一步补充 zigzag 逐块侧面面积加权温度积分、退蚀全过程最高温度检查、外接球直接积分校准和网格无关性验证，以提高结果的投稿稳健性。
+
+\section*{参考文献}
+\zihao{6}
+\begin{thebibliography}{99}
+\bibitem{ref:mat} 待补充: 钨高温热物性数据文献。
+\bibitem{ref:erosion} 待补充: 钨表面蒸发/升华速率模型文献。
+\bibitem{ref:radiation} 待补充: S2S 面-面辐射与 view factor 建模文献。
+\bibitem{ref:bo} 待补充: 贝叶斯优化与 TPE 方法文献。
+\bibitem{ref:shap} 待补充: SHAP 与工程优化可解释性文献。
+\bibitem{ref:thermal} 待补充: 半导体设备高温热控部件相关文献。
+\end{thebibliography}
+
+\balance
+\end{document}

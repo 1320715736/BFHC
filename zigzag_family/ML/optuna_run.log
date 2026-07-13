@@ -1,0 +1,3511 @@
+CSV output:     D:\VScode\project\BFHC\zigzag_family\ML\data\trials.csv
+Optuna DB:      sqlite:///D:\VScode\project\BFHC\zigzag_family\ML\data\optuna.db
+Trials:         150
+Search space:   N_RUNS ∈ [4, 6, 8, 10, 12, 14, 16]
+                L_RUN ∈ [20.0, 300.0] mm
+                z_first ∈ [0.6, 3.0] mm
+Zigzag ref:     N=8 L=104.0mm zf=0.8mm
+Life constraint: cylinder baseline 115.5037h × 30% = 34.65h
+Zigzag Java ref: lifetime=7.1277h (reference only, not the constraint)
+
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+Resuming from 1 trials, running 149 more...
+
+============================================================
+Trial 0: N_RUNS=8  L_RUN=104.0mm  z_first=0.80mm  side=0.5700mm  path=846.0mm
+============================================================
+  Building model: N=8 L=104.0mm zf=0.80mm side=0.5700mm nblk=17
+  Model init OK: sanity Tmax=564.0K I=3.4365A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3209.3K P03sph=3688.1W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=2.95h loss=0.1000
+  STEP=10 t=6.38h loss=0.2000
+  Vwork=100.0000V  Tmax=3209.3K  Lifetime=6.38h  AvgP03=3539.83W  [574s]
+
+============================================================
+Trial 1: N_RUNS=12  L_RUN=213.8mm  z_first=2.70mm  side=0.3264mm  path=2579.9mm
+============================================================
+  Building model: N=12 L=213.8mm zf=2.70mm side=0.3264mm nblk=25
+  Model init OK: sanity Tmax=360.7K I=0.4828A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=1907.3K P03sph=566.6W steps=1
+  Phase 2: erosion loop...
+  Evaporation negligible. Infinite lifetime.
+  Vwork=100.0000V  Tmax=1907.3K  Lifetime=0.00h  AvgP03=nanW  [40s]
+
+============================================================
+Trial 2: N_RUNS=16  L_RUN=30.8mm  z_first=1.66mm  side=0.7359mm  path=507.6mm
+============================================================
+  FAILED: FAIL_Z_OVERLAP
+
+============================================================
+Trial 3: N_RUNS=14  L_RUN=289.1mm  z_first=2.06mm  side=0.2601mm  path=4062.0mm
+============================================================
+  Building model: N=14 L=289.1mm zf=2.06mm side=0.2601mm nblk=29
+  NOTE: Phase-0 warm-up succeeded at 10V
+  Model init OK: sanity Tmax=638.1K I=0.9072A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=1532.9K P03sph=240.4W steps=1
+  Phase 2: erosion loop...
+  Evaporation negligible. Infinite lifetime.
+  Vwork=100.0000V  Tmax=1532.9K  Lifetime=0.00h  AvgP03=nanW  [59s]
+
+============================================================
+Trial 4: N_RUNS=16  L_RUN=126.2mm  z_first=2.29mm  side=0.3677mm  path=2032.6mm
+============================================================
+  Building model: N=16 L=126.2mm zf=2.29mm side=0.3677mm nblk=33
+  NOTE: Phase-0 warm-up succeeded at 10V
+  Model init OK: sanity Tmax=901.2K I=3.5925A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2160.7K P03sph=1064.9W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0000
+  STEP=10 t=100.00h loss=0.0000
+  STEP=15 t=150.00h loss=0.0000
+  Lifetime cap 200h at step 20, stopping.
+  Vwork=100.0000V  Tmax=2160.7K  Lifetime=200.00h  AvgP03=1011.65W  [450s]
+
+============================================================
+Trial 5: N_RUNS=6  L_RUN=167.8mm  z_first=1.67mm  side=0.5190mm  path=1020.7mm
+============================================================
+  Building model: N=6 L=167.8mm zf=1.67mm side=0.5190mm nblk=13
+  Model init OK: sanity Tmax=516.3K I=2.4409A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2928.9K P03sph=2660.3W steps=1
+  Phase 2: erosion loop...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 112 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (-6.07057e-05,0.00025835,0.0130722), (6.07057e-05,0.00025835,0.0130722), (1.999e-19,0.00025835,0.0130722), (-6.07057e-05,0.00025835,0.0130733), (-6.07057e-05,0.00025835,0.0130727), ...
+
+  WARN: solve failed step 1
+  STEP=1 t=10.00h loss=0.0190
+  Vwork=100.0000V  Tmax=2928.9K  Lifetime=10.00h  AvgP03=2660.30W  [39s]
+
+============================================================
+Trial 6: N_RUNS=14  L_RUN=120.4mm  z_first=0.97mm  side=0.4022mm  path=1699.4mm
+============================================================
+  Building model: N=14 L=120.4mm zf=0.97mm side=0.4022mm nblk=29
+  Model init OK: sanity Tmax=418.6K I=1.2012A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2326.7K P03sph=1360.4W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0000
+  STEP=10 t=100.00h loss=0.0000
+  STEP=15 t=150.00h loss=0.0000
+  Lifetime cap 200h at step 20, stopping.
+  Vwork=100.0000V  Tmax=2326.7K  Lifetime=200.00h  AvgP03=1274.27W  [403s]
+
+============================================================
+Trial 7: N_RUNS=10  L_RUN=164.4mm  z_first=1.71mm  side=0.4072mm  path=1657.7mm
+============================================================
+  Building model: N=10 L=164.4mm zf=1.71mm side=0.4072mm nblk=21
+  Model init OK: sanity Tmax=421.2K I=1.1306A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2342.9K P03sph=1278.6W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0000
+  STEP=10 t=100.00h loss=0.0000
+  STEP=15 t=150.00h loss=0.0001
+  Lifetime cap 200h at step 20, stopping.
+  Vwork=100.0000V  Tmax=2342.9K  Lifetime=200.00h  AvgP03=1210.35W  [351s]
+
+============================================================
+Trial 8: N_RUNS=16  L_RUN=251.2mm  z_first=2.88mm  side=0.2611mm  path=4033.1mm
+============================================================
+  Building model: N=16 L=251.2mm zf=2.88mm side=0.2611mm nblk=33
+  NOTE: Phase-0 warm-up succeeded at 10V
+  Model init OK: sanity Tmax=644.2K I=0.9354A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=1547.9K P03sph=249.1W steps=1
+  Phase 2: erosion loop...
+  Evaporation negligible. Infinite lifetime.
+  Vwork=100.0000V  Tmax=1547.9K  Lifetime=0.00h  AvgP03=nanW  [67s]
+
+============================================================
+Trial 9: N_RUNS=8  L_RUN=183.0mm  z_first=1.42mm  side=0.4313mm  path=1477.9mm
+============================================================
+  Building model: N=8 L=183.0mm zf=1.42mm side=0.4313mm nblk=17
+  Model init OK: sanity Tmax=440.1K I=1.4035A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2465.1K P03sph=1575.1W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0002
+  STEP=10 t=100.00h loss=0.0003
+  STEP=15 t=150.00h loss=0.0005
+  Lifetime cap 200h at step 20, stopping.
+  Vwork=100.0000V  Tmax=2465.1K  Lifetime=200.00h  AvgP03=1528.78W  [315s]
+
+============================================================
+Trial 10: N_RUNS=8  L_RUN=50.8mm  z_first=1.17mm  side=0.8083mm  path=420.8mm
+============================================================
+  Building model: N=8 L=50.8mm zf=1.17mm side=0.8083mm nblk=17
+  Model init OK: sanity Tmax=792.5K I=9.1726A
+  Phase 1: voltage search...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/(comp1.rad.Tu_band1*(comp1.rad.lambdar*k_B_const)))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/(comp1.rad.Tu_band1*(comp1.rad.lambdar*k_B_const)),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/(comp1.rad.Tu_band1*(comp1.rad.lambdar*k_B_const)),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  PHASE1: Vwork=42.1387V Tmax=3272.8K P03sph=2528.5W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=2.32h loss=0.1000
+  STEP=10 t=5.11h loss=0.2000
+  Vwork=42.1387V  Tmax=3272.8K  Lifetime=5.11h  AvgP03=2522.09W  [613s]
+
+============================================================
+Trial 11: N_RUNS=14  L_RUN=103.3mm  z_first=0.95mm  side=0.4339mm  path=1460.3mm
+============================================================
+  Building model: N=14 L=103.3mm zf=0.95mm side=0.4339mm nblk=29
+  Model init OK: sanity Tmax=445.9K I=1.6977A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2503.9K P03sph=1901.4W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0003
+  STEP=10 t=100.00h loss=0.0006
+  STEP=15 t=150.00h loss=0.0009
+  Lifetime cap 200h at step 20, stopping.
+  Vwork=100.0000V  Tmax=2503.9K  Lifetime=200.00h  AvgP03=1679.60W  [433s]
+
+============================================================
+Trial 12: N_RUNS=4  L_RUN=202.0mm  z_first=1.27mm  side=0.5783mm  path=821.9mm
+============================================================
+  Building model: N=4 L=202.0mm zf=1.27mm side=0.5783mm nblk=9
+  Model init OK: sanity Tmax=568.4K I=3.3054A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3230.8K P03sph=3537.1W steps=1
+  Phase 2: erosion loop...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 81 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (-0.000289158,0.000288037,0.0136674), (-0.000289158,0.000288037,0.0137339), (-0.000289158,0.000288037,0.0138004), (-6.65198e-05,0.000288037,0.0134447), (6.65198e-05,0.000288037,0.0134447), ...
+
+  WARN: solve failed step 1
+  STEP=1 t=0.45h loss=0.0200
+  Vwork=100.0000V  Tmax=3230.8K  Lifetime=0.45h  AvgP03=3537.11W  [34s]
+
+============================================================
+Trial 13: N_RUNS=8  L_RUN=72.7mm  z_first=0.61mm  side=0.6795mm  path=595.4mm
+============================================================
+  Building model: N=8 L=72.7mm zf=0.61mm side=0.6795mm nblk=17
+  Model init OK: sanity Tmax=668.8K I=5.6564A
+  Phase 1: voltage search...
+  PHASE1: Vwork=66.5336V Tmax=3272.8K P03sph=3181.3W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.91h loss=0.1000
+  STEP=10 t=4.12h loss=0.2000
+  STEP=11 t=4.60h loss=0.2200
+  Vwork=66.5336V  Tmax=3272.8K  Lifetime=4.60h  AvgP03=3002.17W  [767s]
+
+============================================================
+Trial 14: N_RUNS=14  L_RUN=81.8mm  z_first=1.35mm  side=0.4870mm  path=1158.9mm
+============================================================
+  Building model: N=14 L=81.8mm zf=1.35mm side=0.4870mm nblk=29
+  Model init OK: sanity Tmax=495.7K I=1.7993A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2811.9K P03sph=1971.0W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  NOTE: mesh OK with hauto=7 (fallback)
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 1002 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (-0.000243519,-0.000243232,0.0134516), (-0.000243519,-0.000243232,0.0134908), (-0.000243519,-0.000243232,0.0135299), (-0.000243232,-0.000243232,0.0134516), (-0.000243375,-0.000243232,0.0134516), ...
+
+  WARN: solve failed step 1
+  STEP=1 t=10.00h loss=0.0047
+  Vwork=100.0000V  Tmax=2811.9K  Lifetime=10.00h  AvgP03=1971.03W  [61s]
+
+============================================================
+Trial 15: N_RUNS=6  L_RUN=207.9mm  z_first=1.45mm  side=0.4668mm  path=1261.6mm
+============================================================
+  Building model: N=6 L=207.9mm zf=1.45mm side=0.4668mm nblk=13
+  Model init OK: sanity Tmax=469.8K I=1.3515A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2649.5K P03sph=1496.3W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0026
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 8: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 32
+
+	边界合规中的内部错误。
+	- x 坐标: -0.233395
+	- y 坐标: 0.23288
+	- z 坐标: 13.7793
+
+  STEP=8 t=80.00h loss=0.0042
+  Vwork=100.0000V  Tmax=2649.5K  Lifetime=80.00h  AvgP03=1574.24W  [132s]
+
+============================================================
+Trial 16: N_RUNS=6  L_RUN=232.6mm  z_first=1.05mm  side=0.4416mm  path=1409.5mm
+============================================================
+  Building model: N=6 L=232.6mm zf=1.05mm side=0.4416mm nblk=13
+  Model init OK: sanity Tmax=447.9K I=1.6791A
+  Phase 1: voltage search...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((k_B_const*comp1.rad.lambdar)*comp1.rad.Tu_band1),1.0E-6)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((k_B_const*comp1.rad.lambdar)*comp1.rad.Tu_band1),1.0E-6)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: ((sigma_const*(comp1.rad.nS2S^2))*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),1.0E-6)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),1.0E-6)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  PHASE1: Vwork=96.1426V Tmax=2476.8K P03sph=1765.5W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0002
+  STEP=10 t=100.00h loss=0.0004
+  STEP=15 t=150.00h loss=0.0006
+  Lifetime cap 200h at step 20, stopping.
+  Vwork=96.1426V  Tmax=2476.8K  Lifetime=200.00h  AvgP03=1695.44W  [509s]
+
+============================================================
+Trial 17: N_RUNS=6  L_RUN=251.8mm  z_first=0.99mm  side=0.4246mm  path=1524.9mm
+============================================================
+  Building model: N=6 L=251.8mm zf=0.99mm side=0.4246mm nblk=13
+  Model init OK: sanity Tmax=433.5K I=1.3893A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2421.7K P03sph=1562.1W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0001
+  STEP=10 t=100.00h loss=0.0002
+  STEP=15 t=150.00h loss=0.0002
+  Lifetime cap 200h at step 20, stopping.
+  Vwork=100.0000V  Tmax=2421.7K  Lifetime=200.00h  AvgP03=1478.33W  [300s]
+
+============================================================
+Trial 18: N_RUNS=4  L_RUN=265.3mm  z_first=0.65mm  side=0.5056mm  path=1075.2mm
+============================================================
+  Building model: N=4 L=265.3mm zf=0.65mm side=0.5056mm nblk=9
+  Model init OK: sanity Tmax=503.5K I=2.3695A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2851.8K P03sph=2590.5W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 1: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 41
+
+	边界合规中的内部错误。
+	- x 坐标: -0.252501
+	- y 坐标: -0.251936
+	- z 坐标: 14.0996
+
+  STEP=1 t=10.00h loss=0.0076
+  Vwork=100.0000V  Tmax=2851.8K  Lifetime=10.00h  AvgP03=2590.46W  [31s]
+
+============================================================
+Trial 19: N_RUNS=10  L_RUN=131.6mm  z_first=2.03mm  side=0.4545mm  path=1330.5mm
+============================================================
+  Building model: N=10 L=131.6mm zf=2.03mm side=0.4545mm nblk=21
+  Model init OK: sanity Tmax=462.4K I=1.3236A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2606.0K P03sph=1469.1W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0014
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 8: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 42
+
+	边界合规中的内部错误。
+	- x 坐标: -0.227273
+	- y 坐标: -0.227139
+	- z 坐标: 11.8482
+
+  STEP=8 t=80.00h loss=0.0023
+  Vwork=100.0000V  Tmax=2606.0K  Lifetime=80.00h  AvgP03=1772.01W  [168s]
+
+============================================================
+Trial 20: N_RUNS=10  L_RUN=144.0mm  z_first=2.27mm  side=0.4349mm  path=1453.6mm
+============================================================
+  Building model: N=10 L=144.0mm zf=2.27mm side=0.4349mm nblk=21
+  Model init OK: sanity Tmax=445.4K I=1.1089A
+  Phase 1: voltage search...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),1.0E-6)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),1.0E-6)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	辐射度
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/(comp1.rad.Tu_band1*(comp1.rad.lambdar*k_B_const)))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/(comp1.rad.Tu_band1*(comp1.rad.lambdar*k_B_const)),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/(comp1.rad.Tu_band1*(comp1.rad.lambdar*k_B_const)),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算表达式。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1)-comp1.rad.Ju_band1)*dvol
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1-comp1.rad.Ju_band1)*test(comp1.rad.Ju_band1))*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	辐射度
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算表达式。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1)-comp1.rad.Ju_band1)*dvol
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1-comp1.rad.Ju_band1)*test(comp1.rad.Ju_band1))*(dvol)
+
+  PHASE1: Vwork=98.4863V Tmax=2485.7K P03sph=1209.8W steps=12
+  Phase 2: erosion loop...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	辐射度
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((k_B_const*comp1.rad.lambdar)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((k_B_const*comp1.rad.lambdar)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/(comp1.rad.Tu_band1*(comp1.rad.lambdar*k_B_const)))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/(comp1.rad.Tu_band1*(comp1.rad.lambdar*k_B_const)),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/(comp1.rad.Tu_band1*(comp1.rad.lambdar*k_B_const)),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算表达式。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1)-comp1.rad.Ju_band1)*dvol
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1-comp1.rad.Ju_band1)*test(comp1.rad.Ju_band1))*(dvol)
+
+  WARN: solve failed step 3
+  STEP=3 t=30.00h loss=0.0001
+  Vwork=98.4863V  Tmax=2485.7K  Lifetime=30.00h  AvgP03=1261.26W  [238s]
+
+============================================================
+Trial 21: N_RUNS=10  L_RUN=99.5mm  z_first=2.04mm  side=0.5219mm  path=1009.3mm
+============================================================
+  Building model: N=10 L=99.5mm zf=2.04mm side=0.5219mm nblk=21
+  Model init OK: sanity Tmax=524.0K I=1.9987A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2978.0K P03sph=2168.3W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=32.87h loss=0.1000
+  STEP=10 t=73.48h loss=0.2000
+  STEP=11 t=82.39h loss=0.2194
+  Vwork=100.0000V  Tmax=2978.0K  Lifetime=82.39h  AvgP03=2848.70W  [551s]
+
+============================================================
+Trial 22: N_RUNS=10  L_RUN=77.3mm  z_first=2.01mm  side=0.5909mm  path=787.3mm
+============================================================
+  Building model: N=10 L=77.3mm zf=2.01mm side=0.5909mm nblk=21
+  Model init OK: sanity Tmax=590.0K I=3.0000A
+  Phase 1: voltage search...
+  PHASE1: Vwork=93.0234V Tmax=3272.8K P03sph=2858.7W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.69h loss=0.1000
+  STEP=10 t=3.78h loss=0.2000
+  Vwork=93.0234V  Tmax=3272.8K  Lifetime=3.78h  AvgP03=3253.85W  [750s]
+
+============================================================
+Trial 23: N_RUNS=10  L_RUN=231.7mm  z_first=2.51mm  side=0.3434mm  path=2331.1mm
+============================================================
+  Building model: N=10 L=231.7mm zf=2.51mm side=0.3434mm nblk=21
+  Model init OK: sanity Tmax=371.8K I=0.6242A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=1994.4K P03sph=727.0W steps=1
+  Phase 2: erosion loop...
+  Evaporation negligible. Infinite lifetime.
+  Vwork=100.0000V  Tmax=1994.4K  Lifetime=0.00h  AvgP03=nanW  [37s]
+
+============================================================
+Trial 24: N_RUNS=10  L_RUN=140.0mm  z_first=2.01mm  side=0.4409mm  path=1414.0mm
+============================================================
+  Building model: N=10 L=140.0mm zf=2.01mm side=0.4409mm nblk=21
+  Model init OK: sanity Tmax=450.3K I=1.2251A
+  Phase 1: voltage search...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((k_B_const*comp1.rad.lambdar)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((k_B_const*comp1.rad.lambdar)*comp1.rad.Tu_band1),1.0E-6)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((k_B_const*comp1.rad.lambdar)*comp1.rad.Tu_band1),1.0E-6)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((k_B_const*comp1.rad.lambdar)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((k_B_const*comp1.rad.lambdar)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	辐射度
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算表达式。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1)-comp1.rad.Ju_band1)*dvol
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1-comp1.rad.Ju_band1)*test(comp1.rad.Ju_band1))*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	辐射度
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算表达式。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1)-comp1.rad.Ju_band1)*dvol
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1-comp1.rad.Ju_band1)*test(comp1.rad.Ju_band1))*(dvol)
+
+  PHASE1: Vwork=94.8242V Tmax=2481.1K P03sph=1257.4W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0002
+  STEP=10 t=100.00h loss=0.0004
+  STEP=15 t=150.00h loss=0.0006
+  Lifetime cap 200h at step 20, stopping.
+  Vwork=94.8242V  Tmax=2481.1K  Lifetime=200.00h  AvgP03=1177.71W  [594s]
+
+============================================================
+Trial 25: N_RUNS=12  L_RUN=179.9mm  z_first=1.88mm  side=0.3557mm  path=2172.3mm
+============================================================
+  Building model: N=12 L=179.9mm zf=1.88mm side=0.3557mm nblk=25
+  Model init OK: sanity Tmax=381.2K I=0.8138A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2065.9K P03sph=941.6W steps=1
+  Phase 2: erosion loop...
+  Evaporation negligible. Infinite lifetime.
+  Vwork=100.0000V  Tmax=2065.9K  Lifetime=0.00h  AvgP03=nanW  [39s]
+
+============================================================
+Trial 26: N_RUNS=6  L_RUN=109.4mm  z_first=2.27mm  side=0.6402mm  path=670.7mm
+============================================================
+  Building model: N=6 L=109.4mm zf=2.27mm side=0.6402mm nblk=13
+  Model init OK: sanity Tmax=629.0K I=4.0483A
+  Phase 1: voltage search...
+  PHASE1: Vwork=78.4943V Tmax=3272.5K P03sph=2958.0W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.82h loss=0.1000
+  STEP=10 t=3.99h loss=0.2000
+  STEP=11 t=3.99h loss=0.2000
+  Vwork=78.4943V  Tmax=3272.5K  Lifetime=3.99h  AvgP03=3314.27W  [548s]
+
+============================================================
+Trial 27: N_RUNS=10  L_RUN=288.6mm  z_first=1.84mm  side=0.3079mm  path=2900.4mm
+============================================================
+  Building model: N=10 L=288.6mm zf=1.84mm side=0.3079mm nblk=21
+  Model init OK: sanity Tmax=347.5K I=0.4437A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=1793.6K P03sph=527.3W steps=1
+  Phase 2: erosion loop...
+  Evaporation negligible. Infinite lifetime.
+  Vwork=100.0000V  Tmax=1793.6K  Lifetime=0.00h  AvgP03=nanW  [40s]
+
+============================================================
+Trial 28: N_RUNS=10  L_RUN=142.9mm  z_first=2.47mm  side=0.4365mm  path=1443.1mm
+============================================================
+  Building model: N=10 L=142.9mm zf=2.47mm side=0.4365mm nblk=21
+  Model init OK: sanity Tmax=447.2K I=1.1750A
+  Phase 1: voltage search...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((k_B_const*comp1.rad.lambdar)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((k_B_const*comp1.rad.lambdar)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	辐射度
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),1.0E-6)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),1.0E-6)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算表达式。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1)-comp1.rad.Ju_band1)*dvol
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1-comp1.rad.Ju_band1)*test(comp1.rad.Ju_band1))*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	辐射度
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/(comp1.rad.Tu_band1*(comp1.rad.lambdar*k_B_const)))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/(comp1.rad.Tu_band1*(comp1.rad.lambdar*k_B_const)))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算表达式。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1)-comp1.rad.Ju_band1)*dvol
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1-comp1.rad.Ju_band1)*test(comp1.rad.Ju_band1))*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	辐射度
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((k_B_const*comp1.rad.lambdar)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((k_B_const*comp1.rad.lambdar)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算表达式。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1)-comp1.rad.Ju_band1)*dvol
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1-comp1.rad.Ju_band1)*test(comp1.rad.Ju_band1))*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	辐射度
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((k_B_const*comp1.rad.lambdar)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((k_B_const*comp1.rad.lambdar)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算表达式。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1)-comp1.rad.Ju_band1)*dvol
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1-comp1.rad.Ju_band1)*test(comp1.rad.Ju_band1))*(dvol)
+
+  PHASE1: Vwork=98.4375V Tmax=2496.3K P03sph=1280.7W steps=12
+  Phase 2: erosion loop...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	辐射度
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算表达式。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1)-comp1.rad.Ju_band1)*dvol
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1-comp1.rad.Ju_band1)*test(comp1.rad.Ju_band1))*(dvol)
+
+  WARN: solve failed step 1
+  STEP=1 t=10.00h loss=0.0001
+  Vwork=98.4375V  Tmax=2496.3K  Lifetime=10.00h  AvgP03=1280.74W  [186s]
+
+============================================================
+Trial 29: N_RUNS=6  L_RUN=97.8mm  z_first=1.53mm  side=0.6763mm  path=601.0mm
+============================================================
+  Building model: N=6 L=97.8mm zf=1.53mm side=0.6763mm nblk=13
+  Model init OK: sanity Tmax=661.8K I=5.0803A
+  Phase 1: voltage search...
+  PHASE1: Vwork=68.5382V Tmax=3272.7K P03sph=2990.2W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.90h loss=0.1000
+  STEP=10 t=4.12h loss=0.2000
+  STEP=11 t=4.12h loss=0.2000
+  Vwork=68.5382V  Tmax=3272.7K  Lifetime=4.12h  AvgP03=3163.72W  [554s]
+
+============================================================
+Trial 30: N_RUNS=10  L_RUN=53.2mm  z_first=1.14mm  side=0.7095mm  path=546.1mm
+============================================================
+  Building model: N=10 L=53.2mm zf=1.14mm side=0.7095mm nblk=21
+  Model init OK: sanity Tmax=702.5K I=6.2779A
+  Phase 1: voltage search...
+  PHASE1: Vwork=58.0396V Tmax=3272.7K P03sph=2846.5W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=2.03h loss=0.1000
+  STEP=10 t=4.50h loss=0.2000
+  STEP=11 t=5.06h loss=0.2200
+  Vwork=58.0396V  Tmax=3272.7K  Lifetime=5.06h  AvgP03=2857.93W  [800s]
+
+============================================================
+Trial 31: N_RUNS=14  L_RUN=99.5mm  z_first=0.84mm  side=0.4421mm  path=1406.6mm
+============================================================
+  Building model: N=14 L=99.5mm zf=0.84mm side=0.4421mm nblk=29
+  Model init OK: sanity Tmax=452.9K I=1.6216A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2548.6K P03sph=1809.2W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0006
+  STEP=10 t=100.00h loss=0.0012
+  STEP=15 t=150.00h loss=0.0018
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 17: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 184
+
+	边界合规中的内部错误。
+	- x 坐标: -0.220783
+	- y 坐标: 0.220933
+	- z 坐标: 13.9398
+
+  STEP=17 t=170.00h loss=0.0021
+  Vwork=100.0000V  Tmax=2548.6K  Lifetime=170.00h  AvgP03=1787.38W  [389s]
+
+============================================================
+Trial 32: N_RUNS=12  L_RUN=124.5mm  z_first=0.74mm  side=0.4269mm  path=1508.5mm
+============================================================
+  Building model: N=12 L=124.5mm zf=0.74mm side=0.4269mm nblk=25
+  Model init OK: sanity Tmax=438.1K I=1.4405A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2453.1K P03sph=1618.2W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0001
+  STEP=10 t=100.00h loss=0.0003
+  STEP=15 t=150.00h loss=0.0004
+  Lifetime cap 200h at step 20, stopping.
+  Vwork=100.0000V  Tmax=2453.1K  Lifetime=200.00h  AvgP03=1534.72W  [453s]
+
+============================================================
+Trial 33: N_RUNS=14  L_RUN=20.2mm  z_first=0.76mm  side=0.9622mm  path=296.9mm
+============================================================
+  FAILED: FAIL_Z_OVERLAP
+
+============================================================
+Trial 34: N_RUNS=4  L_RUN=86.5mm  z_first=2.11mm  side=0.8738mm  path=360.0mm
+============================================================
+  Building model: N=4 L=86.5mm zf=2.11mm side=0.8738mm nblk=9
+  Model init OK: sanity Tmax=843.9K I=10.9032A
+  Phase 1: voltage search...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  PHASE1: Vwork=35.9375V Tmax=3273.1K P03sph=2350.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=2.46h loss=0.1000
+  STEP=10 t=5.36h loss=0.2000
+  STEP=11 t=5.36h loss=0.2000
+  Vwork=35.9375V  Tmax=3273.1K  Lifetime=5.36h  AvgP03=2447.05W  [420s]
+
+============================================================
+Trial 35: N_RUNS=14  L_RUN=60.0mm  z_first=2.49mm  side=0.5675mm  path=853.6mm
+============================================================
+  Building model: N=14 L=60.0mm zf=2.49mm side=0.5675mm nblk=29
+  Model init OK: sanity Tmax=589.4K I=2.5668A
+  Phase 1: voltage search...
+  PHASE1: Vwork=92.7363V Tmax=3273.0K P03sph=2432.7W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.72h loss=0.1000
+  STEP=10 t=4.20h loss=0.2000
+  Vwork=92.7363V  Tmax=3273.0K  Lifetime=4.20h  AvgP03=2470.95W  [1073s]
+
+============================================================
+Trial 36: N_RUNS=16  L_RUN=150.2mm  z_first=0.91mm  side=0.3372mm  path=2416.9mm
+============================================================
+  Building model: N=16 L=150.2mm zf=0.91mm side=0.3372mm nblk=33
+  Model init OK: sanity Tmax=368.4K I=0.6281A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=1968.4K P03sph=732.6W steps=1
+  Phase 2: erosion loop...
+  Evaporation negligible. Infinite lifetime.
+  Vwork=100.0000V  Tmax=1968.4K  Lifetime=0.00h  AvgP03=nanW  [46s]
+
+============================================================
+Trial 37: N_RUNS=6  L_RUN=122.4mm  z_first=1.59mm  side=0.6060mm  path=748.5mm
+============================================================
+  Building model: N=6 L=122.4mm zf=1.59mm side=0.6060mm nblk=13
+  Model init OK: sanity Tmax=596.1K I=3.8109A
+  Phase 1: voltage search...
+  PHASE1: Vwork=90.8223V Tmax=3272.6K P03sph=3499.2W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.69h loss=0.1000
+  STEP=10 t=3.67h loss=0.2000
+  STEP=11 t=3.67h loss=0.2000
+  Vwork=90.8223V  Tmax=3272.6K  Lifetime=3.67h  AvgP03=3570.40W  [543s]
+
+============================================================
+Trial 38: N_RUNS=12  L_RUN=188.7mm  z_first=2.17mm  side=0.3474mm  path=2278.2mm
+============================================================
+  Building model: N=12 L=188.7mm zf=2.17mm side=0.3474mm nblk=25
+  Model init OK: sanity Tmax=375.2K I=0.7378A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2021.1K P03sph=857.2W steps=1
+  Phase 2: erosion loop...
+  Evaporation negligible. Infinite lifetime.
+  Vwork=100.0000V  Tmax=2021.1K  Lifetime=0.00h  AvgP03=nanW  [41s]
+
+============================================================
+Trial 39: N_RUNS=10  L_RUN=224.2mm  z_first=1.97mm  side=0.3490mm  path=2256.5mm
+============================================================
+  Building model: N=10 L=224.2mm zf=1.97mm side=0.3490mm nblk=21
+  Model init OK: sanity Tmax=375.5K I=0.6888A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2022.8K P03sph=799.6W steps=1
+  Phase 2: erosion loop...
+  Evaporation negligible. Infinite lifetime.
+  Vwork=100.0000V  Tmax=2022.8K  Lifetime=0.00h  AvgP03=nanW  [37s]
+
+============================================================
+Trial 40: N_RUNS=14  L_RUN=161.6mm  z_first=1.08mm  side=0.3475mm  path=2276.2mm
+============================================================
+  Building model: N=14 L=161.6mm zf=1.08mm side=0.3475mm nblk=29
+  Model init OK: sanity Tmax=375.3K I=0.7125A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2021.3K P03sph=827.5W steps=1
+  Phase 2: erosion loop...
+  Evaporation negligible. Infinite lifetime.
+  Vwork=100.0000V  Tmax=2021.3K  Lifetime=0.00h  AvgP03=nanW  [41s]
+
+============================================================
+Trial 41: N_RUNS=14  L_RUN=105.1mm  z_first=0.91mm  side=0.4302mm  path=1485.0mm
+============================================================
+  Building model: N=14 L=105.1mm zf=0.91mm side=0.4302mm nblk=29
+  Model init OK: sanity Tmax=442.6K I=1.6136A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2483.2K P03sph=1809.3W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0002
+  STEP=10 t=100.00h loss=0.0004
+  STEP=15 t=150.00h loss=0.0006
+  Lifetime cap 200h at step 20, stopping.
+  Vwork=100.0000V  Tmax=2483.2K  Lifetime=200.00h  AvgP03=1684.32W  [436s]
+
+============================================================
+Trial 42: N_RUNS=14  L_RUN=96.4mm  z_first=0.86mm  side=0.4489mm  path=1364.1mm
+============================================================
+  Building model: N=14 L=96.4mm zf=0.86mm side=0.4489mm nblk=29
+  Model init OK: sanity Tmax=459.1K I=1.7850A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2587.3K P03sph=1987.6W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0011
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 9: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 428
+
+	边界合规中的内部错误。
+	- x 坐标: 96.6634
+	- y 坐标: -0.0457823
+	- z 坐标: 12.8954
+
+  STEP=9 t=90.00h loss=0.0020
+  Vwork=100.0000V  Tmax=2587.3K  Lifetime=90.00h  AvgP03=1922.27W  [220s]
+
+============================================================
+Trial 43: N_RUNS=14  L_RUN=64.4mm  z_first=1.75mm  side=0.5478mm  path=916.1mm
+============================================================
+  Building model: N=14 L=64.4mm zf=1.75mm side=0.5478mm nblk=29
+  Model init OK: sanity Tmax=557.9K I=2.1245A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3180.4K P03sph=2279.3W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=3.94h loss=0.1000
+  STEP=10 t=9.00h loss=0.2000
+  STEP=11 t=9.00h loss=0.2000
+  Vwork=100.0000V  Tmax=3180.4K  Lifetime=9.00h  AvgP03=3026.77W  [880s]
+
+============================================================
+Trial 44: N_RUNS=16  L_RUN=38.5mm  z_first=0.83mm  side=0.6602mm  path=630.7mm
+============================================================
+  Building model: N=16 L=38.5mm zf=0.83mm side=0.6602mm nblk=33
+  Model init OK: sanity Tmax=680.7K I=5.0759A
+  Phase 1: voltage search...
+  PHASE1: Vwork=62.5543V Tmax=3273.1K P03sph=2596.7W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.94h loss=0.1000
+  STEP=10 t=4.58h loss=0.2000
+  STEP=11 t=4.58h loss=0.2000
+  Vwork=62.5543V  Tmax=3273.1K  Lifetime=4.58h  AvgP03=2480.77W  [1923s]
+
+============================================================
+Trial 45: N_RUNS=14  L_RUN=90.8mm  z_first=1.23mm  side=0.4624mm  path=1285.5mm
+============================================================
+  Building model: N=14 L=90.8mm zf=1.23mm side=0.4624mm nblk=29
+  Model init OK: sanity Tmax=472.3K I=1.7922A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2669.1K P03sph=1984.7W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 3: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 60
+
+	边界合规中的内部错误。
+	- x 坐标: -0.231217
+	- y 坐标: 0.142701
+	- z 坐标: 13.0333
+
+  STEP=3 t=30.00h loss=0.0021
+  Vwork=100.0000V  Tmax=2669.1K  Lifetime=30.00h  AvgP03=1990.40W  [99s]
+
+============================================================
+Trial 46: N_RUNS=8  L_RUN=108.5mm  z_first=1.05mm  side=0.5583mm  path=882.0mm
+============================================================
+  Building model: N=8 L=108.5mm zf=1.05mm side=0.5583mm nblk=17
+  Model init OK: sanity Tmax=553.5K I=3.4400A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3148.1K P03sph=3704.3W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=5.39h loss=0.1000
+  STEP=10 t=11.70h loss=0.2000
+  STEP=11 t=13.08h loss=0.2200
+  Vwork=100.0000V  Tmax=3148.1K  Lifetime=13.08h  AvgP03=3400.28W  [496s]
+
+============================================================
+Trial 47: N_RUNS=6  L_RUN=135.3mm  z_first=2.97mm  side=0.5769mm  path=825.9mm
+============================================================
+  Building model: N=6 L=135.3mm zf=2.97mm side=0.5769mm nblk=13
+  Model init OK: sanity Tmax=571.0K I=3.0572A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3248.3K P03sph=3272.4W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=2.08h loss=0.1000
+  STEP=10 t=4.62h loss=0.2000
+  STEP=11 t=5.20h loss=0.2200
+  Vwork=100.0000V  Tmax=3248.3K  Lifetime=5.20h  AvgP03=3376.95W  [352s]
+
+============================================================
+Trial 48: N_RUNS=14  L_RUN=115.2mm  z_first=0.72mm  side=0.4111mm  path=1626.3mm
+============================================================
+  Building model: N=14 L=115.2mm zf=0.72mm side=0.4111mm nblk=29
+  Model init OK: sanity Tmax=425.8K I=1.2788A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2374.3K P03sph=1444.6W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0000
+  STEP=10 t=100.00h loss=0.0001
+  STEP=15 t=150.00h loss=0.0001
+  Lifetime cap 200h at step 20, stopping.
+  Vwork=100.0000V  Tmax=2374.3K  Lifetime=200.00h  AvgP03=1368.98W  [549s]
+
+============================================================
+Trial 49: N_RUNS=10  L_RUN=128.2mm  z_first=1.64mm  side=0.4605mm  path=1296.4mm
+============================================================
+  Building model: N=10 L=128.2mm zf=1.64mm side=0.4605mm nblk=21
+  Model init OK: sanity Tmax=467.1K I=1.5005A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2635.0K P03sph=1663.7W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0022
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 6: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 15
+
+	边界合规中的内部错误。
+	- x 坐标: -0.230242
+	- y 坐标: -0.229096
+	- z 坐标: 2.70952
+
+  STEP=6 t=60.00h loss=0.0026
+  Vwork=100.0000V  Tmax=2635.0K  Lifetime=60.00h  AvgP03=1733.72W  [133s]
+
+============================================================
+Trial 50: N_RUNS=10  L_RUN=96.2mm  z_first=2.36mm  side=0.5308mm  path=975.7mm
+============================================================
+  Building model: N=10 L=96.2mm zf=2.36mm side=0.5308mm nblk=21
+  Model init OK: sanity Tmax=533.5K I=2.6542A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3034.0K P03sph=2878.2W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=17.88h loss=0.1000
+  STEP=10 t=40.32h loss=0.2000
+  STEP=11 t=44.66h loss=0.2169
+  Vwork=100.0000V  Tmax=3034.0K  Lifetime=44.66h  AvgP03=2707.92W  [566s]
+
+============================================================
+Trial 51: N_RUNS=10  L_RUN=93.0mm  z_first=2.66mm  side=0.5396mm  path=944.2mm
+============================================================
+  Building model: N=10 L=93.0mm zf=2.66mm side=0.5396mm nblk=21
+  Model init OK: sanity Tmax=543.2K I=2.6977A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3091.2K P03sph=2915.5W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=9.82h loss=0.1000
+  STEP=10 t=22.39h loss=0.2000
+  STEP=11 t=24.54h loss=0.2148
+  Vwork=100.0000V  Tmax=3091.2K  Lifetime=24.54h  AvgP03=2929.41W  [587s]
+
+============================================================
+Trial 52: N_RUNS=10  L_RUN=131.5mm  z_first=2.41mm  side=0.4547mm  path=1329.4mm
+============================================================
+  Building model: N=10 L=131.5mm zf=2.41mm side=0.4547mm nblk=21
+  Model init OK: sanity Tmax=463.2K I=1.3235A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2611.6K P03sph=1468.6W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0016
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 7: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 20
+
+	边界合规中的内部错误。
+	- x 坐标: -0.22723
+	- y 坐标: -0.0923369
+	- z 坐标: 4.89928
+
+  STEP=7 t=70.00h loss=0.0022
+  Vwork=100.0000V  Tmax=2611.6K  Lifetime=70.00h  AvgP03=1469.77W  [151s]
+
+============================================================
+Trial 53: N_RUNS=10  L_RUN=155.6mm  z_first=2.21mm  side=0.4184mm  path=1570.3mm
+============================================================
+  Building model: N=10 L=155.6mm zf=2.21mm side=0.4184mm nblk=21
+  Model init OK: sanity Tmax=431.1K I=1.1046A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2408.2K P03sph=1243.5W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0001
+  STEP=10 t=100.00h loss=0.0001
+  STEP=15 t=150.00h loss=0.0002
+  Lifetime cap 200h at step 20, stopping.
+  Vwork=100.0000V  Tmax=2408.2K  Lifetime=200.00h  AvgP03=1176.94W  [346s]
+
+============================================================
+Trial 54: N_RUNS=10  L_RUN=73.1mm  z_first=2.76mm  side=0.6074mm  path=745.0mm
+============================================================
+  Building model: N=10 L=73.1mm zf=2.76mm side=0.6074mm nblk=21
+  Model init OK: sanity Tmax=611.1K I=3.6286A
+  Phase 1: voltage search...
+  PHASE1: Vwork=84.4840V Tmax=3273.1K P03sph=2975.5W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.77h loss=0.1000
+  STEP=10 t=4.09h loss=0.2000
+  STEP=11 t=4.09h loss=0.2000
+  Vwork=84.4840V  Tmax=3273.1K  Lifetime=4.09h  AvgP03=2991.56W  [813s]
+
+============================================================
+Trial 55: N_RUNS=10  L_RUN=114.5mm  z_first=1.64mm  side=0.4870mm  path=1159.2mm
+============================================================
+  Building model: N=10 L=114.5mm zf=1.64mm side=0.4870mm nblk=21
+  Model init OK: sanity Tmax=490.9K I=2.1116A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2780.4K P03sph=2323.2W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 1: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 39
+
+	边界合规中的内部错误。
+	- x 坐标: -0.24336
+	- y 坐标: -0.0986676
+	- z 坐标: 10.5096
+
+  STEP=1 t=10.00h loss=0.0031
+  Vwork=100.0000V  Tmax=2780.4K  Lifetime=10.00h  AvgP03=2323.16W  [46s]
+
+============================================================
+Trial 56: N_RUNS=10  L_RUN=99.2mm  z_first=2.34mm  side=0.5226mm  path=1006.5mm
+============================================================
+  Building model: N=10 L=99.2mm zf=2.34mm side=0.5226mm nblk=21
+  Model init OK: sanity Tmax=525.7K I=2.5711A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2987.8K P03sph=2796.4W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=29.60h loss=0.1000
+  STEP=10 t=66.73h loss=0.2000
+  STEP=11 t=74.06h loss=0.2173
+  Vwork=100.0000V  Tmax=2987.8K  Lifetime=74.06h  AvgP03=2585.55W  [567s]
+
+============================================================
+Trial 57: N_RUNS=4  L_RUN=81.9mm  z_first=2.34mm  side=0.8972mm  path=341.5mm
+============================================================
+  Building model: N=4 L=81.9mm zf=2.34mm side=0.8972mm nblk=9
+  Model init OK: sanity Tmax=866.2K I=11.8209A
+  Phase 1: voltage search...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),1.0E-6)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),1.0E-6)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: comp1.rad.ebu1*(-comp1.rad.epsilonu_band1)
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  PHASE1: Vwork=33.4961V Tmax=3272.4K P03sph=2286.1W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=2.55h loss=0.1000
+  STEP=10 t=5.57h loss=0.2000
+  STEP=11 t=6.23h loss=0.2200
+  Vwork=33.4961V  Tmax=3272.4K  Lifetime=6.23h  AvgP03=2258.41W  [422s]
+
+============================================================
+Trial 58: N_RUNS=8  L_RUN=97.2mm  z_first=2.14mm  side=0.5893mm  path=791.5mm
+============================================================
+  Building model: N=8 L=97.2mm zf=2.14mm side=0.5893mm nblk=17
+  Model init OK: sanity Tmax=584.4K I=3.3180A
+  Phase 1: voltage search...
+  PHASE1: Vwork=95.6553V Tmax=3273.0K P03sph=3309.2W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.67h loss=0.1000
+  STEP=10 t=3.69h loss=0.2000
+  STEP=11 t=4.14h loss=0.2200
+  Vwork=95.6553V  Tmax=3273.0K  Lifetime=4.14h  AvgP03=3564.88W  [660s]
+
+============================================================
+Trial 59: N_RUNS=10  L_RUN=40.0mm  z_first=1.92mm  side=0.8150mm  path=413.8mm
+============================================================
+  Building model: N=10 L=40.0mm zf=1.92mm side=0.8150mm nblk=21
+  Model init OK: sanity Tmax=818.8K I=8.9588A
+  Phase 1: voltage search...
+  PHASE1: Vwork=38.2998V Tmax=3272.2K P03sph=2130.1W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=2.44h loss=0.1000
+  STEP=10 t=5.71h loss=0.2000
+  STEP=11 t=5.71h loss=0.2000
+  Vwork=38.2998V  Tmax=3272.2K  Lifetime=5.71h  AvgP03=2073.36W  [774s]
+
+============================================================
+Trial 60: N_RUNS=10  L_RUN=67.5mm  z_first=2.38mm  side=0.6317mm  path=688.9mm
+============================================================
+  Building model: N=10 L=67.5mm zf=2.38mm side=0.6317mm nblk=21
+  Model init OK: sanity Tmax=632.5K I=3.6166A
+  Phase 1: voltage search...
+  PHASE1: Vwork=76.9496V Tmax=3272.7K P03sph=2551.8W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.84h loss=0.1000
+  STEP=10 t=4.19h loss=0.2000
+  STEP=11 t=4.61h loss=0.2152
+  Vwork=76.9496V  Tmax=3272.7K  Lifetime=4.61h  AvgP03=2830.53W  [841s]
+
+============================================================
+Trial 61: N_RUNS=10  L_RUN=129.3mm  z_first=1.80mm  side=0.4586mm  path=1306.9mm
+============================================================
+  Building model: N=10 L=129.3mm zf=1.80mm side=0.4586mm nblk=21
+  Model init OK: sanity Tmax=465.7K I=1.5456A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2626.3K P03sph=1715.5W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0019
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 6: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 12
+
+	边界合规中的内部错误。
+	- x 坐标: -0.229272
+	- y 坐标: -0.0311668
+	- z 坐标: 2.02814
+
+  STEP=6 t=60.00h loss=0.0023
+  Vwork=100.0000V  Tmax=2626.3K  Lifetime=60.00h  AvgP03=1704.86W  [132s]
+
+============================================================
+Trial 62: N_RUNS=10  L_RUN=101.7mm  z_first=2.07mm  side=0.5164mm  path=1030.7mm
+============================================================
+  Building model: N=10 L=101.7mm zf=2.07mm side=0.5164mm nblk=21
+  Model init OK: sanity Tmax=519.0K I=2.2647A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2948.3K P03sph=2464.4W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=45.99h loss=0.1000
+  STEP=10 t=95.99h loss=0.1887
+  STEP=12 t=113.11h loss=0.2155
+  Vwork=100.0000V  Tmax=2948.3K  Lifetime=113.11h  AvgP03=2655.14W  [580s]
+
+============================================================
+Trial 63: N_RUNS=10  L_RUN=105.6mm  z_first=2.58mm  side=0.5070mm  path=1069.6mm
+============================================================
+  Building model: N=10 L=105.6mm zf=2.58mm side=0.5070mm nblk=21
+  Model init OK: sanity Tmax=511.7K I=1.9727A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2905.6K P03sph=2151.6W steps=1
+  Phase 2: erosion loop...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 174 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (2.94381e-20,0.000252372,0.0121641), (0.000115133,0.000252372,0.0121641), (5.75666e-05,0.000252372,0.0121641), (0.000115133,-0.000252372,0.0121641), (2.06067e-19,-0.000252372,0.0121641), ...
+
+  WARN: solve failed step 1
+  STEP=1 t=10.00h loss=0.0147
+  Vwork=100.0000V  Tmax=2905.6K  Lifetime=10.00h  AvgP03=2151.57W  [53s]
+
+============================================================
+Trial 64: N_RUNS=10  L_RUN=117.4mm  z_first=2.05mm  side=0.4811mm  path=1187.7mm
+============================================================
+  Building model: N=10 L=117.4mm zf=2.05mm side=0.4811mm nblk=21
+  Model init OK: sanity Tmax=486.3K I=1.9920A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2752.7K P03sph=2194.8W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 1: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 39
+
+	边界合规中的内部错误。
+	- x 坐标: -0.240541
+	- y 坐标: 0.000350054
+	- z 坐标: 10.285
+
+  STEP=1 t=10.00h loss=0.0022
+  Vwork=100.0000V  Tmax=2752.7K  Lifetime=10.00h  AvgP03=2194.85W  [44s]
+
+============================================================
+Trial 65: N_RUNS=14  L_RUN=87.5mm  z_first=2.25mm  side=0.4711mm  path=1238.7mm
+============================================================
+  Building model: N=14 L=87.5mm zf=2.25mm side=0.4711mm nblk=29
+  Model init OK: sanity Tmax=484.6K I=1.3679A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2745.5K P03sph=1505.8W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 1: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 10
+
+	边界合规中的内部错误。
+	- x 坐标: -0.235537
+	- y 坐标: -0.235402
+	- z 坐标: 2.01707
+
+  STEP=1 t=10.00h loss=0.0020
+  Vwork=100.0000V  Tmax=2745.5K  Lifetime=10.00h  AvgP03=1505.81W  [55s]
+
+============================================================
+Trial 66: N_RUNS=16  L_RUN=96.4mm  z_first=2.08mm  side=0.4203mm  path=1555.9mm
+============================================================
+  Building model: N=16 L=96.4mm zf=2.08mm side=0.4203mm nblk=33
+  NOTE: Phase-0 warm-up succeeded at 10V
+  Model init OK: sanity Tmax=1030.9K I=4.2254A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2465.4K P03sph=1271.4W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0002
+  STEP=10 t=100.00h loss=0.0003
+  STEP=15 t=150.00h loss=0.0005
+  Lifetime cap 200h at step 20, stopping.
+  Vwork=100.0000V  Tmax=2465.4K  Lifetime=200.00h  AvgP03=1104.90W  [456s]
+
+============================================================
+Trial 67: N_RUNS=10  L_RUN=74.0mm  z_first=1.94mm  side=0.6039mm  path=753.8mm
+============================================================
+  Building model: N=10 L=74.0mm zf=1.94mm side=0.6039mm nblk=21
+  Model init OK: sanity Tmax=602.3K I=3.4431A
+  Phase 1: voltage search...
+  PHASE1: Vwork=87.9231V Tmax=3272.9K P03sph=3001.9W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.73h loss=0.1000
+  STEP=10 t=3.86h loss=0.2000
+  STEP=11 t=4.29h loss=0.2181
+  Vwork=87.9231V  Tmax=3272.9K  Lifetime=4.29h  AvgP03=3221.67W  [824s]
+
+============================================================
+Trial 68: N_RUNS=12  L_RUN=82.4mm  z_first=2.21mm  side=0.5237mm  path=1002.2mm
+============================================================
+  Building model: N=12 L=82.4mm zf=2.21mm side=0.5237mm nblk=25
+  Model init OK: sanity Tmax=530.7K I=2.2136A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3019.0K P03sph=2401.4W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=20.96h loss=0.1000
+  STEP=10 t=47.76h loss=0.2000
+  STEP=11 t=51.46h loss=0.2120
+  Vwork=100.0000V  Tmax=3019.0K  Lifetime=51.46h  AvgP03=2632.36W  [684s]
+
+============================================================
+Trial 69: N_RUNS=12  L_RUN=56.2mm  z_first=2.32mm  side=0.6317mm  path=688.9mm
+============================================================
+  Building model: N=12 L=56.2mm zf=2.32mm side=0.6317mm nblk=25
+  Model init OK: sanity Tmax=643.1K I=4.3840A
+  Phase 1: voltage search...
+  PHASE1: Vwork=73.3237V Tmax=3272.4K P03sph=2876.0W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.88h loss=0.1000
+  STEP=10 t=4.44h loss=0.2000
+  STEP=11 t=4.75h loss=0.2104
+  Vwork=73.3237V  Tmax=3272.4K  Lifetime=4.75h  AvgP03=2644.47W  [950s]
+
+============================================================
+Trial 70: N_RUNS=12  L_RUN=84.8mm  z_first=2.21mm  side=0.5163mm  path=1031.4mm
+============================================================
+  Building model: N=12 L=84.8mm zf=2.21mm side=0.5163mm nblk=25
+  Model init OK: sanity Tmax=523.4K I=2.2837A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2975.9K P03sph=2483.3W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=33.79h loss=0.1000
+  STEP=10 t=77.00h loss=0.2000
+  STEP=11 t=77.00h loss=0.2000
+  Vwork=100.0000V  Tmax=2975.9K  Lifetime=77.00h  AvgP03=2465.44W  [671s]
+
+============================================================
+Trial 71: N_RUNS=12  L_RUN=80.3mm  z_first=2.19mm  side=0.5303mm  path=977.5mm
+============================================================
+  Building model: N=12 L=80.3mm zf=2.19mm side=0.5303mm nblk=25
+  Model init OK: sanity Tmax=537.0K I=2.4408A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3056.3K P03sph=2640.1W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  NOTE: mesh OK with hauto=6 (fallback)
+  STEP=5 t=14.05h loss=0.1000
+  STEP=10 t=32.01h loss=0.2000
+  STEP=11 t=34.49h loss=0.2120
+  Vwork=100.0000V  Tmax=3056.3K  Lifetime=34.49h  AvgP03=2640.28W  [691s]
+
+============================================================
+Trial 72: N_RUNS=12  L_RUN=102.1mm  z_first=2.39mm  side=0.4710mm  path=1239.4mm
+============================================================
+  Building model: N=12 L=102.1mm zf=2.39mm side=0.4710mm nblk=25
+  Model init OK: sanity Tmax=481.0K I=1.9518A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2721.7K P03sph=2155.9W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 2: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 39
+
+	边界合规中的内部错误。
+	- x 坐标: -0.235282
+	- y 坐标: -0.142638
+	- z 坐标: 8.65808
+
+  STEP=2 t=20.00h loss=0.0029
+  Vwork=100.0000V  Tmax=2721.7K  Lifetime=20.00h  AvgP03=2075.44W  [70s]
+
+============================================================
+Trial 73: N_RUNS=12  L_RUN=44.8mm  z_first=2.23mm  side=0.7057mm  path=552.0mm
+============================================================
+  Building model: N=12 L=44.8mm zf=2.23mm side=0.7057mm nblk=25
+  Model init OK: sanity Tmax=724.9K I=5.9298A
+  Phase 1: voltage search...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: comp1.rad.ebu1*(-comp1.rad.epsilonu_band1)
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  PHASE1: Vwork=52.9785V Tmax=3272.2K P03sph=2340.3W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=2.16h loss=0.1000
+  STEP=10 t=5.26h loss=0.2000
+  STEP=11 t=5.66h loss=0.2105
+  Vwork=52.9785V  Tmax=3272.2K  Lifetime=5.66h  AvgP03=2127.93W  [918s]
+
+============================================================
+Trial 74: N_RUNS=12  L_RUN=84.6mm  z_first=2.61mm  side=0.5167mm  path=1029.5mm
+============================================================
+  Building model: N=12 L=84.6mm zf=2.61mm side=0.5167mm nblk=25
+  Model init OK: sanity Tmax=526.4K I=2.0123A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2994.0K P03sph=2183.0W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=27.84h loss=0.1000
+  STEP=10 t=64.65h loss=0.2000
+  STEP=11 t=69.18h loss=0.2104
+  Vwork=100.0000V  Tmax=2994.0K  Lifetime=69.18h  AvgP03=2531.52W  [671s]
+
+============================================================
+Trial 75: N_RUNS=12  L_RUN=67.5mm  z_first=2.60mm  side=0.5776mm  path=824.0mm
+============================================================
+  Building model: N=12 L=67.5mm zf=2.60mm side=0.5776mm nblk=25
+  Model init OK: sanity Tmax=588.7K I=3.3308A
+  Phase 1: voltage search...
+  PHASE1: Vwork=93.2627V Tmax=3272.6K P03sph=3191.2W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.71h loss=0.1000
+  STEP=10 t=4.02h loss=0.2000
+  STEP=11 t=4.02h loss=0.2000
+  Vwork=93.2627V  Tmax=3272.6K  Lifetime=4.02h  AvgP03=2777.76W  [954s]
+
+============================================================
+Trial 76: N_RUNS=12  L_RUN=84.7mm  z_first=2.78mm  side=0.5166mm  path=1029.9mm
+============================================================
+  Building model: N=12 L=84.7mm zf=2.78mm side=0.5166mm nblk=25
+  Model init OK: sanity Tmax=527.6K I=2.2628A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3001.9K P03sph=2457.9W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  NOTE: mesh OK with hauto=6 (fallback)
+  STEP=5 t=25.65h loss=0.1000
+  STEP=10 t=60.22h loss=0.2000
+  STEP=11 t=64.23h loss=0.2097
+  Vwork=100.0000V  Tmax=3001.9K  Lifetime=64.23h  AvgP03=2559.17W  [652s]
+
+============================================================
+Trial 77: N_RUNS=12  L_RUN=83.3mm  z_first=2.76mm  side=0.5206mm  path=1014.2mm
+============================================================
+  Building model: N=12 L=83.3mm zf=2.76mm side=0.5206mm nblk=25
+  Model init OK: sanity Tmax=531.5K I=2.0508A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3024.4K P03sph=2224.1W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=20.03h loss=0.1000
+  STEP=10 t=46.99h loss=0.2000
+  STEP=11 t=50.12h loss=0.2098
+  Vwork=100.0000V  Tmax=3024.4K  Lifetime=50.12h  AvgP03=2471.74W  [661s]
+
+============================================================
+Trial 78: N_RUNS=12  L_RUN=49.3mm  z_first=2.80mm  side=0.6738mm  path=605.4mm
+============================================================
+  Building model: N=12 L=49.3mm zf=2.80mm side=0.6738mm nblk=25
+  Model init OK: sanity Tmax=704.1K I=4.7228A
+  Phase 1: voltage search...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  PHASE1: Vwork=57.2209V Tmax=3273.0K P03sph=2100.2W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=2.13h loss=0.1000
+  STEP=10 t=5.52h loss=0.2000
+  STEP=11 t=5.52h loss=0.2000
+  Vwork=57.2209V  Tmax=3273.0K  Lifetime=5.52h  AvgP03=2048.00W  [949s]
+
+============================================================
+Trial 79: N_RUNS=12  L_RUN=76.7mm  z_first=2.83mm  side=0.5424mm  path=934.4mm
+============================================================
+  Building model: N=12 L=76.7mm zf=2.83mm side=0.5424mm nblk=25
+  Model init OK: sanity Tmax=554.6K I=2.4680A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3160.4K P03sph=2654.9W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=4.90h loss=0.1000
+  STEP=10 t=11.60h loss=0.2000
+  Vwork=100.0000V  Tmax=3160.4K  Lifetime=11.60h  AvgP03=2892.87W  [619s]
+
+============================================================
+Trial 80: N_RUNS=12  L_RUN=61.4mm  z_first=2.67mm  side=0.6052mm  path=750.5mm
+============================================================
+  Building model: N=12 L=61.4mm zf=2.67mm side=0.6052mm nblk=25
+  Model init OK: sanity Tmax=619.7K I=3.2947A
+  Phase 1: voltage search...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  PHASE1: Vwork=81.0785V Tmax=3272.7K P03sph=2530.5W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.82h loss=0.1000
+  STEP=10 t=4.36h loss=0.2000
+  STEP=11 t=4.65h loss=0.2093
+  Vwork=81.0785V  Tmax=3272.7K  Lifetime=4.65h  AvgP03=2350.30W  [1002s]
+
+============================================================
+Trial 81: N_RUNS=12  L_RUN=83.6mm  z_first=2.73mm  side=0.5197mm  path=1017.7mm
+============================================================
+  Building model: N=12 L=83.6mm zf=2.73mm side=0.5197mm nblk=25
+  Model init OK: sanity Tmax=530.3K I=2.3094A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3017.6K P03sph=2505.9W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=21.58h loss=0.1000
+  STEP=10 t=50.49h loss=0.2000
+  STEP=11 t=50.49h loss=0.2000
+  Vwork=100.0000V  Tmax=3017.6K  Lifetime=50.49h  AvgP03=2388.07W  [666s]
+
+============================================================
+Trial 82: N_RUNS=12  L_RUN=89.6mm  z_first=2.94mm  side=0.5025mm  path=1088.6mm
+============================================================
+  Building model: N=12 L=89.6mm zf=2.94mm side=0.5025mm nblk=25
+  Model init OK: sanity Tmax=514.8K I=2.0510A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2926.2K P03sph=2237.2W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0842
+  STEP=10 t=100.00h loss=0.1503
+  STEP=15 t=145.17h loss=0.2000
+  Vwork=100.0000V  Tmax=2926.2K  Lifetime=145.17h  AvgP03=2129.54W  [837s]
+
+============================================================
+Trial 83: N_RUNS=12  L_RUN=112.2mm  z_first=2.58mm  side=0.4495mm  path=1360.7mm
+============================================================
+  Building model: N=12 L=112.2mm zf=2.58mm side=0.4495mm nblk=25
+  Model init OK: sanity Tmax=461.8K I=1.6070A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2603.7K P03sph=1788.3W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0014
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 7: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 28
+
+	边界合规中的内部错误。
+	- x 坐标: -0.224609
+	- y 坐标: -0.094939
+	- z 坐标: 6.3837
+
+  STEP=7 t=70.00h loss=0.0019
+  Vwork=100.0000V  Tmax=2603.7K  Lifetime=70.00h  AvgP03=1774.31W  [170s]
+
+============================================================
+Trial 84: N_RUNS=12  L_RUN=71.1mm  z_first=2.90mm  side=0.5630mm  path=867.3mm
+============================================================
+  Building model: N=12 L=71.1mm zf=2.90mm side=0.5630mm nblk=25
+  Model init OK: sanity Tmax=577.4K I=2.3008A
+  Phase 1: voltage search...
+  PHASE1: Vwork=98.3438V Tmax=3272.7K P03sph=2390.3W steps=8
+  Phase 2: erosion loop...
+  STEP=5 t=1.69h loss=0.1000
+  STEP=10 t=4.04h loss=0.2000
+  STEP=11 t=4.04h loss=0.2000
+  Vwork=98.3438V  Tmax=3272.7K  Lifetime=4.04h  AvgP03=2624.39W  [875s]
+
+============================================================
+Trial 85: N_RUNS=12  L_RUN=86.3mm  z_first=2.32mm  side=0.5117mm  path=1049.9mm
+============================================================
+  Building model: N=12 L=86.3mm zf=2.32mm side=0.5117mm nblk=25
+  Model init OK: sanity Tmax=519.6K I=2.2409A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2953.5K P03sph=2439.4W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=43.64h loss=0.1000
+  STEP=10 t=93.64h loss=0.1899
+  STEP=11 t=100.08h loss=0.2000
+  Vwork=100.0000V  Tmax=2953.5K  Lifetime=100.08h  AvgP03=2556.43W  [688s]
+
+============================================================
+Trial 86: N_RUNS=12  L_RUN=102.5mm  z_first=2.47mm  side=0.4702mm  path=1243.4mm
+============================================================
+  Building model: N=12 L=102.5mm zf=2.47mm side=0.4702mm nblk=25
+  Model init OK: sanity Tmax=480.6K I=1.9019A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2719.3K P03sph=2101.8W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 2: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 23
+
+	边界合规中的内部错误。
+	- x 坐标: -0.235095
+	- y 坐标: 0.000485304
+	- z 坐标: 4.97901
+
+  STEP=2 t=20.00h loss=0.0028
+  Vwork=100.0000V  Tmax=2719.3K  Lifetime=20.00h  AvgP03=2102.19W  [70s]
+
+============================================================
+Trial 87: N_RUNS=4  L_RUN=121.0mm  z_first=2.54mm  side=0.7428mm  path=498.2mm
+============================================================
+  Building model: N=4 L=121.0mm zf=2.54mm side=0.7428mm nblk=9
+  Model init OK: sanity Tmax=721.7K I=6.8248A
+  Phase 1: voltage search...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),1.0E-6)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),1.0E-6)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: ((sigma_const*(comp1.rad.nS2S^2))*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: comp1.rad.ebu1*(-comp1.rad.epsilonu_band1)
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  PHASE1: Vwork=54.4763V Tmax=3272.8K P03sph=2815.3W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=2.09h loss=0.1000
+  STEP=10 t=4.54h loss=0.2000
+  STEP=11 t=4.54h loss=0.2000
+  Vwork=54.4763V  Tmax=3272.8K  Lifetime=4.54h  AvgP03=2810.94W  [430s]
+
+============================================================
+Trial 88: N_RUNS=12  L_RUN=90.8mm  z_first=2.43mm  side=0.4991mm  path=1103.6mm
+============================================================
+  Building model: N=12 L=90.8mm zf=2.43mm side=0.4991mm nblk=25
+  Model init OK: sanity Tmax=507.9K I=2.1270A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2884.2K P03sph=2326.9W steps=1
+  Phase 2: erosion loop...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 510 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (-0.000249541,0.000248695,0.0126253), (-0.000249541,0.000248695,0.0126684), (-0.000249541,0.000248695,0.0127114), (-0.000249541,-0.000248695,0.0127114), (-0.000139795,0.000248695,0.0123221), ...
+
+  WARN: solve failed step 1
+  STEP=1 t=10.00h loss=0.0115
+  Vwork=100.0000V  Tmax=2884.2K  Lifetime=10.00h  AvgP03=2326.88W  [71s]
+
+============================================================
+Trial 89: N_RUNS=12  L_RUN=29.0mm  z_first=2.31mm  side=0.8716mm  path=361.9mm
+============================================================
+  FAILED: FAIL_Z_OVERLAP
+
+============================================================
+Trial 90: N_RUNS=8  L_RUN=79.5mm  z_first=2.63mm  side=0.6503mm  path=650.0mm
+============================================================
+  Building model: N=8 L=79.5mm zf=2.63mm side=0.6503mm nblk=17
+  Model init OK: sanity Tmax=644.8K I=4.4621A
+  Phase 1: voltage search...
+  PHASE1: Vwork=73.2553V Tmax=3272.9K P03sph=2917.4W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.88h loss=0.1000
+  STEP=10 t=4.23h loss=0.2000
+  Vwork=73.2553V  Tmax=3272.9K  Lifetime=4.23h  AvgP03=3087.17W  [679s]
+
+============================================================
+Trial 91: N_RUNS=12  L_RUN=85.0mm  z_first=2.10mm  side=0.5155mm  path=1034.4mm
+============================================================
+  Building model: N=12 L=85.0mm zf=2.10mm side=0.5155mm nblk=25
+  Model init OK: sanity Tmax=522.1K I=2.0914A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2968.5K P03sph=2273.6W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=36.68h loss=0.1000
+  STEP=10 t=83.02h loss=0.1996
+  STEP=12 t=90.00h loss=0.2126
+  Vwork=100.0000V  Tmax=2968.5K  Lifetime=90.00h  AvgP03=2435.01W  [713s]
+
+============================================================
+Trial 92: N_RUNS=12  L_RUN=108.1mm  z_first=2.14mm  side=0.4579mm  path=1311.0mm
+============================================================
+  Building model: N=12 L=108.1mm zf=2.14mm side=0.4579mm nblk=25
+  Model init OK: sanity Tmax=468.0K I=1.8260A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2642.0K P03sph=2027.0W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 4: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 47
+
+	边界合规中的内部错误。
+	- x 坐标: -0.22883
+	- y 坐标: -0.138908
+	- z 坐标: 10.6811
+
+  STEP=4 t=40.00h loss=0.0019
+  Vwork=100.0000V  Tmax=2642.0K  Lifetime=40.00h  AvgP03=2015.74W  [111s]
+
+============================================================
+Trial 93: N_RUNS=12  L_RUN=94.7mm  z_first=2.36mm  side=0.4889mm  path=1149.8mm
+============================================================
+  Building model: N=12 L=94.7mm zf=2.36mm side=0.4889mm nblk=25
+  Model init OK: sanity Tmax=497.8K I=2.1138A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2823.6K P03sph=2320.6W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  NOTE: mesh OK with hauto=6 (fallback)
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 1366 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (-0.000244472,-0.000244085,0.0124), (-0.000244278,-0.000244085,0.0124), (-0.000244085,-0.000244085,0.0124), (-0.000244472,0.000244085,0.0128882), (-0.000244085,0.000244085,0.0128882), ...
+
+  WARN: solve failed step 1
+  STEP=1 t=10.00h loss=0.0055
+  Vwork=100.0000V  Tmax=2823.6K  Lifetime=10.00h  AvgP03=2320.59W  [56s]
+
+============================================================
+Trial 94: N_RUNS=12  L_RUN=60.2mm  z_first=1.99mm  side=0.6109mm  path=736.5mm
+============================================================
+  Building model: N=12 L=60.2mm zf=1.99mm side=0.6109mm nblk=25
+  Model init OK: sanity Tmax=617.0K I=2.9748A
+  Phase 1: voltage search...
+  PHASE1: Vwork=82.1696V Tmax=3273.1K P03sph=2329.7W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.77h loss=0.1000
+  STEP=10 t=4.06h loss=0.2000
+  STEP=11 t=4.06h loss=0.2000
+  Vwork=82.1696V  Tmax=3273.1K  Lifetime=4.06h  AvgP03=2827.84W  [1143s]
+
+============================================================
+Trial 95: N_RUNS=16  L_RUN=69.7mm  z_first=2.81mm  side=0.4935mm  path=1128.7mm
+============================================================
+  Building model: N=16 L=69.7mm zf=2.81mm side=0.4935mm nblk=33
+  Model init OK: sanity Tmax=525.8K I=1.9472A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2996.1K P03sph=2117.0W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=28.16h loss=0.1000
+  STEP=10 t=72.76h loss=0.1984
+  STEP=12 t=76.90h loss=0.2054
+  Vwork=100.0000V  Tmax=2996.1K  Lifetime=76.90h  AvgP03=1905.78W  [1112s]
+
+============================================================
+Trial 96: N_RUNS=12  L_RUN=79.7mm  z_first=2.27mm  side=0.5321mm  path=970.8mm
+============================================================
+  Building model: N=12 L=79.7mm zf=2.27mm side=0.5321mm nblk=25
+  Model init OK: sanity Tmax=539.3K I=2.3662A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3069.7K P03sph=2556.2W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=12.21h loss=0.1000
+  STEP=10 t=27.93h loss=0.2000
+  STEP=11 t=30.04h loss=0.2116
+  Vwork=100.0000V  Tmax=3069.7K  Lifetime=30.04h  AvgP03=2679.72W  [839s]
+
+============================================================
+Trial 97: N_RUNS=10  L_RUN=100.2mm  z_first=2.45mm  side=0.5202mm  path=1015.9mm
+============================================================
+  Building model: N=10 L=100.2mm zf=2.45mm side=0.5202mm nblk=21
+  Model init OK: sanity Tmax=523.7K I=2.7029A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2976.5K P03sph=2942.0W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=33.62h loss=0.1000
+  STEP=10 t=76.08h loss=0.2000
+  STEP=11 t=84.18h loss=0.2166
+  Vwork=100.0000V  Tmax=2976.5K  Lifetime=84.18h  AvgP03=2676.87W  [734s]
+
+============================================================
+Trial 98: N_RUNS=10  L_RUN=171.3mm  z_first=2.44mm  side=0.3990mm  path=1726.8mm
+============================================================
+  Building model: N=10 L=171.3mm zf=2.44mm side=0.3990mm nblk=21
+  Model init OK: sanity Tmax=415.1K I=1.0381A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2302.8K P03sph=1178.1W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0000
+  STEP=10 t=100.00h loss=0.0000
+  STEP=15 t=150.00h loss=0.0000
+  Lifetime cap 200h at step 20, stopping.
+  Vwork=100.0000V  Tmax=2302.8K  Lifetime=200.00h  AvgP03=1119.20W  [533s]
+
+============================================================
+Trial 99: N_RUNS=10  L_RUN=100.5mm  z_first=2.54mm  side=0.5195mm  path=1018.7mm
+============================================================
+  Building model: N=10 L=100.5mm zf=2.54mm side=0.5195mm nblk=21
+  Model init OK: sanity Tmax=523.4K I=1.9554A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2974.7K P03sph=2120.7W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=34.39h loss=0.1000
+  STEP=10 t=78.08h loss=0.2000
+  STEP=11 t=86.16h loss=0.2161
+  Vwork=100.0000V  Tmax=2974.7K  Lifetime=86.16h  AvgP03=2478.51W  [688s]
+
+============================================================
+Trial 100: N_RUNS=10  L_RUN=110.1mm  z_first=2.51mm  side=0.4965mm  path=1115.3mm
+============================================================
+  Building model: N=10 L=110.1mm zf=2.51mm side=0.4965mm nblk=21
+  Model init OK: sanity Tmax=501.6K I=2.0519A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2845.4K P03sph=2248.3W steps=1
+  Phase 2: erosion loop...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 381 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (-0.000248228,0.000179843,0.0127383), (-0.000248228,0.000145657,0.0127383), (-0.000248228,0.000111471,0.0127383), (-0.000248228,-0.000111471,0.0127383), (-0.000248228,0,0.0127383), ...
+
+  WARN: solve failed step 1
+  STEP=1 t=10.00h loss=0.0071
+  Vwork=100.0000V  Tmax=2845.4K  Lifetime=10.00h  AvgP03=2248.28W  [55s]
+
+============================================================
+Trial 101: N_RUNS=10  L_RUN=98.6mm  z_first=2.73mm  side=0.5243mm  path=1000.2mm
+============================================================
+  Building model: N=10 L=98.6mm zf=2.73mm side=0.5243mm nblk=21
+  Model init OK: sanity Tmax=528.8K I=2.5049A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3006.5K P03sph=2721.7W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=24.25h loss=0.1000
+  STEP=10 t=55.43h loss=0.2000
+  STEP=11 t=55.44h loss=0.2000
+  Vwork=100.0000V  Tmax=3006.5K  Lifetime=55.44h  AvgP03=2670.94W  [677s]
+
+============================================================
+Trial 102: N_RUNS=10  L_RUN=102.6mm  z_first=2.69mm  side=0.5141mm  path=1040.1mm
+============================================================
+  Building model: N=10 L=102.6mm zf=2.69mm side=0.5141mm nblk=21
+  Model init OK: sanity Tmax=518.9K I=2.1640A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2948.1K P03sph=2355.4W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=46.30h loss=0.0994
+  STEP=10 t=96.30h loss=0.1845
+  STEP=13 t=116.63h loss=0.2144
+  Vwork=100.0000V  Tmax=2948.1K  Lifetime=116.63h  AvgP03=2478.60W  [666s]
+
+============================================================
+Trial 103: N_RUNS=10  L_RUN=120.1mm  z_first=2.70mm  side=0.4757mm  path=1214.9mm
+============================================================
+  Building model: N=10 L=120.1mm zf=2.70mm side=0.4757mm nblk=21
+  Model init OK: sanity Tmax=483.0K I=1.9722A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2732.9K P03sph=2177.1W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 2: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 72
+
+	边界合规中的内部错误。
+	- x 坐标: -0.237598
+	- y 坐标: -0.146743
+	- z 坐标: 5.07055
+
+  STEP=2 t=20.00h loss=0.0034
+  Vwork=100.0000V  Tmax=2732.9K  Lifetime=20.00h  AvgP03=2179.21W  [68s]
+
+============================================================
+Trial 104: N_RUNS=10  L_RUN=91.2mm  z_first=2.87mm  side=0.5450mm  path=925.6mm
+============================================================
+  Building model: N=10 L=91.2mm zf=2.87mm side=0.5450mm nblk=21
+  Model init OK: sanity Tmax=549.6K I=2.6474A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3128.8K P03sph=2854.6W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=6.69h loss=0.1000
+  STEP=10 t=15.42h loss=0.2000
+  STEP=11 t=16.79h loss=0.2135
+  Vwork=100.0000V  Tmax=3128.8K  Lifetime=16.79h  AvgP03=2871.52W  [670s]
+
+============================================================
+Trial 105: N_RUNS=10  L_RUN=101.7mm  z_first=2.61mm  side=0.5164mm  path=1030.8mm
+============================================================
+  Building model: N=10 L=101.7mm zf=2.61mm side=0.5164mm nblk=21
+  Model init OK: sanity Tmax=520.8K I=2.2088A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2959.3K P03sph=2402.3W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=41.00h loss=0.1000
+  STEP=10 t=90.42h loss=0.1949
+  STEP=12 t=102.91h loss=0.2157
+  Vwork=100.0000V  Tmax=2959.3K  Lifetime=102.91h  AvgP03=2385.30W  [764s]
+
+============================================================
+Trial 106: N_RUNS=10  L_RUN=95.2mm  z_first=2.37mm  side=0.5334mm  path=966.3mm
+============================================================
+  Building model: N=10 L=95.2mm zf=2.37mm side=0.5334mm nblk=21
+  Model init OK: sanity Tmax=535.9K I=2.5870A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3048.3K P03sph=2801.0W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=15.32h loss=0.1000
+  STEP=10 t=34.55h loss=0.2000
+  STEP=11 t=38.26h loss=0.2168
+  Vwork=100.0000V  Tmax=3048.3K  Lifetime=38.26h  AvgP03=2712.59W  [635s]
+
+============================================================
+Trial 107: N_RUNS=10  L_RUN=114.8mm  z_first=2.29mm  side=0.4864mm  path=1162.0mm
+============================================================
+  Building model: N=10 L=114.8mm zf=2.29mm side=0.4864mm nblk=21
+  Model init OK: sanity Tmax=491.7K I=2.1072A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2785.3K P03sph=2317.9W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 1: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 44
+
+	边界合规中的内部错误。
+	- x 坐标: -0.243188
+	- y 坐标: -0.00043127
+	- z 坐标: 11.7989
+
+  STEP=1 t=10.00h loss=0.0033
+  Vwork=100.0000V  Tmax=2785.3K  Lifetime=10.00h  AvgP03=2317.91W  [46s]
+
+============================================================
+Trial 108: N_RUNS=10  L_RUN=136.6mm  z_first=2.34mm  side=0.4464mm  path=1379.7mm
+============================================================
+  Building model: N=10 L=136.6mm zf=2.34mm side=0.4464mm nblk=21
+  Model init OK: sanity Tmax=455.7K I=1.4862A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2564.3K P03sph=1657.1W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0008
+  STEP=10 t=100.00h loss=0.0015
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 15: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 12
+
+	边界合规中的内部错误。
+	- x 坐标: -0.223042
+	- y 坐标: -0.089427
+	- z 坐标: 2.5656
+
+  STEP=15 t=150.00h loss=0.0023
+  Vwork=100.0000V  Tmax=2564.3K  Lifetime=150.00h  AvgP03=1631.44W  [420s]
+
+============================================================
+Trial 109: N_RUNS=10  L_RUN=75.6mm  z_first=2.45mm  side=0.5975mm  path=770.0mm
+============================================================
+  Building model: N=10 L=75.6mm zf=2.45mm side=0.5975mm nblk=21
+  Model init OK: sanity Tmax=598.7K I=3.1682A
+  Phase 1: voltage search...
+  PHASE1: Vwork=89.3286V Tmax=3273.0K P03sph=2832.3W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.73h loss=0.1000
+  STEP=10 t=3.92h loss=0.2000
+  STEP=11 t=4.30h loss=0.2151
+  Vwork=89.3286V  Tmax=3273.0K  Lifetime=4.30h  AvgP03=3169.08W  [1194s]
+
+============================================================
+Trial 110: N_RUNS=10  L_RUN=95.8mm  z_first=1.88mm  side=0.5318mm  path=971.9mm
+============================================================
+  Building model: N=10 L=95.8mm zf=1.88mm side=0.5318mm nblk=21
+  Model init OK: sanity Tmax=532.9K I=2.5648A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3030.3K P03sph=2779.4W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=18.49h loss=0.1000
+  STEP=10 t=41.11h loss=0.2000
+  STEP=11 t=46.21h loss=0.2200
+  Vwork=100.0000V  Tmax=3030.3K  Lifetime=46.21h  AvgP03=2732.47W  [696s]
+
+============================================================
+Trial 111: N_RUNS=10  L_RUN=93.8mm  z_first=2.14mm  side=0.5373mm  path=952.2mm
+============================================================
+  Building model: N=10 L=93.8mm zf=2.14mm side=0.5373mm nblk=21
+  Model init OK: sanity Tmax=538.9K I=2.6937A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3065.4K P03sph=2914.4W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=12.74h loss=0.1000
+  STEP=10 t=28.52h loss=0.2000
+  STEP=11 t=28.52h loss=0.2000
+  Vwork=100.0000V  Tmax=3065.4K  Lifetime=28.52h  AvgP03=2704.08W  [741s]
+
+============================================================
+Trial 112: N_RUNS=10  L_RUN=107.8mm  z_first=1.89mm  side=0.5017mm  path=1092.0mm
+============================================================
+  Building model: N=10 L=107.8mm zf=1.89mm side=0.5017mm nblk=21
+  Model init OK: sanity Tmax=504.9K I=2.2734A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2864.4K P03sph=2491.3W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  NOTE: mesh OK with hauto=6 (fallback)
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 417 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (-0.000250859,-0.00025027,0.0128984), (-0.00025027,-0.00025027,0.0128984), (-0.000250564,-0.00025027,0.0128984), (-0.000208502,-0.00025027,0.0128566), (-0.000208502,-0.00025027,0.012856), ...
+
+  WARN: solve failed step 1
+  STEP=1 t=10.00h loss=0.0089
+  Vwork=100.0000V  Tmax=2864.4K  Lifetime=10.00h  AvgP03=2491.29W  [81s]
+
+============================================================
+Trial 113: N_RUNS=10  L_RUN=96.3mm  z_first=1.80mm  side=0.5304mm  path=977.1mm
+============================================================
+  Building model: N=10 L=96.3mm zf=1.80mm side=0.5304mm nblk=21
+  Model init OK: sanity Tmax=531.4K I=2.5505A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3021.4K P03sph=2765.1W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=20.34h loss=0.1000
+  STEP=10 t=45.14h loss=0.2000
+  STEP=11 t=45.14h loss=0.2000
+  Vwork=100.0000V  Tmax=3021.4K  Lifetime=45.14h  AvgP03=2748.31W  [787s]
+
+============================================================
+Trial 114: N_RUNS=10  L_RUN=95.0mm  z_first=1.82mm  side=0.5341mm  path=963.8mm
+============================================================
+  Building model: N=10 L=95.0mm zf=1.82mm side=0.5341mm nblk=21
+  Model init OK: sanity Tmax=534.9K I=2.4593A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3041.7K P03sph=2661.7W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=16.32h loss=0.1000
+  STEP=10 t=36.25h loss=0.2000
+  Vwork=100.0000V  Tmax=3041.7K  Lifetime=36.25h  AvgP03=2762.95W  [729s]
+
+============================================================
+Trial 115: N_RUNS=10  L_RUN=125.9mm  z_first=1.72mm  side=0.4647mm  path=1273.1mm
+============================================================
+  Building model: N=10 L=125.9mm zf=1.72mm side=0.4647mm nblk=21
+  Model init OK: sanity Tmax=470.9K I=1.4693A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2658.6K P03sph=1625.7W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 4: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 39
+
+	边界合规中的内部错误。
+	- x 坐标: -0.232194
+	- y 坐标: -0.231905
+	- z 坐标: 10.4814
+
+  STEP=4 t=40.00h loss=0.0024
+  Vwork=100.0000V  Tmax=2658.6K  Lifetime=40.00h  AvgP03=1605.26W  [144s]
+
+============================================================
+Trial 116: N_RUNS=10  L_RUN=97.7mm  z_first=1.83mm  side=0.5268mm  path=990.5mm
+============================================================
+  Building model: N=10 L=97.7mm zf=1.83mm side=0.5268mm nblk=21
+  Model init OK: sanity Tmax=528.1K I=2.3145A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3001.8K P03sph=2513.5W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=25.19h loss=0.1000
+  STEP=10 t=55.99h loss=0.2000
+  STEP=11 t=55.99h loss=0.2000
+  Vwork=100.0000V  Tmax=3001.8K  Lifetime=55.99h  AvgP03=2518.53W  [708s]
+
+============================================================
+Trial 117: N_RUNS=10  L_RUN=112.8mm  z_first=1.78mm  side=0.4905mm  path=1142.5mm
+============================================================
+  Building model: N=10 L=112.8mm zf=1.78mm side=0.4905mm nblk=21
+  Model init OK: sanity Tmax=494.4K I=2.2250A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2801.3K P03sph=2447.4W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 1: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 39
+
+	边界合规中的内部错误。
+	- x 坐标: -0.245003
+	- y 坐标: -0.000550736
+	- z 坐标: 10.435
+
+  STEP=1 t=10.00h loss=0.0041
+  Vwork=100.0000V  Tmax=2801.3K  Lifetime=10.00h  AvgP03=2447.42W  [47s]
+
+============================================================
+Trial 118: N_RUNS=10  L_RUN=94.8mm  z_first=1.89mm  side=0.5345mm  path=962.3mm
+============================================================
+  Building model: N=10 L=94.8mm zf=1.89mm side=0.5345mm nblk=21
+  Model init OK: sanity Tmax=535.5K I=2.3804A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3045.1K P03sph=2575.9W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=15.77h loss=0.1000
+  STEP=10 t=35.09h loss=0.2000
+  STEP=11 t=39.45h loss=0.2200
+  Vwork=100.0000V  Tmax=3045.1K  Lifetime=39.45h  AvgP03=2770.34W  [733s]
+
+============================================================
+Trial 119: N_RUNS=10  L_RUN=105.7mm  z_first=1.86mm  side=0.5066mm  path=1071.1mm
+============================================================
+  Building model: N=10 L=105.7mm zf=1.86mm side=0.5066mm nblk=21
+  Model init OK: sanity Tmax=509.3K I=2.3054A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2890.9K P03sph=2520.0W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  NOTE: mesh OK with hauto=6 (fallback)
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 294 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (0.105967,-0.00025248,0.0131361), (0.105967,-0.00025248,0.0130001), (0.105966,-0.00025248,0.0130001), (0.105966,-0.00025248,0.0130001), (0.105967,-0.00025248,0.0130681), ...
+
+  WARN: solve failed step 1
+  STEP=1 t=10.00h loss=0.0123
+  Vwork=100.0000V  Tmax=2890.9K  Lifetime=10.00h  AvgP03=2519.95W  [53s]
+
+============================================================
+Trial 120: N_RUNS=10  L_RUN=93.9mm  z_first=1.94mm  side=0.5371mm  path=952.9mm
+============================================================
+  Building model: N=10 L=93.9mm zf=1.94mm side=0.5371mm nblk=21
+  Model init OK: sanity Tmax=538.1K I=2.2563A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3060.7K P03sph=2440.1W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=13.37h loss=0.1000
+  STEP=10 t=29.77h loss=0.2000
+  STEP=11 t=33.39h loss=0.2195
+  Vwork=100.0000V  Tmax=3060.7K  Lifetime=33.39h  AvgP03=2739.62W  [616s]
+
+============================================================
+Trial 121: N_RUNS=10  L_RUN=90.3mm  z_first=2.01mm  side=0.5474mm  path=917.5mm
+============================================================
+  Building model: N=10 L=90.3mm zf=2.01mm side=0.5474mm nblk=21
+  Model init OK: sanity Tmax=548.0K I=2.8192A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3118.8K P03sph=3040.4W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=7.31h loss=0.1000
+  STEP=10 t=16.30h loss=0.2000
+  STEP=11 t=16.30h loss=0.2000
+  Vwork=100.0000V  Tmax=3118.8K  Lifetime=16.30h  AvgP03=3011.89W  [610s]
+
+============================================================
+Trial 122: N_RUNS=10  L_RUN=99.1mm  z_first=1.72mm  side=0.5231mm  path=1004.7mm
+============================================================
+  Building model: N=10 L=99.1mm zf=1.72mm side=0.5231mm nblk=21
+  Model init OK: sanity Tmax=524.4K I=2.2270A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2980.0K P03sph=2420.7W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=32.14h loss=0.1000
+  STEP=10 t=71.29h loss=0.2000
+  STEP=11 t=71.29h loss=0.2000
+  Vwork=100.0000V  Tmax=2980.0K  Lifetime=71.29h  AvgP03=2590.66W  [744s]
+
+============================================================
+Trial 123: N_RUNS=10  L_RUN=96.7mm  z_first=1.72mm  side=0.5292mm  path=981.4mm
+============================================================
+  Building model: N=10 L=96.7mm zf=1.72mm side=0.5292mm nblk=21
+  Model init OK: sanity Tmax=530.1K I=2.6221A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3013.7K P03sph=2847.0W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=22.10h loss=0.1000
+  STEP=10 t=48.96h loss=0.2000
+  STEP=11 t=55.00h loss=0.2200
+  Vwork=100.0000V  Tmax=3013.7K  Lifetime=55.00h  AvgP03=2754.00W  [653s]
+
+============================================================
+Trial 124: N_RUNS=10  L_RUN=115.9mm  z_first=1.55mm  side=0.4842mm  path=1172.6mm
+============================================================
+  Building model: N=10 L=115.9mm zf=1.55mm side=0.4842mm nblk=21
+  Model init OK: sanity Tmax=488.2K I=2.1254A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2764.0K P03sph=2340.1W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  NOTE: mesh OK with hauto=8 (fallback)
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 405 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (0.116102,-0.000241938,0.0134518), (0.116102,-0.000241938,0.0132943), (0.116102,-0.000241938,0.0133731), (0.115618,0,0.0136939), (0.115618,-7.87613e-05,0.0136939), ...
+
+  WARN: solve failed step 1
+  STEP=1 t=10.00h loss=0.0025
+  Vwork=100.0000V  Tmax=2764.0K  Lifetime=10.00h  AvgP03=2340.15W  [78s]
+
+============================================================
+Trial 125: N_RUNS=10  L_RUN=106.3mm  z_first=1.69mm  side=0.5053mm  path=1076.5mm
+============================================================
+  Building model: N=10 L=106.3mm zf=1.69mm side=0.5053mm nblk=21
+  Model init OK: sanity Tmax=507.8K I=2.2924A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2881.7K P03sph=2507.0W steps=1
+  Phase 2: erosion loop...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 158 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (-0.000252661,0.000251954,0.00164047), (-0.000252661,0.000251954,0.00169257), (-0.000252661,0.000251954,0.00174466), (-0.000251954,0.000251954,0.00164038), (-0.000252308,0.000251954,0.00164043), ...
+
+  WARN: solve failed step 1
+  STEP=1 t=10.00h loss=0.0110
+  Vwork=100.0000V  Tmax=2881.7K  Lifetime=10.00h  AvgP03=2506.97W  [65s]
+
+============================================================
+Trial 126: N_RUNS=10  L_RUN=95.6mm  z_first=1.73mm  side=0.5325mm  path=969.6mm
+============================================================
+  Building model: N=10 L=95.6mm zf=1.73mm side=0.5325mm nblk=21
+  Model init OK: sanity Tmax=533.2K I=2.5651A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3031.4K P03sph=2779.0W steps=1
+  Phase 2: erosion loop...
+  SERVER_DISCONNECT: params saved to D:\VScode\project\BFHC\zigzag_family\ML\data\failed_trial.json
+
+COMSOL server disconnected. Optimization paused.
+Retry params saved to: D:\VScode\project\BFHC\zigzag_family\ML\data\failed_trial.json
+Re-run the script to resume from the interrupted trial.
+
+============================================================
+  OPTIMIZATION COMPLETE
+============================================================
+Best trial:     #21
+Best value:     2848.70 W (lifeAvgP03sphere)
+Best params:    N_RUNS=10  L_RUN=99.5mm  z_first=2.04mm
+Best side:      0.5219 mm
+Best path len:  1009.3 mm
+
+Total trials:   127
+Results saved:  D:\VScode\project\BFHC\zigzag_family\ML\data\trials.csv
+COMSOL disconnected.

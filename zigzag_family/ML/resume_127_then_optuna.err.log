@@ -1,0 +1,23 @@
+[I 2026-05-06 17:52:31,005] Using an existing study with name 'zigzag_bo_v3_cylinder_life' instead of creating a new one.
+[I 2026-05-06 18:03:10,945] Trial 128 finished with value: 2717.1229587187545 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 97.81288498114748, 'z_first_mm': 1.7223989052445545}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 18:18:27,529] Trial 129 pruned. Lifetime 4.25h < 34.65h
+[I 2026-05-06 18:28:59,339] Trial 130 pruned. Lifetime 20.75h < 34.65h
+[I 2026-05-06 18:30:08,756] Trial 131 pruned. Lifetime 20.00h < 34.65h
+[I 2026-05-06 18:38:07,629] Trial 132 pruned. Lifetime 5.09h < 34.65h
+[I 2026-05-06 18:49:45,194] Trial 133 finished with value: 2605.9138196265185 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 99.26208193910611, 'z_first_mm': 1.7432786184273243}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 18:51:01,513] Trial 134 pruned. Lifetime 10.00h < 34.65h
+[I 2026-05-06 19:03:18,359] Trial 135 pruned. Lifetime 4.05h < 34.65h
+[I 2026-05-06 19:04:02,300] Trial 136 pruned. Lifetime 0.00h < 34.65h
+[I 2026-05-06 19:13:18,824] Trial 137 pruned. Lifetime 11.63h < 34.65h
+[I 2026-05-06 19:24:14,414] Trial 138 finished with value: 2687.9423842219676 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 96.82795655115048, 'z_first_mm': 1.803408584772784}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 19:25:05,745] Trial 139 pruned. Lifetime 10.00h < 34.65h
+[I 2026-05-06 19:30:43,818] Trial 140 finished with value: 1135.8302870446098 and parameters: {'N_RUNS': 8, 'L_RUN_mm': 192.71268040947328, 'z_first_mm': 1.968757463135894}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 19:41:07,101] Trial 141 pruned. Lifetime 33.05h < 34.65h
+[I 2026-05-06 19:56:34,916] Trial 142 pruned. Lifetime 4.12h < 34.65h
+[I 2026-05-06 20:06:11,272] Trial 143 finished with value: 2717.816968073445 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 98.76285965308206, 'z_first_mm': 1.650015527304372}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 20:07:26,857] Trial 144 pruned. Lifetime 10.00h < 34.65h
+[I 2026-05-06 20:16:04,007] Trial 145 pruned. Lifetime 12.04h < 34.65h
+[I 2026-05-06 20:23:15,560] Trial 146 finished with value: 1079.271118058832 and parameters: {'N_RUNS': 16, 'L_RUN_mm': 96.05784084824147, 'z_first_mm': 1.8058140414379125}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 20:33:38,882] Trial 147 pruned. Lifetime 4.78h < 34.65h
+[I 2026-05-06 20:47:40,048] Trial 148 pruned. Lifetime 4.06h < 34.65h
+[I 2026-05-06 20:48:32,628] Trial 149 pruned. Lifetime 10.00h < 34.65h

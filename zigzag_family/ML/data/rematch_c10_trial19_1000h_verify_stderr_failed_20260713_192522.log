@@ -1,0 +1,47 @@
+Model does not exist.
+Traceback (most recent call last):
+  File "SourceFile", line 974, in com.comsol.clientapi.impl.ModelClient.param
+Exception: Java Exception
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\VScode\project\BFHC\zigzag_family\ML\zigzag_runner.py", line 1117, in evaluate
+    self._init_model(N_RUNS, L_RUN_m, z_first_m)
+  File "D:\VScode\project\BFHC\zigzag_family\ML\zigzag_runner.py", line 463, in _init_model
+    j.param().set("Vapp", f"{warmup_voltage}[V]")
+    ^^^^^^^^^
+com.comsol.util.exceptions.com.comsol.util.exceptions.FlException: Exception:
+	com.comsol.util.exceptions.FlException: 未连接到服务器。
+Messages:
+	Not connected to a server
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\VScode\project\BFHC\zigzag_family\ML\rematch_c10_verify_trial19.py", line 221, in <module>
+    main()
+  File "D:\VScode\project\BFHC\zigzag_family\ML\rematch_c10_verify_trial19.py", line 154, in main
+    result = runner.evaluate(
+             ^^^^^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\zigzag_family\ML\zigzag_runner.py", line 1127, in evaluate
+    raise ServerDisconnectError(self._safe_exception_text(e))
+zigzag_runner.ServerDisconnectError: Exception:
+	com.comsol.util.exceptions.FlException: 未连接到服务器。
+Messages:
+	Not connected to a server
+
+Error while disconnecting client at session clean-up.
+Traceback (most recent call last):
+  File "SourceFile", line 290, in com.comsol.model.util.ModelUtil.disconnect
+Exception: Java Exception
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\BFHC\Lib\site-packages\mph\session.py", line 160, in cleanup
+    client.disconnect()
+  File "D:\conda_envs\BFHC\Lib\site-packages\mph\client.py", line 441, in disconnect
+    self.java.disconnect()
+java.lang.java.lang.IllegalStateException: java.lang.IllegalStateException: Tried to disconnect while not connected.

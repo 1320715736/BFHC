@@ -1,0 +1,14 @@
+[I 2026-07-11 19:01:35,382] Using an existing study with name 'cylinder_rematch_c4' instead of creating a new one.
+[I 2026-07-11 19:25:23,729] Trial 60 finished with value: 97.75621232009092 and parameters: {'r1_mm': 1.9006519104413555, 'r2_mm': 1.9758637407657837, 'r3_mm': 3.777278446816257}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 19:39:14,348] Trial 61 finished with value: 113.98726069186876 and parameters: {'r1_mm': 1.8287146526188276, 'r2_mm': 2.0756699802253, 'r3_mm': 3.624086886606944}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 19:53:23,979] Trial 62 finished with value: 117.9649955160851 and parameters: {'r1_mm': 1.8666543177783812, 'r2_mm': 2.0413282851833987, 'r3_mm': 3.5970516887603385}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 20:14:45,169] Trial 63 finished with value: 113.3689341708099 and parameters: {'r1_mm': 1.9488304490906798, 'r2_mm': 2.014351598145505, 'r3_mm': 3.5281349808041154}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 20:33:16,431] Trial 64 finished with value: 112.18933522581851 and parameters: {'r1_mm': 1.8805680215998268, 'r2_mm': 2.042658979450153, 'r3_mm': 3.6009313848686477}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 20:41:10,617] Trial 65 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-11 21:01:34,767] Trial 66 finished with value: 107.51921263264805 and parameters: {'r1_mm': 1.9826347070655619, 'r2_mm': 1.9831496695938302, 'r3_mm': 3.568288491658095}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 21:25:18,872] Trial 67 finished with value: 83.39114088500656 and parameters: {'r1_mm': 2.0288236903920267, 'r2_mm': 2.031996511812375, 'r3_mm': 3.589804066545606}. Best is trial 36 with value: 127.60287969412285.
+[I 2026-07-11 21:50:39,188] Trial 68 finished with value: 130.76181255488152 and parameters: {'r1_mm': 1.9063832640319742, 'r2_mm': 1.9423869762989763, 'r3_mm': 3.6474884452463625}. Best is trial 68 with value: 130.76181255488152.
+[I 2026-07-11 22:15:32,617] Trial 69 finished with value: 83.28532157036418 and parameters: {'r1_mm': 2.1364231862902656, 'r2_mm': 1.9328709468133192, 'r3_mm': 3.7146555174018876}. Best is trial 68 with value: 130.76181255488152.
+[I 2026-07-11 22:41:01,891] Trial 70 finished with value: 127.39222162378864 and parameters: {'r1_mm': 1.9076791561979083, 'r2_mm': 1.9515414342452395, 'r3_mm': 3.6439130112784732}. Best is trial 68 with value: 130.76181255488152.
+[I 2026-07-11 22:47:51,831] Trial 71 pruned. FAIL_OVERTEMP_DURING_EROSION
+[I 2026-07-11 23:13:00,166] Trial 72 finished with value: 108.6395917805744 and parameters: {'r1_mm': 1.9356893172535348, 'r2_mm': 1.9591518134073609, 'r3_mm': 3.678693639900312}. Best is trial 68 with value: 130.76181255488152.

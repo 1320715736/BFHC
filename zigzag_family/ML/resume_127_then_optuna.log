@@ -1,0 +1,434 @@
+Resuming disconnected CSV trial #127: {'N_RUNS': 10, 'L_RUN_mm': 98.95089803966052, 'z_first_mm': 1.725320517019182}
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+  Building model: N=10 L=99.0mm zf=1.73mm side=0.5234mm nblk=21
+  Model init OK: sanity Tmax=524.6K I=2.3241A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2981.4K P03sph=2527.6W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=31.53h loss=0.1000
+  STEP=10 t=69.90h loss=0.2000
+Recovered trial #127: status=OK, lifetime=69.90h, AvgP03=2643.03W
+COMSOL disconnected.
+Recovered failed trial. Start a fresh process for the remaining Optuna trials to avoid stale COMSOL/mph client state.
+CSV output:     D:\VScode\project\BFHC\zigzag_family\ML\data\trials.csv
+Optuna DB:      sqlite:///D:\VScode\project\BFHC\zigzag_family\ML\data\optuna.db
+Trials:         150
+Search space:   N_RUNS ∈ [4, 6, 8, 10, 12, 14, 16]
+                L_RUN ∈ [20.0, 300.0] mm
+                z_first ∈ [0.6, 3.0] mm
+Zigzag ref:     N=8 L=104.0mm zf=0.8mm
+Life constraint: cylinder baseline 115.5037h × 30% = 34.65h
+Zigzag Java ref: lifetime=7.1277h (reference only, not the constraint)
+
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+Resuming from 128 trials, running 22 more...
+
+============================================================
+Trial 128: N_RUNS=10  L_RUN=97.8mm  z_first=1.72mm  side=0.5264mm  path=992.1mm
+============================================================
+  Building model: N=10 L=97.8mm zf=1.72mm side=0.5264mm nblk=21
+  Model init OK: sanity Tmax=527.4K I=2.4033A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2997.9K P03sph=2611.7W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=26.27h loss=0.1000
+  STEP=10 t=58.25h loss=0.2000
+  STEP=11 t=58.25h loss=0.2000
+  Vwork=100.0000V  Tmax=2997.9K  Lifetime=58.25h  AvgP03=2717.12W  [640s]
+
+============================================================
+Trial 129: N_RUNS=10  L_RUN=75.6mm  z_first=1.82mm  side=0.5977mm  path=769.6mm
+============================================================
+  Building model: N=10 L=75.6mm zf=1.82mm side=0.5977mm nblk=21
+  Model init OK: sanity Tmax=595.7K I=2.7677A
+  Phase 1: voltage search...
+  PHASE1: Vwork=90.5830V Tmax=3272.6K P03sph=2524.3W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.71h loss=0.1000
+  STEP=10 t=3.80h loss=0.2000
+  STEP=11 t=4.25h loss=0.2190
+  Vwork=90.5830V  Tmax=3272.6K  Lifetime=4.25h  AvgP03=3334.13W  [917s]
+
+============================================================
+Trial 130: N_RUNS=10  L_RUN=90.6mm  z_first=1.45mm  side=0.5465mm  path=920.4mm
+============================================================
+  Building model: N=10 L=90.6mm zf=1.45mm side=0.5465mm nblk=21
+  Model init OK: sanity Tmax=545.7K I=2.7996A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3104.7K P03sph=3018.9W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=8.40h loss=0.1000
+  STEP=10 t=18.50h loss=0.2000
+  STEP=11 t=20.75h loss=0.2200
+  Vwork=100.0000V  Tmax=3104.7K  Lifetime=20.75h  AvgP03=3056.43W  [632s]
+
+============================================================
+Trial 131: N_RUNS=10  L_RUN=121.4mm  z_first=1.61mm  side=0.4732mm  path=1227.8mm
+============================================================
+  Building model: N=10 L=121.4mm zf=1.61mm side=0.4732mm nblk=21
+  Model init OK: sanity Tmax=478.4K I=1.9214A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2704.2K P03sph=2123.4W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 2: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 321
+
+	边界合规中的内部错误。
+	- x 坐标: 121.612
+	- y 坐标: 0.236456
+	- z 坐标: 6.63192
+
+  STEP=2 t=20.00h loss=0.0023
+  Vwork=100.0000V  Tmax=2704.2K  Lifetime=20.00h  AvgP03=2141.48W  [69s]
+
+============================================================
+Trial 132: N_RUNS=4  L_RUN=95.7mm  z_first=1.89mm  side=0.8322mm  path=396.9mm
+============================================================
+  Building model: N=4 L=95.7mm zf=1.89mm side=0.8322mm nblk=9
+  Model init OK: sanity Tmax=804.7K I=9.4320A
+  Phase 1: voltage search...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  PHASE1: Vwork=40.7715V Tmax=3272.1K P03sph=2469.4W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=2.36h loss=0.1000
+  STEP=10 t=5.09h loss=0.2000
+  STEP=11 t=5.09h loss=0.2000
+  Vwork=40.7715V  Tmax=3272.1K  Lifetime=5.09h  AvgP03=2530.09W  [479s]
+
+============================================================
+Trial 133: N_RUNS=10  L_RUN=99.3mm  z_first=1.74mm  side=0.5226mm  path=1006.6mm
+============================================================
+  Building model: N=10 L=99.3mm zf=1.74mm side=0.5226mm nblk=21
+  Model init OK: sanity Tmax=523.9K I=2.0748A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2977.3K P03sph=2252.8W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=33.07h loss=0.1000
+  STEP=10 t=73.34h loss=0.2000
+  STEP=11 t=73.34h loss=0.2000
+  Vwork=100.0000V  Tmax=2977.3K  Lifetime=73.34h  AvgP03=2605.91W  [698s]
+
+============================================================
+Trial 134: N_RUNS=10  L_RUN=108.6mm  z_first=1.76mm  side=0.4999mm  path=1100.0mm
+============================================================
+  Building model: N=10 L=108.6mm zf=1.76mm side=0.4999mm nblk=21
+  Model init OK: sanity Tmax=503.0K I=2.3043A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2852.7K P03sph=2527.6W steps=1
+  Phase 2: erosion loop...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 384 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (-0.000249944,0.000249448,0.013419), (-0.000249448,0.000249448,0.013419), (-0.000249696,0.000249448,0.013419), (-0.000249944,0.000249448,0.0133845), (-0.000249944,0.000249448,0.0133501), ...
+
+  WARN: solve failed step 1
+  STEP=1 t=10.00h loss=0.0077
+  Vwork=100.0000V  Tmax=2852.7K  Lifetime=10.00h  AvgP03=2527.63W  [76s]
+
+============================================================
+Trial 135: N_RUNS=6  L_RUN=102.0mm  z_first=1.68mm  side=0.6625mm  path=626.3mm
+============================================================
+  Building model: N=6 L=102.0mm zf=1.68mm side=0.6625mm nblk=13
+  Model init OK: sanity Tmax=649.1K I=4.1141A
+  Phase 1: voltage search...
+  PHASE1: Vwork=72.1874V Tmax=3272.5K P03sph=2622.0W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.86h loss=0.1000
+  STEP=10 t=4.05h loss=0.2000
+  Vwork=72.1874V  Tmax=3272.5K  Lifetime=4.05h  AvgP03=3308.10W  [737s]
+
+============================================================
+Trial 136: N_RUNS=10  L_RUN=299.5mm  z_first=2.06mm  side=0.3022mm  path=3009.1mm
+============================================================
+  Building model: N=10 L=299.5mm zf=2.06mm side=0.3022mm nblk=21
+  Model init OK: sanity Tmax=344.1K I=0.4183A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=1763.0K P03sph=498.9W steps=1
+  Phase 2: erosion loop...
+  Evaporation negligible. Infinite lifetime.
+  Vwork=100.0000V  Tmax=1763.0K  Lifetime=0.00h  AvgP03=nanW  [44s]
+
+============================================================
+Trial 137: N_RUNS=10  L_RUN=88.3mm  z_first=1.92mm  side=0.5537mm  path=896.7mm
+============================================================
+  Building model: N=10 L=88.3mm zf=1.92mm side=0.5537mm nblk=21
+  Model init OK: sanity Tmax=553.8K I=2.6769A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3152.0K P03sph=2879.2W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=5.23h loss=0.1000
+  STEP=10 t=11.63h loss=0.2000
+  Vwork=100.0000V  Tmax=3152.0K  Lifetime=11.63h  AvgP03=3087.16W  [556s]
+
+============================================================
+Trial 138: N_RUNS=10  L_RUN=96.8mm  z_first=1.80mm  side=0.5290mm  path=982.3mm
+============================================================
+  Building model: N=10 L=96.8mm zf=1.80mm side=0.5290mm nblk=21
+  Model init OK: sanity Tmax=530.1K I=2.5184A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3013.6K P03sph=2731.5W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  NOTE: mesh OK with hauto=6 (fallback)
+  STEP=5 t=22.13h loss=0.1000
+  STEP=10 t=49.13h loss=0.2000
+  STEP=11 t=49.13h loss=0.2000
+  Vwork=100.0000V  Tmax=3013.6K  Lifetime=49.13h  AvgP03=2687.94W  [656s]
+
+============================================================
+Trial 139: N_RUNS=10  L_RUN=112.0mm  z_first=1.82mm  side=0.4924mm  path=1133.7mm
+============================================================
+  Building model: N=10 L=112.0mm zf=1.82mm side=0.4924mm nblk=21
+  Model init OK: sanity Tmax=496.2K I=2.1385A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2812.3K P03sph=2348.1W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  NOTE: mesh OK with hauto=8 (fallback)
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 358 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (-0.000246207,-0.00024591,0.0134247), (-0.000246207,-0.000162012,0.0134247), (-0.000246207,-0.000203961,0.0134247), (-0.000246059,-0.00024591,0.0134247), (-0.000246059,-0.000203961,0.0134247), ...
+
+  WARN: solve failed step 1
+  STEP=1 t=10.00h loss=0.0047
+  Vwork=100.0000V  Tmax=2812.3K  Lifetime=10.00h  AvgP03=2348.09W  [51s]
+
+============================================================
+Trial 140: N_RUNS=8  L_RUN=192.7mm  z_first=1.97mm  side=0.4204mm  path=1555.7mm
+============================================================
+  Building model: N=8 L=192.7mm zf=1.97mm side=0.4204mm nblk=17
+  Model init OK: sanity Tmax=431.3K I=1.0063A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2408.1K P03sph=1131.1W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0001
+  STEP=10 t=100.00h loss=0.0001
+  STEP=15 t=150.00h loss=0.0002
+  Lifetime cap 200h at step 20, stopping.
+  Vwork=100.0000V  Tmax=2408.1K  Lifetime=200.00h  AvgP03=1135.83W  [338s]
+
+============================================================
+Trial 141: N_RUNS=10  L_RUN=93.9mm  z_first=2.04mm  side=0.5370mm  path=953.4mm
+============================================================
+  Building model: N=10 L=93.9mm zf=2.04mm side=0.5370mm nblk=21
+  Model init OK: sanity Tmax=538.3K I=2.6275A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3061.7K P03sph=2844.0W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=13.24h loss=0.1000
+  STEP=10 t=29.56h loss=0.2000
+  STEP=11 t=33.05h loss=0.2189
+  Vwork=100.0000V  Tmax=3061.7K  Lifetime=33.05h  AvgP03=2977.76W  [623s]
+
+============================================================
+Trial 142: N_RUNS=10  L_RUN=79.7mm  z_first=1.86mm  side=0.5822mm  path=811.0mm
+============================================================
+  Building model: N=10 L=79.7mm zf=1.86mm side=0.5822mm nblk=21
+  Model init OK: sanity Tmax=580.9K I=3.3257A
+  Phase 1: voltage search...
+  PHASE1: Vwork=97.0430V Tmax=3272.9K P03sph=3395.3W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.66h loss=0.1000
+  STEP=10 t=3.69h loss=0.2000
+  STEP=11 t=4.12h loss=0.2188
+  Vwork=97.0430V  Tmax=3272.9K  Lifetime=4.12h  AvgP03=3416.59W  [928s]
+
+============================================================
+Trial 143: N_RUNS=10  L_RUN=98.8mm  z_first=1.65mm  side=0.5239mm  path=1001.6mm
+============================================================
+  Building model: N=10 L=98.8mm zf=1.65mm side=0.5239mm nblk=21
+  Model init OK: sanity Tmax=524.9K I=2.3959A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2983.1K P03sph=2603.6W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=30.91h loss=0.1000
+  STEP=10 t=68.43h loss=0.2000
+  STEP=11 t=68.43h loss=0.2000
+  Vwork=100.0000V  Tmax=2983.1K  Lifetime=68.43h  AvgP03=2717.82W  [576s]
+
+============================================================
+Trial 144: N_RUNS=10  L_RUN=104.9mm  z_first=1.53mm  side=0.5086mm  path=1062.6mm
+============================================================
+  Building model: N=10 L=104.9mm zf=1.53mm side=0.5086mm nblk=21
+  Model init OK: sanity Tmax=510.6K I=2.3168A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2898.0K P03sph=2533.0W steps=1
+  Phase 2: erosion loop...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 266 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (-2.92445e-20,-0.000253471,0.0132129), (-0.000254315,-0.000253471,0.0133513), (-0.000254315,-0.000253471,0.013583), (-0.000254315,-0.000253471,0.0134093), (-0.000254315,-0.000253471,0.0134672), ...
+
+  WARN: solve failed step 1
+  STEP=1 t=10.00h loss=0.0133
+  Vwork=100.0000V  Tmax=2898.0K  Lifetime=10.00h  AvgP03=2533.04W  [76s]
+
+============================================================
+Trial 145: N_RUNS=10  L_RUN=88.3mm  z_first=1.67mm  side=0.5537mm  path=896.6mm
+============================================================
+  Building model: N=10 L=88.3mm zf=1.67mm side=0.5537mm nblk=21
+  Model init OK: sanity Tmax=553.0K I=2.9337A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3147.7K P03sph=3158.3W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=5.44h loss=0.1000
+  STEP=10 t=12.04h loss=0.2000
+  STEP=11 t=12.04h loss=0.2000
+  Vwork=100.0000V  Tmax=3147.7K  Lifetime=12.04h  AvgP03=3129.47W  [517s]
+
+============================================================
+Trial 146: N_RUNS=16  L_RUN=96.1mm  z_first=1.81mm  side=0.4210mm  path=1550.9mm
+============================================================
+  Building model: N=16 L=96.1mm zf=1.81mm side=0.4210mm nblk=33
+  Model init OK: sanity Tmax=439.0K I=0.9726A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2461.3K P03sph=1089.9W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0002
+  STEP=10 t=100.00h loss=0.0003
+  STEP=15 t=150.00h loss=0.0005
+  Lifetime cap 200h at step 20, stopping.
+  Vwork=100.0000V  Tmax=2461.3K  Lifetime=200.00h  AvgP03=1079.27W  [432s]
+
+============================================================
+Trial 147: N_RUNS=10  L_RUN=82.9mm  z_first=1.58mm  side=0.5712mm  path=842.6mm
+============================================================
+  Building model: N=10 L=82.9mm zf=1.58mm side=0.5712mm nblk=21
+  Model init OK: sanity Tmax=569.4K I=2.9374A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3242.7K P03sph=3139.9W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=2.17h loss=0.1000
+  STEP=10 t=4.78h loss=0.2000
+  STEP=11 t=4.78h loss=0.2000
+  Vwork=100.0000V  Tmax=3242.7K  Lifetime=4.78h  AvgP03=3400.18W  [623s]
+
+============================================================
+Trial 148: N_RUNS=10  L_RUN=66.8mm  z_first=1.75mm  side=0.6349mm  path=682.0mm
+============================================================
+  Building model: N=10 L=66.8mm zf=1.75mm side=0.6349mm nblk=21
+  Model init OK: sanity Tmax=631.8K I=3.9512A
+  Phase 1: voltage search...
+  PHASE1: Vwork=77.2351V Tmax=3272.9K P03sph=2809.3W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.82h loss=0.1000
+  STEP=10 t=4.06h loss=0.2000
+  STEP=11 t=4.06h loss=0.2000
+  Vwork=77.2351V  Tmax=3272.9K  Lifetime=4.06h  AvgP03=3083.53W  [841s]
+
+============================================================
+Trial 149: N_RUNS=10  L_RUN=103.8mm  z_first=1.36mm  side=0.5111mm  path=1052.3mm
+============================================================
+  Building model: N=10 L=103.8mm zf=1.36mm side=0.5111mm nblk=21
+  Model init OK: sanity Tmax=512.5K I=2.5258A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2909.6K P03sph=2758.6W steps=1
+  Phase 2: erosion loop...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 221 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (0.103827,-0.000254607,0.0139005), (0.10371,-0.000254607,0.0139005), (0.103769,-0.000254607,0.0139005), (0.10371,-0.000254607,0.0139), (0.10371,-0.000254607,0.0138995), ...
+
+  WARN: solve failed step 1
+  STEP=1 t=10.00h loss=0.0153
+  Vwork=100.0000V  Tmax=2909.6K  Lifetime=10.00h  AvgP03=2758.56W  [53s]
+
+============================================================
+  OPTIMIZATION COMPLETE
+============================================================
+Best trial:     #21
+Best value:     2848.70 W (lifeAvgP03sphere)
+Best params:    N_RUNS=10  L_RUN=99.5mm  z_first=2.04mm
+Best side:      0.5219 mm
+Best path len:  1009.3 mm
+
+Total trials:   150
+Results saved:  D:\VScode\project\BFHC\zigzag_family\ML\data\trials.csv
+COMSOL disconnected.

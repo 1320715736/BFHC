@@ -1,0 +1,21 @@
+[I 2026-07-12 10:38:34,107] A new study created in RDB with name: zigzag_rematch_c6
+[I 2026-07-12 10:53:07,861] Trial 0 pruned. R_L 4.68% < 50.00%
+[I 2026-07-12 10:53:58,431] Trial 1 pruned. FAIL_EROSION_SOLVE
+[I 2026-07-12 10:53:58,475] Trial 2 pruned. FAIL_Z_OVERLAP
+[I 2026-07-12 11:12:57,694] Trial 3 pruned. R_L 7.84% < 50.00%
+[I 2026-07-12 11:25:31,836] Trial 4 pruned. R_L 3.56% < 50.00%
+[I 2026-07-12 11:25:31,900] Trial 5 pruned. FAIL_Z_OVERLAP
+[I 2026-07-12 11:26:18,341] Trial 6 pruned. R_L 0.00% < 50.00%
+[I 2026-07-12 11:27:15,667] Trial 7 pruned. R_L 0.00% < 50.00%
+[I 2026-07-12 11:30:44,835] Trial 8 pruned. R_L 0.00% < 50.00%
+[I 2026-07-12 11:31:26,704] Trial 9 pruned. R_L 0.00% < 50.00%
+[I 2026-07-12 11:34:21,961] Trial 10 pruned. R_L 0.00% < 50.00%
+[I 2026-07-12 11:47:15,112] Trial 11 pruned. R_L 20.57% < 50.00%
+[I 2026-07-12 12:02:00,057] Trial 12 pruned. R_L 3.69% < 50.00%
+[I 2026-07-12 12:08:16,295] Trial 13 finished with value: 889.7970773695199 and parameters: {'N_RUNS': 8, 'L_RUN_mm': 182.21933689763196, 'z_first_mm': 1.1873910029713393}. Best is trial 13 with value: 889.7970773695199.
+[I 2026-07-12 12:10:54,758] Trial 14 pruned. R_L 0.00% < 50.00%
+[I 2026-07-12 12:13:35,486] Trial 15 pruned. R_L 0.00% < 50.00%
+[I 2026-07-12 12:18:36,682] Trial 16 pruned. FAIL_EROSION_SOLVE
+[I 2026-07-12 12:32:04,565] Trial 17 pruned. R_L 5.33% < 50.00%
+[I 2026-07-12 12:32:54,052] Trial 18 pruned. R_L 0.00% < 50.00%
+[I 2026-07-12 12:49:23,734] Trial 19 finished with value: 1340.3886373039438 and parameters: {'N_RUNS': 12, 'L_RUN_mm': 89.09934228871522, 'z_first_mm': 2.10495899560028}. Best is trial 19 with value: 1340.3886373039438.

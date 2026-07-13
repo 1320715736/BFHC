@@ -1,0 +1,36 @@
+BFHC zigzag C8 trial 19 verification
+CSV output:       D:\VScode\project\BFHC\zigzag_family\ML\data\rematch_c8_trial19_verify.csv
+Geometry:         N=12, L=89.0993 mm, z_first=2.1050 mm
+Computed side:    0.5038 mm
+Path length:      1083.1921 mm
+Lifetime cap:     500.0 h
+
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+  Building model: N=12 L=89.1mm zf=2.10mm side=0.5038mm nblk=25
+  Model init OK: sanity Tmax=519.4K I=2.3381A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2910.2K P03sph=2609.7W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=42.53h loss=0.0500
+  STEP=10 t=92.53h loss=0.0896
+  STEP=15 t=142.53h loss=0.1186
+  STEP=20 t=192.53h loss=0.1415
+  STEP=25 t=242.53h loss=0.1602
+  STEP=30 t=292.53h loss=0.1760
+  STEP=35 t=342.53h loss=0.1897
+  STEP=40 t=384.80h loss=0.2000
+  STEP=41 t=384.87h loss=0.2000
+
+============================================================
+  C8 VERIFY COMPLETE
+============================================================
+Status:          OK
+Lifetime:        384.86716802301424 h
+failureReached:  True
+capLimited:      False
+eta_E:           2522.387546292965%
+R_L:             158.98404153337353%
+U:               97.29239542463746%
+COMSOL disconnected.

@@ -1,0 +1,118 @@
+BFHC cylinder rematch C4 local search
+CSV output:       D:\VScode\project\BFHC\cylinder_family\ML\data\rematch_c4_trials.csv
+Optuna DB:        sqlite:///D:\VScode\project\BFHC\cylinder_family\ML\data\rematch_c4_optuna.db
+Study name:       cylinder_rematch_c4
+Trials target:    80
+Radius bounds:    r1=[1.8, 2.8] mm, r2=[1.6, 2.2] mm, r3=[3.0, 3.8] mm, r4=[1.5, 2.5] mm
+Lifetime floor:   121.0396 h (50.0% of baseline)
+U limit:          178.4313% (1.20x baseline)
+U penalty weight: 0.25
+
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+Recovered interrupted trial #73 from RUNNING to WAITING.
+Resuming from 73 finished trials, running 7 more...
+
+============================================================
+Trial 73: r = [2.075, 1.922, 3.639, 1.939, 1.939, 3.639, 1.922, 2.075] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=2711.9K, I=1875.3224A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.1719V Tmax=3187.2K P03sph=187.4W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0306
+  STEP=10 t=100.00h loss=0.0604
+  STEP=15 t=150.00h loss=0.0888
+  STEP=20 t=200.00h loss=0.1157
+  STEP=25 t=250.00h loss=0.1410
+  STEP=30 t=300.00h loss=0.1644
+  STEP=35 t=350.00h loss=0.1862
+  STEP=39 t=384.22h loss=0.2000
+  Vwork=1.1719V  L=384.22h  R_L=158.72%  eta_E=95.30%  U=137.71%  score=95.30  [1186s]
+
+============================================================
+Trial 74: r = [1.821, 1.945, 3.666, 2.112, 2.112, 3.666, 1.945, 1.821] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=2678.2K, I=1875.2560A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.2207V Tmax=3255.0K P03sph=263.1W steps=12
+  Phase 2: erosion loop...
+
+============================================================
+Trial 75: r = [1.999, 1.997, 3.487, 2.205, 2.205, 3.487, 1.997, 1.999] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=2696.1K, I=2071.0033A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.1719V Tmax=3156.5K P03sph=218.2W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0313
+  STEP=10 t=100.00h loss=0.0626
+  STEP=15 t=150.00h loss=0.0933
+  STEP=20 t=200.00h loss=0.1233
+  STEP=25 t=250.00h loss=0.1522
+  STEP=30 t=300.00h loss=0.1798
+  STEP=35 t=338.92h loss=0.2001
+  Vwork=1.1719V  L=338.92h  R_L=140.00%  eta_E=111.06%  U=126.95%  score=111.06  [1361s]
+
+============================================================
+Trial 76: r = [1.909, 1.877, 3.615, 2.183, 2.183, 3.615, 1.877, 1.909] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=2674.0K, I=1926.7355A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.2207V Tmax=3245.2K P03sph=269.9W steps=12
+  Phase 2: erosion loop...
+
+============================================================
+Trial 77: r = [1.959, 1.831, 3.647, 2.124, 2.124, 3.647, 1.831, 1.959] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=2675.8K, I=1881.4389A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.2207V Tmax=3249.8K P03sph=264.3W steps=12
+  Phase 2: erosion loop...
+
+============================================================
+Trial 78: r = [1.802, 1.853, 3.628, 2.271, 2.271, 3.628, 1.853, 1.802] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=2652.2K, I=1888.1997A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.2207V Tmax=3200.7K P03sph=288.0W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0676
+  STEP=10 t=100.00h loss=0.1425
+
+============================================================
+Trial 79: r = [1.866, 1.974, 3.671, 2.036, 2.036, 3.671, 1.974, 1.866] mm
+============================================================
+  Building model...
+  Model init OK: sanity Tmax=2692.7K, I=1869.5500A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.1719V Tmax=3152.8K P03sph=212.1W steps=12
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0282
+  STEP=10 t=100.00h loss=0.0563
+  STEP=15 t=150.00h loss=0.0840
+  STEP=20 t=200.00h loss=0.1109
+  STEP=25 t=250.00h loss=0.1371
+  STEP=30 t=300.00h loss=0.1621
+  STEP=35 t=350.00h loss=0.1859
+  STEP=40 t=381.38h loss=0.2001
+  Vwork=1.1719V  L=381.38h  R_L=157.54%  eta_E=127.04%  U=127.36%  score=127.04  [1043s]
+
+============================================================
+  C4 SEARCH COMPLETE
+============================================================
+Best trial:     #68
+Best score:     130.7618
+Best params:    r1=1.906  r2=1.942  r3=3.647 mm
+Full radii (mm): [1.906, 1.942, 3.647, 2.071, 2.071, 3.647, 1.942, 1.906]
+
+Total trials:   80
+Results saved:  D:\VScode\project\BFHC\cylinder_family\ML\data\rematch_c4_trials.csv
+COMSOL disconnected.

@@ -1,0 +1,41 @@
+[I 2026-05-06 17:36:21,230] Using an existing study with name 'zigzag_bo_v3_cylinder_life' instead of creating a new one.
+[W 2026-05-06 17:36:21,489] Trial 127 failed with parameters: {'N_RUNS': 10, 'L_RUN_mm': 98.95089803966052, 'z_first_mm': 1.725320517019182} because of the following error: ServerDisconnectError('Exception:\r\n\tcom.comsol.util.exceptions.FlException: 未连接到服务器。\r\nMessages:\r\n\tNot connected to a server\r\n').
+Traceback (most recent call last):
+  File "SourceFile", line 99, in com.comsol.model.util.ModelUtil.createUnique
+Exception: Java Exception
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\VScode\project\BFHC\zigzag_family\ML\zigzag_runner.py", line 794, in evaluate
+    self._init_model(N_RUNS, L_RUN_m, z_first_m)
+  File "D:\VScode\project\BFHC\zigzag_family\ML\zigzag_runner.py", line 310, in _init_model
+    self.model = self.client.create("zigzag_opt")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\conda_envs\BFHC\Lib\site-packages\mph\client.py", line 360, in create
+    java = self.java.createUnique('model')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+com.comsol.util.exceptions.com.comsol.util.exceptions.FlException: Exception:
+	com.comsol.util.exceptions.FlException: 未连接到服务器。
+Messages:
+	Not connected to a server
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\BFHC\Lib\site-packages\optuna\study\_optimize.py", line 206, in _run_trial
+    value_or_values = func(trial)
+                      ^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\zigzag_family\ML\optuna_optimize.py", line 186, in objective
+    result = runner.evaluate(
+             ^^^^^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\zigzag_family\ML\zigzag_runner.py", line 802, in evaluate
+    raise ServerDisconnectError(self._safe_exception_text(e))
+zigzag_runner.ServerDisconnectError: Exception:
+	com.comsol.util.exceptions.FlException: 未连接到服务器。
+Messages:
+	Not connected to a server
+
+[W 2026-05-06 17:36:21,492] Trial 127 failed with value None.
+The client is not connected to a server.

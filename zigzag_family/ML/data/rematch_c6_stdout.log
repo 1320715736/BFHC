@@ -1,0 +1,1435 @@
+BFHC zigzag rematch C6 small search
+CSV output:       D:\VScode\project\BFHC\zigzag_family\ML\data\rematch_c6_trials.csv
+Optuna DB:        sqlite:///D:\VScode\project\BFHC\zigzag_family\ML\data\rematch_c6_optuna.db
+Study name:       zigzag_rematch_c6
+Trials target:    20
+Search space:     N=[4, 6, 8, 10, 12, 14, 16], L=[20.0, 300.0] mm, zf=[0.6, 3.0] mm
+Reference queued: N=8, L=104.0 mm, zf=0.8 mm
+Lifetime floor:   121.0396 h (50.0% of B2 baseline)
+U limit:          178.4313% (1.20x B2 baseline)
+U penalty weight: 0.25
+
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+Resuming from 0 finished trials, running 20 more...
+
+============================================================
+Trial 0: N=8  L=104.00 mm  zf=0.800 mm  side=0.5700 mm  path=846.00 mm
+============================================================
+  Building model: N=8 L=104.0mm zf=0.80mm side=0.5700mm nblk=17
+  Model init OK: sanity Tmax=577.4K I=3.5692A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3221.3K P03sph=3567.5W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=1.54h loss=0.0500
+  STEP=10 t=3.71h loss=0.1000
+  STEP=15 t=6.80h loss=0.1500
+  STEP=20 t=11.33h loss=0.2000
+  STEP=21 t=11.33h loss=0.2000
+
+============================================================
+Trial 1: N=8  L=148.20 mm  zf=1.533 mm  side=0.4787 mm  path=1199.58 mm
+============================================================
+  Building model: N=8 L=148.2mm zf=1.53mm side=0.4787mm nblk=17
+  Model init OK: sanity Tmax=488.1K I=2.0271A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2730.1K P03sph=2111.6W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  NOTE: mesh OK with hauto=7 (fallback)
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 600 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (-0.00023935,-0.000156106,0.0137064), (-0.00023935,1.23798e-19,0.0137064), (-0.00023935,-7.80532e-05,0.0137064), (-0.00023935,0.000238987,0.0134674), (-0.00023935,0.000238987,0.0133113), ...
+
+  WARN: solve failed step 1: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 600 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (-0.00023935,-0.000156106,0.0137064), (-0.00023935,1.23798e-19,0.0137064), (-0.00023935,-7.80532e-05,0.0137064), (-0.00023935,0.000238987,0.0134674), (-0.00023935,0.000238987,0.0133113), ...
+
+
+============================================================
+Trial 2: N=14  L=20.35 mm  zf=2.399 mm  side=0.9589 mm  path=298.97 mm
+============================================================
+
+============================================================
+Trial 3: N=10  L=54.87 mm  zf=2.513 mm  side=0.6989 mm  path=562.74 mm
+============================================================
+  Building model: N=10 L=54.9mm zf=2.51mm side=0.6989mm nblk=21
+  Model init OK: sanity Tmax=730.7K I=6.4140A
+  Phase 1: voltage search...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((k_B_const*comp1.rad.lambdar)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((k_B_const*comp1.rad.lambdar)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: comp1.rad.ebu1*(-comp1.rad.epsilonu_band1)
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	辐射度
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算表达式。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1)-comp1.rad.Ju_band1)*dvol
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1-comp1.rad.Ju_band1)*test(comp1.rad.Ju_band1))*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	辐射度
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算表达式。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1)-comp1.rad.Ju_band1)*dvol
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1-comp1.rad.Ju_band1)*test(comp1.rad.Ju_band1))*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	辐射度
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/(comp1.rad.Tu_band1*(comp1.rad.lambdar*k_B_const)))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/(comp1.rad.Tu_band1*(comp1.rad.lambdar*k_B_const)),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/(comp1.rad.Tu_band1*(comp1.rad.lambdar*k_B_const)),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算表达式。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1)-comp1.rad.Ju_band1)*dvol
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1-comp1.rad.Ju_band1)*test(comp1.rad.Ju_band1))*(dvol)
+
+  PHASE1: Vwork=54.7656V Tmax=3230.1K P03sph=2792.4W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=2.05h loss=0.0500
+  STEP=10 t=5.30h loss=0.1000
+  STEP=15 t=10.52h loss=0.1500
+  STEP=20 t=18.97h loss=0.2000
+  STEP=21 t=18.98h loss=0.2000
+
+============================================================
+Trial 4: N=4  L=128.81 mm  zf=2.443 mm  side=0.7207 mm  path=529.25 mm
+============================================================
+  Building model: N=4 L=128.8mm zf=2.44mm side=0.7207mm nblk=9
+  Model init OK: sanity Tmax=728.0K I=6.2623A
+  Phase 1: voltage search...
+  PHASE1: Vwork=57.8214V Tmax=3272.4K P03sph=2953.1W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.20h loss=0.0500
+  STEP=10 t=2.87h loss=0.1000
+  STEP=15 t=5.22h loss=0.1500
+  STEP=20 t=8.61h loss=0.2000
+  STEP=21 t=8.61h loss=0.2000
+
+============================================================
+Trial 5: N=16  L=32.36 mm  zf=1.826 mm  side=0.7190 mm  path=531.77 mm
+============================================================
+
+============================================================
+Trial 6: N=14  L=176.24 mm  zf=2.760 mm  side=0.3328 mm  path=2481.35 mm
+============================================================
+  Building model: N=14 L=176.2mm zf=2.76mm side=0.3328mm nblk=29
+  Model init OK: sanity Tmax=367.3K I=0.6385A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=1956.8K P03sph=679.0W steps=1
+  Phase 2: erosion loop...
+  Evaporation negligible. Infinite lifetime.
+
+============================================================
+Trial 7: N=12  L=255.77 mm  zf=1.707 mm  side=0.2986 mm  path=3083.18 mm
+============================================================
+  Building model: N=12 L=255.8mm zf=1.71mm side=0.2986mm nblk=25
+  NOTE: Phase-0 warm-up succeeded at 10V
+  Model init OK: sanity Tmax=728.7K I=1.6666A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=1747.5K P03sph=442.9W steps=1
+  Phase 2: erosion loop...
+  Evaporation negligible. Infinite lifetime.
+
+============================================================
+Trial 8: N=14  L=124.58 mm  zf=1.539 mm  side=0.3954 mm  path=1758.18 mm
+============================================================
+  Building model: N=14 L=124.6mm zf=1.54mm side=0.3954mm nblk=29
+  Model init OK: sanity Tmax=416.3K I=1.0180A
+  Phase 1: voltage search...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),1.0E-6)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),1.0E-6)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: comp1.rad.ebu1*(-comp1.rad.epsilonu_band1)
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  PHASE1: Vwork=67.6758V Tmax=1987.0K P03sph=609.6W steps=12
+  Phase 2: erosion loop...
+  Evaporation negligible. Infinite lifetime.
+
+============================================================
+Trial 9: N=10  L=274.05 mm  zf=1.751 mm  side=0.3159 mm  path=2754.48 mm
+============================================================
+  Building model: N=10 L=274.0mm zf=1.75mm side=0.3159mm nblk=21
+  Model init OK: sanity Tmax=353.1K I=0.4624A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=1840.9K P03sph=538.9W steps=1
+  Phase 2: erosion loop...
+  Evaporation negligible. Infinite lifetime.
+
+============================================================
+Trial 10: N=8  L=211.22 mm  zf=0.638 mm  side=0.4017 mm  path=1703.75 mm
+============================================================
+  Building model: N=8 L=211.2mm zf=0.64mm side=0.4017mm nblk=17
+  Model init OK: sanity Tmax=418.2K I=1.2206A
+  Phase 1: voltage search...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/(comp1.rad.Tu_band1*(k_B_const*comp1.rad.lambdar)),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/(comp1.rad.Tu_band1*(k_B_const*comp1.rad.lambdar)),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: ((sigma_const*(comp1.rad.nS2S^2))*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: comp1.rad.ebu1*(-comp1.rad.epsilonu_band1)
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  PHASE1: Vwork=66.9922V Tmax=1988.2K P03sph=604.1W steps=12
+  Phase 2: erosion loop...
+  Evaporation negligible. Infinite lifetime.
+
+============================================================
+Trial 11: N=8  L=114.77 mm  zf=0.848 mm  side=0.5430 mm  path=932.19 mm
+============================================================
+  Building model: N=8 L=114.8mm zf=0.85mm side=0.5430mm nblk=17
+  Model init OK: sanity Tmax=550.3K I=3.1685A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3075.1K P03sph=3086.9W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=6.59h loss=0.0500
+  STEP=10 t=15.96h loss=0.1000
+  STEP=15 t=29.56h loss=0.1500
+  STEP=20 t=49.79h loss=0.2000
+  STEP=22 t=49.79h loss=0.2000
+
+============================================================
+Trial 12: N=6  L=86.40 mm  zf=1.153 mm  side=0.7185 mm  path=532.42 mm
+============================================================
+  Building model: N=6 L=86.4mm zf=1.15mm side=0.7185mm nblk=13
+  Model init OK: sanity Tmax=729.2K I=7.7896A
+  Phase 1: voltage search...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	辐射度
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算表达式。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1)-comp1.rad.Ju_band1)*dvol
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: ((comp1.rad.epsilonu_band1*comp1.rad.ebu1-comp1.rad.Ju_band1)*test(comp1.rad.Ju_band1))*(dvol)
+
+  PHASE1: Vwork=57.6602V Tmax=3272.4K P03sph=2949.5W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.23h loss=0.0500
+  STEP=10 t=2.94h loss=0.1000
+  STEP=15 t=5.38h loss=0.1500
+  STEP=20 t=8.93h loss=0.2000
+  STEP=22 t=8.93h loss=0.2000
+
+============================================================
+Trial 13: N=8  L=182.22 mm  zf=1.187 mm  side=0.4322 mm  path=1471.75 mm
+============================================================
+  Building model: N=8 L=182.2mm zf=1.19mm side=0.4322mm nblk=17
+  Model init OK: sanity Tmax=444.8K I=1.3660A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2475.1K P03sph=1529.0W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0002
+  STEP=10 t=100.00h loss=0.0004
+  STEP=15 t=150.00h loss=0.0005
+  Lifetime cap 200h at step 20, stopping.
+  Vwork=100.0000V  L=200.00h  R_L=82.62%  eta_E=889.80%  U=94.71%  score=889.80  [376s]
+
+============================================================
+Trial 14: N=8  L=206.17 mm  zf=1.111 mm  side=0.4065 mm  path=1663.35 mm
+============================================================
+  Building model: N=8 L=206.2mm zf=1.11mm side=0.4065mm nblk=17
+  Model init OK: sanity Tmax=422.2K I=1.1166A
+  Phase 1: voltage search...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((k_B_const*comp1.rad.lambdar)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((k_B_const*comp1.rad.lambdar)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: ((sigma_const*(comp1.rad.nS2S^2))*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: comp1.rad.ebu1*(-comp1.rad.epsilonu_band1)
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: comp1.rad.ebu1*(-comp1.rad.epsilonu_band1)
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  PHASE1: Vwork=62.8418V Tmax=1962.7K P03sph=562.1W steps=12
+  Phase 2: erosion loop...
+  Evaporation negligible. Infinite lifetime.
+
+============================================================
+Trial 15: N=8  L=191.24 mm  zf=1.153 mm  side=0.4220 mm  path=1543.94 mm
+============================================================
+  Building model: N=8 L=191.2mm zf=1.15mm side=0.4220mm nblk=17
+  Model init OK: sanity Tmax=435.7K I=1.1672A
+  Phase 1: voltage search...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/(comp1.rad.Tu_band1*(comp1.rad.lambdar*k_B_const)),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/(comp1.rad.Tu_band1*(comp1.rad.lambdar*k_B_const)),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: comp1.rad.ebu1*(-comp1.rad.epsilonu_band1)
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: comp1.rad.ebu1*(-comp1.rad.epsilonu_band1)
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/(comp1.rad.Tu_band1*(comp1.rad.lambdar*k_B_const)),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/(comp1.rad.Tu_band1*(comp1.rad.lambdar*k_B_const)),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: (((comp1.rad.nS2S^2)*sigma_const)*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算积分算子的上限。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: ((sigma_const*(comp1.rad.nS2S^2))*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: (-comp1.rad.epsilonu_band1)*comp1.rad.ebu1
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	无法更新分离步骤 2 的残差。
+
+	除零错误。
+	- 函数: /
+
+	无法计算表达式。
+	- 表达式: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算变量。
+	- 变量: comp1.rad.zeta
+	- 定义为: unsubst(0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))),-1)
+
+	无法计算表达式。
+	- 表达式: subst((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,0.5*(eps+((h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1))))
+
+	无法计算积分算子的积分。
+	- 算子: integrate
+
+	无法计算表达式。
+	- 表达式: integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)
+
+	无法计算变量。
+	- 变量: comp1.rad.fepu1
+	- 定义为: ((integrate((comp1.rad.zeta^3)/(1-exp(comp1.rad.zeta)),comp1.rad.zeta,eps,(h_const*c_const)/((comp1.rad.lambdar*k_B_const)*comp1.rad.Tu_band1),9.9999999999999995475e-07)*15)/(pi^4))+1
+
+	无法计算变量。
+	- 变量: comp1.rad.ebu1
+	- 定义为: ((sigma_const*(comp1.rad.nS2S^2))*(comp1.rad.Tu_band1^4))*comp1.rad.fepu1
+
+	无法计算变量。
+	- 变量: comp1.rad.rfluxoutu_band1
+	- 定义为: comp1.rad.ebu1*(-comp1.rad.epsilonu_band1)
+
+	无法计算表达式。
+	- 表达式: dvol*(comp1.rad.rfluxoutu_band1*comp1.htradZZ.d)
+
+	无法计算表达式的雅可比矩阵。
+	- 表达式: (comp1.rad.rfluxoutu_band1*test(comp1.rad.Tu_band1)*comp1.htradZZ.d)*(dvol)
+
+  PHASE1: Vwork=57.3242V Tmax=1965.3K P03sph=543.5W steps=12
+  Phase 2: erosion loop...
+  Evaporation negligible. Infinite lifetime.
+
+============================================================
+Trial 16: N=6  L=234.80 mm  zf=0.608 mm  side=0.4395 mm  path=1422.82 mm
+============================================================
+  Building model: N=6 L=234.8mm zf=0.61mm side=0.4395mm nblk=13
+  Model init OK: sanity Tmax=450.8K I=1.5909A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2510.6K P03sph=1599.3W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0003
+  STEP=10 t=100.00h loss=0.0006
+  STEP=15 t=150.00h loss=0.0010
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 17: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 11
+
+	边界合规中的内部错误。
+	- x 坐标: -0.219614
+	- y 坐标: -0.000709083
+	- z 坐标: 0.82789
+
+
+============================================================
+Trial 17: N=4  L=85.29 mm  zf=0.939 mm  side=0.8798 mm  path=355.16 mm
+============================================================
+  Building model: N=4 L=85.3mm zf=0.94mm side=0.8798mm nblk=9
+  Model init OK: sanity Tmax=899.8K I=13.5516A
+  Phase 1: voltage search...
+  PHASE1: Vwork=33.9272V Tmax=3272.4K P03sph=2306.3W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.74h loss=0.0500
+  STEP=10 t=4.23h loss=0.1000
+  STEP=15 t=7.76h loss=0.1500
+  STEP=20 t=12.89h loss=0.2000
+  STEP=21 t=12.89h loss=0.2000
+
+============================================================
+Trial 18: N=16  L=158.33 mm  zf=1.381 mm  side=0.3285 mm  path=2547.21 mm
+============================================================
+  Building model: N=16 L=158.3mm zf=1.38mm side=0.3285mm nblk=33
+  Model init OK: sanity Tmax=363.3K I=0.5823A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=1925.4K P03sph=639.4W steps=1
+  Phase 2: erosion loop...
+  Evaporation negligible. Infinite lifetime.
+
+============================================================
+Trial 19: N=12  L=89.10 mm  zf=2.105 mm  side=0.5038 mm  path=1083.19 mm
+============================================================
+  Building model: N=12 L=89.1mm zf=2.10mm side=0.5038mm nblk=25
+  Model init OK: sanity Tmax=519.4K I=2.3381A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2910.2K P03sph=2609.7W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=42.53h loss=0.0500
+  STEP=10 t=92.53h loss=0.0896
+  STEP=15 t=142.53h loss=0.1186
+  STEP=20 t=192.53h loss=0.1414
+  Lifetime cap 200h at step 21, stopping.
+  Vwork=100.0000V  L=202.53h  R_L=83.66%  eta_E=1340.39%  U=97.29%  score=1340.39  [990s]
+
+============================================================
+  C6 SEARCH COMPLETE
+============================================================
+Best trial:     #19
+Best score:     1340.3886
+Best params:    N=12  L=89.10 mm  zf=2.105 mm
+Best side:      0.5038 mm
+Best path len:  1083.19 mm
+
+Total trials:   20
+Results saved:  D:\VScode\project\BFHC\zigzag_family\ML\data\rematch_c6_trials.csv
+COMSOL disconnected.

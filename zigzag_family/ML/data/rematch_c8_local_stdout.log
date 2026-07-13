@@ -1,0 +1,464 @@
+BFHC zigzag rematch C8 local search
+CSV output:       D:\VScode\project\BFHC\zigzag_family\ML\data\rematch_c8_local_trials.csv
+Optuna DB:        sqlite:///D:\VScode\project\BFHC\zigzag_family\ML\data\rematch_c8_local_optuna.db
+Study name:       zigzag_rematch_c8_local
+Trials target:    20
+Search space:     N=[8, 10, 12, 14], L=[70.0, 120.0] mm, zf=[1.6, 2.5] mm
+Reference queued: N=12, L=89.09934228871522 mm, zf=2.10495899560028 mm
+Lifetime cap:     500.0 h
+Lifetime floor:   121.0396 h (50.0% of B2 baseline)
+U limit:          178.4313% (1.20x B2 baseline)
+U penalty weight: 0.25
+
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+Resuming from 0 finished trials, running 20 more...
+
+============================================================
+Trial 0: N=12  L=89.10 mm  zf=2.105 mm  side=0.5038 mm  path=1083.19 mm
+============================================================
+  Building model: N=12 L=89.1mm zf=2.10mm side=0.5038mm nblk=25
+  Model init OK: sanity Tmax=519.4K I=2.3381A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2910.2K P03sph=2609.7W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=42.52h loss=0.0500
+  STEP=10 t=92.52h loss=0.0896
+  STEP=15 t=142.52h loss=0.1186
+  STEP=20 t=192.52h loss=0.1414
+  STEP=25 t=242.52h loss=0.1602
+  STEP=30 t=292.52h loss=0.1760
+  STEP=35 t=342.52h loss=0.1897
+  STEP=40 t=384.82h loss=0.2000
+  STEP=41 t=384.82h loss=0.2000
+  Vwork=100.0000V  L=384.82h  R_L=158.96%  eta_E=2522.10%  U=97.29%  score=2522.10  [2034s]
+
+============================================================
+Trial 1: N=8  L=84.02 mm  zf=1.919 mm  side=0.6329 mm  path=686.17 mm
+============================================================
+  Building model: N=8 L=84.0mm zf=1.92mm side=0.6329mm nblk=17
+  Model init OK: sanity Tmax=644.7K I=4.3354A
+  Phase 1: voltage search...
+  PHASE1: Vwork=78.5764V Tmax=3272.7K P03sph=3380.3W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.08h loss=0.0500
+  STEP=10 t=2.62h loss=0.1000
+  STEP=15 t=4.84h loss=0.1500
+  STEP=20 t=8.13h loss=0.2000
+  STEP=22 t=8.13h loss=0.2000
+
+============================================================
+Trial 2: N=12  L=80.27 mm  zf=1.624 mm  side=0.5304 mm  path=977.26 mm
+============================================================
+  Building model: N=12 L=80.3mm zf=1.62mm side=0.5304mm nblk=25
+  Model init OK: sanity Tmax=544.9K I=2.5411A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3050.5K P03sph=3026.3W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=8.90h loss=0.0500
+  STEP=10 t=22.26h loss=0.1000
+  STEP=15 t=42.63h loss=0.1500
+  STEP=20 t=74.36h loss=0.2000
+  STEP=22 t=74.40h loss=0.2000
+
+============================================================
+Trial 3: N=10  L=114.28 mm  zf=2.204 mm  side=0.4875 mm  path=1156.84 mm
+============================================================
+  Building model: N=10 L=114.3mm zf=2.20mm side=0.4875mm nblk=21
+  Model init OK: sanity Tmax=499.7K I=2.1174A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2798.1K P03sph=2291.9W steps=1
+  Phase 2: erosion loop...
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 195 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (-0.000107715,-0.000242845,0.0125523), (-5.38573e-05,-0.000242845,0.0125523), (6.37111e-20,-0.000242845,0.0125523), (-0.000243732,-0.000242845,0.0129037), (-0.000243732,-0.000242845,0.012796), ...
+
+  WARN: solve failed step 1: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 195 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (-0.000107715,-0.000242845,0.0125523), (-5.38573e-05,-0.000242845,0.0125523), (6.37111e-20,-0.000242845,0.0125523), (-0.000243732,-0.000242845,0.0129037), (-0.000243732,-0.000242845,0.012796), ...
+
+
+============================================================
+Trial 4: N=10  L=87.14 mm  zf=2.364 mm  side=0.5572 mm  path=885.38 mm
+============================================================
+  Building model: N=10 L=87.1mm zf=2.36mm side=0.5572mm nblk=21
+  Model init OK: sanity Tmax=571.4K I=2.9813A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3193.0K P03sph=3484.8W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=2.07h loss=0.0500
+  STEP=10 t=5.12h loss=0.1000
+  STEP=15 t=9.67h loss=0.1500
+  STEP=20 t=16.61h loss=0.2000
+  STEP=21 t=16.61h loss=0.2000
+
+============================================================
+Trial 5: N=10  L=102.07 mm  zf=1.924 mm  side=0.5154 mm  path=1034.69 mm
+============================================================
+  Building model: N=10 L=102.1mm zf=1.92mm side=0.5154mm nblk=21
+  Model init OK: sanity Tmax=526.9K I=2.2498A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2949.8K P03sph=2712.9W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=26.41h loss=0.0500
+  STEP=10 t=65.54h loss=0.1000
+  STEP=15 t=115.46h loss=0.1433
+  STEP=20 t=165.46h loss=0.1744
+  STEP=25 t=215.46h loss=0.1986
+  STEP=27 t=218.67h loss=0.2000
+  Vwork=100.0000V  L=218.67h  R_L=90.33%  eta_E=1470.28%  U=97.39%  score=1470.28  [1417s]
+
+============================================================
+Trial 6: N=8  L=80.84 mm  zf=1.667 mm  side=0.6450 mm  path=660.74 mm
+============================================================
+  Building model: N=8 L=80.8mm zf=1.67mm side=0.6450mm nblk=17
+  Model init OK: sanity Tmax=656.7K I=4.2411A
+  Phase 1: voltage search...
+  PHASE1: Vwork=74.9846V Tmax=3273.0K P03sph=3313.1W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.10h loss=0.0500
+  STEP=10 t=2.67h loss=0.1000
+  STEP=15 t=4.92h loss=0.1500
+  STEP=20 t=8.26h loss=0.2000
+  STEP=21 t=8.26h loss=0.2000
+
+============================================================
+Trial 7: N=10  L=96.60 mm  zf=2.173 mm  side=0.5296 mm  path=980.01 mm
+============================================================
+  Building model: N=10 L=96.6mm zf=2.17mm side=0.5296mm nblk=21
+  Model init OK: sanity Tmax=542.0K I=2.4536A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3033.2K P03sph=2964.9W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=10.53h loss=0.0500
+  STEP=10 t=26.09h loss=0.1000
+  STEP=15 t=49.52h loss=0.1500
+  STEP=20 t=85.65h loss=0.2000
+  STEP=22 t=85.67h loss=0.2000
+
+============================================================
+Trial 8: N=8  L=73.26 mm  zf=2.134 mm  side=0.6768 mm  path=600.11 mm
+============================================================
+  Building model: N=8 L=73.3mm zf=2.13mm side=0.6768mm nblk=17
+  Model init OK: sanity Tmax=692.3K I=5.6256A
+  Phase 1: voltage search...
+  PHASE1: Vwork=65.5208V Tmax=3273.1K P03sph=3125.4W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.18h loss=0.0500
+  STEP=10 t=2.89h loss=0.1000
+  STEP=15 t=5.38h loss=0.1500
+  STEP=20 t=9.12h loss=0.2000
+  STEP=22 t=9.12h loss=0.2000
+
+============================================================
+Trial 9: N=8  L=77.00 mm  zf=2.012 mm  side=0.6605 mm  path=630.02 mm
+============================================================
+  Building model: N=8 L=77.0mm zf=2.01mm side=0.6605mm nblk=17
+  Model init OK: sanity Tmax=674.3K I=4.6564A
+  Phase 1: voltage search...
+  PHASE1: Vwork=70.0344V Tmax=3272.4K P03sph=3215.3W steps=13
+  Phase 2: erosion loop...
+  STEP=5 t=1.15h loss=0.0500
+  STEP=10 t=2.79h loss=0.1000
+  STEP=15 t=5.19h loss=0.1500
+  STEP=20 t=8.75h loss=0.2000
+  STEP=21 t=8.75h loss=0.2000
+
+============================================================
+Trial 10: N=12  L=107.75 mm  zf=2.450 mm  side=0.4586 mm  path=1306.95 mm
+============================================================
+  Building model: N=12 L=107.7mm zf=2.45mm side=0.4586mm nblk=25
+  Model init OK: sanity Tmax=475.3K I=1.6831A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2659.6K P03sph=1951.4W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 1: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 44
+
+	边界合规中的内部错误。
+	- x 坐标: -0.229221
+	- y 坐标: -0.0929499
+	- z 坐标: 10.0246
+
+
+============================================================
+Trial 11: N=14  L=99.31 mm  zf=1.850 mm  side=0.4424 mm  path=1404.32 mm
+============================================================
+  Building model: N=14 L=99.3mm zf=1.85mm side=0.4424mm nblk=29
+  Model init OK: sanity Tmax=460.6K I=1.4871A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2573.4K P03sph=1754.1W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 3: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 20
+
+	边界合规中的内部错误。
+	- x 坐标: -0.221179
+	- y 坐标: 0.000482889
+	- z 坐标: 3.80928
+
+
+============================================================
+Trial 12: N=12  L=104.79 mm  zf=1.807 mm  side=0.4650 mm  path=1271.47 mm
+============================================================
+  Building model: N=12 L=104.8mm zf=1.81mm side=0.4650mm nblk=25
+  Model init OK: sanity Tmax=479.5K I=1.4817A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2683.2K P03sph=2004.9W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 1: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 47
+
+	边界合规中的内部错误。
+	- x 坐标: -0.232485
+	- y 坐标: 0.140686
+	- z 坐标: 10.8904
+
+
+============================================================
+Trial 13: N=14  L=90.91 mm  zf=2.002 mm  side=0.4622 mm  path=1286.67 mm
+============================================================
+  Building model: N=14 L=90.9mm zf=2.00mm side=0.4622mm nblk=29
+  Model init OK: sanity Tmax=480.7K I=1.8208A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2692.2K P03sph=2037.3W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 1: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 55
+
+	边界合规中的内部错误。
+	- x 坐标: -0.231108
+	- y 坐标: -0.00051985
+	- z 坐标: 11.0752
+
+
+============================================================
+Trial 14: N=10  L=118.24 mm  zf=2.276 mm  side=0.4793 mm  path=1196.42 mm
+============================================================
+  Building model: N=10 L=118.2mm zf=2.28mm side=0.4793mm nblk=21
+  Model init OK: sanity Tmax=491.9K I=2.0723A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2753.8K P03sph=2176.8W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  NOTE: mesh OK with hauto=7 (fallback)
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 457 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (-0.000239666,-0.000239173,0.0124849), (-0.00023942,-0.000239173,0.0124849), (-0.000239173,-0.000239173,0.0124849), (-0.000239173,-0.000239173,0.0124844), (-0.000239173,-0.000239173,0.0124846), ...
+
+  WARN: solve failed step 1: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 457 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (-0.000239666,-0.000239173,0.0124849), (-0.00023942,-0.000239173,0.0124849), (-0.000239173,-0.000239173,0.0124849), (-0.000239173,-0.000239173,0.0124844), (-0.000239173,-0.000239173,0.0124846), ...
+
+
+============================================================
+Trial 15: N=12  L=103.11 mm  zf=1.773 mm  side=0.4687 mm  path=1251.32 mm
+============================================================
+  Building model: N=12 L=103.1mm zf=1.77mm side=0.4687mm nblk=25
+  Model init OK: sanity Tmax=483.0K I=1.8788A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2703.7K P03sph=2055.2W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 1: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 47
+
+	边界合规中的内部错误。
+	- x 坐标: -0.23435
+	- y 坐标: 0.142318
+	- z 坐标: 10.9101
+
+
+============================================================
+Trial 16: N=10  L=91.35 mm  zf=2.068 mm  side=0.5444 mm  path=927.55 mm
+============================================================
+  Building model: N=10 L=91.4mm zf=2.07mm side=0.5444mm nblk=21
+  Model init OK: sanity Tmax=556.8K I=2.8319A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3113.9K P03sph=3219.8W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=4.53h loss=0.0500
+  STEP=10 t=11.16h loss=0.1000
+  STEP=15 t=21.06h loss=0.1500
+  STEP=20 t=36.15h loss=0.2000
+  STEP=22 t=36.16h loss=0.2000
+
+============================================================
+Trial 17: N=12  L=110.52 mm  zf=1.916 mm  side=0.4529 mm  path=1340.26 mm
+============================================================
+  Building model: N=12 L=110.5mm zf=1.92mm side=0.4529mm nblk=25
+  Model init OK: sanity Tmax=468.1K I=1.6693A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2616.6K P03sph=1846.6W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 2: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 23
+
+	边界合规中的内部错误。
+	- x 坐标: -0.22644
+	- y 坐标: 0.000352313
+	- z 坐标: 4.73547
+
+
+============================================================
+Trial 18: N=14  L=99.61 mm  zf=2.106 mm  side=0.4418 mm  path=1408.59 mm
+============================================================
+  Building model: N=14 L=99.6mm zf=2.11mm side=0.4418mm nblk=29
+  Model init OK: sanity Tmax=460.9K I=1.2047A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2575.5K P03sph=1760.9W steps=1
+  Phase 2: erosion loop...
+  WARN: mesh hauto=5 failed, retrying hauto=6...
+  WARN: mesh hauto=6 failed, retrying hauto=7...
+  WARN: mesh hauto=7 failed, retrying hauto=8...
+  WARN: mesh hauto=8 failed, retrying hauto=9...
+  WARN: rebuild failed step 3: Mesh failed at all levels (hauto=5..9): Exception:
+	com.comsol.util.exceptions.FlException: 构建网格特征“自由四面体网格 1”时出现问题。
+Messages:
+	构建网格特征“自由四面体网格 1”时出现问题。
+
+	无法为域生成网格。
+	- 域: 1
+
+	无法遵循几何面上的边界单元。
+	- 面: 60
+
+	边界合规中的内部错误。
+	- x 坐标: -0.220842
+	- y 坐标: 0.133796
+	- z 坐标: 12.285
+
+
+============================================================
+Trial 19: N=12  L=92.01 mm  zf=2.267 mm  side=0.4958 mm  path=1118.13 mm
+============================================================
+  Building model: N=12 L=92.0mm zf=2.27mm side=0.4958mm nblk=25
+  Model init OK: sanity Tmax=512.0K I=2.2505A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2868.9K P03sph=2494.2W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=50.00h loss=0.0377
+  STEP=10 t=100.00h loss=0.0657
+  STEP=15 t=150.00h loss=0.0881
+  STEP=20 t=200.00h loss=0.1065
+  STEP=25 t=250.00h loss=0.1223
+  STEP=30 t=300.00h loss=0.1360
+  STEP=35 t=350.00h loss=0.1481
+  STEP=40 t=400.00h loss=0.1589
+  STEP=45 t=450.00h loss=0.1687
+  Lifetime cap 500h at step 50, stopping.
+  Vwork=100.0000V  L=500.00h  R_L=206.54%  eta_E=3216.03%  U=97.10%  score=3216.03  [2149s]
+
+============================================================
+  C8 LOCAL SEARCH COMPLETE
+============================================================
+Best trial:     #19
+Best score:     3216.0330
+Best params:    N=12  L=92.01 mm  zf=2.267 mm
+Best side:      0.4958 mm
+Best path len:  1118.13 mm
+
+Total trials:   20
+Results saved:  D:\VScode\project\BFHC\zigzag_family\ML\data\rematch_c8_local_trials.csv
+COMSOL disconnected.

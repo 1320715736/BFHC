@@ -1,0 +1,169 @@
+[I 2026-05-06 00:58:02,570] A new study created in RDB with name: zigzag_bo_v3_cylinder_life
+[I 2026-05-06 01:07:36,896] Trial 0 pruned. Lifetime 6.38h < 34.65h
+[I 2026-05-06 01:08:16,540] Trial 1 pruned. Lifetime 0.00h < 34.65h
+[I 2026-05-06 01:08:16,622] Trial 2 pruned. FAIL_Z_OVERLAP
+[I 2026-05-06 01:09:15,349] Trial 3 pruned. Lifetime 0.00h < 34.65h
+[I 2026-05-06 01:16:45,894] Trial 4 finished with value: 1011.650355416329 and parameters: {'N_RUNS': 16, 'L_RUN_mm': 126.16517032879783, 'z_first_mm': 2.2936473127095725}. Best is trial 4 with value: 1011.650355416329.
+[I 2026-05-06 01:17:25,400] Trial 5 pruned. Lifetime 10.00h < 34.65h
+[I 2026-05-06 01:24:08,634] Trial 6 finished with value: 1274.2670326764583 and parameters: {'N_RUNS': 14, 'L_RUN_mm': 120.38627988491511, 'z_first_mm': 0.9675292509790796}. Best is trial 6 with value: 1274.2670326764583.
+[I 2026-05-06 01:30:00,129] Trial 7 finished with value: 1210.3512833221903 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 164.37100955169555, 'z_first_mm': 1.7100953712949511}. Best is trial 6 with value: 1274.2670326764583.
+[I 2026-05-06 01:31:06,904] Trial 8 pruned. Lifetime 0.00h < 34.65h
+[I 2026-05-06 01:36:22,077] Trial 9 finished with value: 1528.7813492873152 and parameters: {'N_RUNS': 8, 'L_RUN_mm': 182.9912299450877, 'z_first_mm': 1.4160827052067595}. Best is trial 9 with value: 1528.7813492873152.
+[I 2026-05-06 01:46:34,788] Trial 10 pruned. Lifetime 5.11h < 34.65h
+[I 2026-05-06 01:53:47,753] Trial 11 finished with value: 1679.600036381924 and parameters: {'N_RUNS': 14, 'L_RUN_mm': 103.31065291359907, 'z_first_mm': 0.949749948004885}. Best is trial 11 with value: 1679.600036381924.
+[I 2026-05-06 01:54:22,018] Trial 12 pruned. Lifetime 0.45h < 34.65h
+[I 2026-05-06 02:07:09,513] Trial 13 pruned. Lifetime 4.60h < 34.65h
+[I 2026-05-06 02:08:10,497] Trial 14 pruned. Lifetime 10.00h < 34.65h
+[I 2026-05-06 02:10:22,643] Trial 15 finished with value: 1574.2413068123421 and parameters: {'N_RUNS': 6, 'L_RUN_mm': 207.92904318067832, 'z_first_mm': 1.453858076457476}. Best is trial 11 with value: 1679.600036381924.
+[I 2026-05-06 02:18:51,759] Trial 16 finished with value: 1695.444204142939 and parameters: {'N_RUNS': 6, 'L_RUN_mm': 232.58826859709183, 'z_first_mm': 1.050605446531826}. Best is trial 16 with value: 1695.444204142939.
+[I 2026-05-06 02:23:52,128] Trial 17 finished with value: 1478.3349532109128 and parameters: {'N_RUNS': 6, 'L_RUN_mm': 251.82103061625108, 'z_first_mm': 0.9881057991981921}. Best is trial 16 with value: 1695.444204142939.
+[I 2026-05-06 02:24:23,260] Trial 18 pruned. Lifetime 10.00h < 34.65h
+[I 2026-05-06 02:27:11,798] Trial 19 finished with value: 1772.0140223954074 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 131.64608093103803, 'z_first_mm': 2.0273346867533983}. Best is trial 19 with value: 1772.0140223954074.
+[I 2026-05-06 02:31:09,662] Trial 20 pruned. Lifetime 30.00h < 34.65h
+[I 2026-05-06 02:40:20,791] Trial 21 finished with value: 2848.700358202729 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 99.52925906194412, 'z_first_mm': 2.040332841813785}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 02:52:51,200] Trial 22 pruned. Lifetime 3.78h < 34.65h
+[I 2026-05-06 02:53:27,887] Trial 23 pruned. Lifetime 0.00h < 34.65h
+[I 2026-05-06 03:03:21,569] Trial 24 finished with value: 1177.7064609319293 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 139.99847378910042, 'z_first_mm': 2.011663669866298}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 03:04:00,600] Trial 25 pruned. Lifetime 0.00h < 34.65h
+[I 2026-05-06 03:13:08,798] Trial 26 pruned. Lifetime 3.99h < 34.65h
+[I 2026-05-06 03:13:48,522] Trial 27 pruned. Lifetime 0.00h < 34.65h
+[I 2026-05-06 03:16:54,982] Trial 28 pruned. Lifetime 10.00h < 34.65h
+[I 2026-05-06 03:26:08,597] Trial 29 pruned. Lifetime 4.12h < 34.65h
+[I 2026-05-06 03:39:28,557] Trial 30 pruned. Lifetime 5.06h < 34.65h
+[I 2026-05-06 03:45:57,822] Trial 31 finished with value: 1787.3786463716353 and parameters: {'N_RUNS': 14, 'L_RUN_mm': 99.4731679060278, 'z_first_mm': 0.8391674367694684}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 03:53:30,710] Trial 32 finished with value: 1534.7234246585967 and parameters: {'N_RUNS': 12, 'L_RUN_mm': 124.54159259516376, 'z_first_mm': 0.74162800494854}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 03:53:30,783] Trial 33 pruned. FAIL_Z_OVERLAP
+[I 2026-05-06 04:00:30,401] Trial 34 pruned. Lifetime 5.36h < 34.65h
+[I 2026-05-06 04:18:22,977] Trial 35 pruned. Lifetime 4.20h < 34.65h
+[I 2026-05-06 04:19:08,648] Trial 36 pruned. Lifetime 0.00h < 34.65h
+[I 2026-05-06 04:28:11,713] Trial 37 pruned. Lifetime 3.67h < 34.65h
+[I 2026-05-06 04:28:52,679] Trial 38 pruned. Lifetime 0.00h < 34.65h
+[I 2026-05-06 04:29:29,278] Trial 39 pruned. Lifetime 0.00h < 34.65h
+[I 2026-05-06 04:30:10,224] Trial 40 pruned. Lifetime 0.00h < 34.65h
+[I 2026-05-06 04:37:26,706] Trial 41 finished with value: 1684.32034765172 and parameters: {'N_RUNS': 14, 'L_RUN_mm': 105.06899882945628, 'z_first_mm': 0.9062933966620303}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 04:41:06,322] Trial 42 finished with value: 1922.2709591921498 and parameters: {'N_RUNS': 14, 'L_RUN_mm': 96.43900765632658, 'z_first_mm': 0.858348994359846}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 04:55:45,916] Trial 43 pruned. Lifetime 9.00h < 34.65h
+[I 2026-05-06 05:27:49,399] Trial 44 pruned. Lifetime 4.58h < 34.65h
+[I 2026-05-06 05:29:28,530] Trial 45 pruned. Lifetime 30.00h < 34.65h
+[I 2026-05-06 05:37:45,045] Trial 46 pruned. Lifetime 13.08h < 34.65h
+[I 2026-05-06 05:43:36,997] Trial 47 pruned. Lifetime 5.20h < 34.65h
+[I 2026-05-06 05:52:46,275] Trial 48 finished with value: 1368.9813094469262 and parameters: {'N_RUNS': 14, 'L_RUN_mm': 115.16608360559448, 'z_first_mm': 0.7187425041523823}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 05:54:59,570] Trial 49 finished with value: 1733.7219427819355 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 128.23649870766127, 'z_first_mm': 1.6366526075812926}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 06:04:25,478] Trial 50 finished with value: 2707.921807891052 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 96.16985349543893, 'z_first_mm': 2.3647692963653935}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 06:14:12,042] Trial 51 pruned. Lifetime 24.54h < 34.65h
+[I 2026-05-06 06:16:42,955] Trial 52 finished with value: 1469.7662460195343 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 131.5369550339799, 'z_first_mm': 2.4096928975645904}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 06:22:28,901] Trial 53 finished with value: 1176.9448902052873 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 155.62787772347443, 'z_first_mm': 2.2062568985232174}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 06:36:01,832] Trial 54 pruned. Lifetime 4.09h < 34.65h
+[I 2026-05-06 06:36:47,513] Trial 55 pruned. Lifetime 10.00h < 34.65h
+[I 2026-05-06 06:46:14,231] Trial 56 finished with value: 2585.5485523864377 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 99.24825900110956, 'z_first_mm': 2.344421951709447}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 06:53:16,461] Trial 57 pruned. Lifetime 6.23h < 34.65h
+[I 2026-05-06 07:04:16,210] Trial 58 pruned. Lifetime 4.14h < 34.65h
+[I 2026-05-06 07:17:10,203] Trial 59 pruned. Lifetime 5.71h < 34.65h
+[I 2026-05-06 07:31:11,494] Trial 60 pruned. Lifetime 4.61h < 34.65h
+[I 2026-05-06 07:33:23,231] Trial 61 finished with value: 1704.8615939570864 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 129.28617407597633, 'z_first_mm': 1.7989543789375622}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 07:43:03,042] Trial 62 finished with value: 2655.135570064348 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 101.66632538965312, 'z_first_mm': 2.0660996592075107}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 07:43:56,351] Trial 63 pruned. Lifetime 10.00h < 34.65h
+[I 2026-05-06 07:44:40,599] Trial 64 pruned. Lifetime 10.00h < 34.65h
+[I 2026-05-06 07:45:35,680] Trial 65 pruned. Lifetime 10.00h < 34.65h
+[I 2026-05-06 07:53:12,012] Trial 66 finished with value: 1104.8974148559553 and parameters: {'N_RUNS': 16, 'L_RUN_mm': 96.37022254028214, 'z_first_mm': 2.0786283671146837}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 08:06:56,368] Trial 67 pruned. Lifetime 4.29h < 34.65h
+[I 2026-05-06 08:18:20,705] Trial 68 finished with value: 2632.3594683691554 and parameters: {'N_RUNS': 12, 'L_RUN_mm': 82.35045376582644, 'z_first_mm': 2.21312775615559}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 08:34:11,239] Trial 69 pruned. Lifetime 4.75h < 34.65h
+[I 2026-05-06 08:45:21,851] Trial 70 finished with value: 2465.444654269062 and parameters: {'N_RUNS': 12, 'L_RUN_mm': 84.7842791903469, 'z_first_mm': 2.2050779033325374}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 08:56:52,865] Trial 71 pruned. Lifetime 34.49h < 34.65h
+[I 2026-05-06 08:58:02,473] Trial 72 pruned. Lifetime 20.00h < 34.65h
+[I 2026-05-06 09:13:20,769] Trial 73 pruned. Lifetime 5.66h < 34.65h
+[I 2026-05-06 09:24:31,949] Trial 74 finished with value: 2531.5177816070554 and parameters: {'N_RUNS': 12, 'L_RUN_mm': 84.62515058289782, 'z_first_mm': 2.6076995744601232}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 09:40:26,211] Trial 75 pruned. Lifetime 4.02h < 34.65h
+[I 2026-05-06 09:51:18,583] Trial 76 finished with value: 2559.173371914197 and parameters: {'N_RUNS': 12, 'L_RUN_mm': 84.65423654672502, 'z_first_mm': 2.7775337498863863}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 10:02:19,654] Trial 77 finished with value: 2471.74414621209 and parameters: {'N_RUNS': 12, 'L_RUN_mm': 83.34699420460076, 'z_first_mm': 2.7564641339894176}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 10:18:08,503] Trial 78 pruned. Lifetime 5.52h < 34.65h
+[I 2026-05-06 10:28:27,665] Trial 79 pruned. Lifetime 11.60h < 34.65h
+[I 2026-05-06 10:45:09,561] Trial 80 pruned. Lifetime 4.65h < 34.65h
+[I 2026-05-06 10:56:15,917] Trial 81 finished with value: 2388.073346585064 and parameters: {'N_RUNS': 12, 'L_RUN_mm': 83.6376449143194, 'z_first_mm': 2.7264447024195793}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 11:10:12,886] Trial 82 finished with value: 2129.538782041821 and parameters: {'N_RUNS': 12, 'L_RUN_mm': 89.55027379608093, 'z_first_mm': 2.93663325807484}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 11:13:03,059] Trial 83 finished with value: 1774.3097872835365 and parameters: {'N_RUNS': 12, 'L_RUN_mm': 112.22226959762736, 'z_first_mm': 2.5833536525228387}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 11:27:38,222] Trial 84 pruned. Lifetime 4.04h < 34.65h
+[I 2026-05-06 11:39:06,570] Trial 85 finished with value: 2556.4331881468293 and parameters: {'N_RUNS': 12, 'L_RUN_mm': 86.32588765061783, 'z_first_mm': 2.3243639634029667}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 11:40:16,606] Trial 86 pruned. Lifetime 20.00h < 34.65h
+[I 2026-05-06 11:47:26,935] Trial 87 pruned. Lifetime 4.54h < 34.65h
+[I 2026-05-06 11:48:37,509] Trial 88 pruned. Lifetime 10.00h < 34.65h
+[I 2026-05-06 11:48:37,578] Trial 89 pruned. FAIL_Z_OVERLAP
+[I 2026-05-06 11:59:56,516] Trial 90 pruned. Lifetime 4.23h < 34.65h
+[I 2026-05-06 12:11:49,964] Trial 91 finished with value: 2435.00895708994 and parameters: {'N_RUNS': 12, 'L_RUN_mm': 85.0354817808867, 'z_first_mm': 2.1027478350910744}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 12:13:41,127] Trial 92 finished with value: 2015.7376723411683 and parameters: {'N_RUNS': 12, 'L_RUN_mm': 108.08686056512965, 'z_first_mm': 2.141589559752965}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 12:14:37,049] Trial 93 pruned. Lifetime 10.00h < 34.65h
+[I 2026-05-06 12:33:40,283] Trial 94 pruned. Lifetime 4.06h < 34.65h
+[I 2026-05-06 12:52:12,747] Trial 95 finished with value: 1905.783039359169 and parameters: {'N_RUNS': 16, 'L_RUN_mm': 69.66866124663423, 'z_first_mm': 2.8136109859335248}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 13:06:11,834] Trial 96 pruned. Lifetime 30.04h < 34.65h
+[I 2026-05-06 13:18:25,719] Trial 97 finished with value: 2676.8669811699547 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 100.19287498742608, 'z_first_mm': 2.4515151640222714}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 13:27:19,067] Trial 98 finished with value: 1119.1982117589362 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 171.2763579403667, 'z_first_mm': 2.4425056495804287}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 13:38:46,786] Trial 99 finished with value: 2478.5069448527306 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 100.47029265753943, 'z_first_mm': 2.5415162698313503}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 13:39:41,892] Trial 100 pruned. Lifetime 10.00h < 34.65h
+[I 2026-05-06 13:50:59,119] Trial 101 finished with value: 2670.944503668595 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 98.6163449471039, 'z_first_mm': 2.7303649492874618}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 14:02:05,639] Trial 102 finished with value: 2478.5980845197137 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 102.60705117937228, 'z_first_mm': 2.6871238970225915}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 14:03:13,216] Trial 103 pruned. Lifetime 20.00h < 34.65h
+[I 2026-05-06 14:14:22,873] Trial 104 pruned. Lifetime 16.79h < 34.65h
+[I 2026-05-06 14:27:06,819] Trial 105 finished with value: 2385.2958077206727 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 101.67817245878315, 'z_first_mm': 2.612936791974209}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 14:37:41,889] Trial 106 finished with value: 2712.5940517371932 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 95.2306359508828, 'z_first_mm': 2.365182297815936}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 14:38:28,321] Trial 107 pruned. Lifetime 10.00h < 34.65h
+[I 2026-05-06 14:45:28,119] Trial 108 finished with value: 1631.4391506775485 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 136.5705657956251, 'z_first_mm': 2.342562288126033}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 15:05:21,816] Trial 109 pruned. Lifetime 4.30h < 34.65h
+[I 2026-05-06 15:16:57,447] Trial 110 finished with value: 2732.4728810494407 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 95.79456449079515, 'z_first_mm': 1.8786593145102712}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 15:29:18,826] Trial 111 pruned. Lifetime 28.52h < 34.65h
+[I 2026-05-06 15:30:39,922] Trial 112 pruned. Lifetime 10.00h < 34.65h
+[I 2026-05-06 15:43:47,036] Trial 113 finished with value: 2748.3076542356193 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 96.30534861129338, 'z_first_mm': 1.804178196299211}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 15:55:55,744] Trial 114 finished with value: 2762.9506347830006 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 94.97647264954338, 'z_first_mm': 1.818702383346286}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 15:58:20,261] Trial 115 finished with value: 1605.258694042413 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 125.91360368213742, 'z_first_mm': 1.7155001143687523}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 16:10:08,546] Trial 116 finished with value: 2518.5263483198996 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 97.65419930066358, 'z_first_mm': 1.8303820039692862}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 16:10:55,568] Trial 117 pruned. Lifetime 10.00h < 34.65h
+[I 2026-05-06 16:23:08,509] Trial 118 finished with value: 2770.3442730505067 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 94.83452185375282, 'z_first_mm': 1.8855251589255921}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 16:24:01,460] Trial 119 pruned. Lifetime 10.00h < 34.65h
+[I 2026-05-06 16:34:17,839] Trial 120 pruned. Lifetime 33.39h < 34.65h
+[I 2026-05-06 16:44:28,018] Trial 121 pruned. Lifetime 16.30h < 34.65h
+[I 2026-05-06 16:56:52,002] Trial 122 finished with value: 2590.6590202923517 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 99.07000227356578, 'z_first_mm': 1.722991284120849}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 17:07:44,960] Trial 123 finished with value: 2753.996199603592 and parameters: {'N_RUNS': 10, 'L_RUN_mm': 96.74185151100454, 'z_first_mm': 1.7215168708802735}. Best is trial 21 with value: 2848.700358202729.
+[I 2026-05-06 17:09:03,433] Trial 124 pruned. Lifetime 10.00h < 34.65h
+[I 2026-05-06 17:10:08,120] Trial 125 pruned. Lifetime 10.00h < 34.65h
+[W 2026-05-06 17:14:58,616] Trial 126 failed with parameters: {'N_RUNS': 10, 'L_RUN_mm': 95.56139278653293, 'z_first_mm': 1.7295175542011458} because of the following error: ServerDisconnectError('java.lang.NullPointerException').
+Traceback (most recent call last):
+  File "SourceFile", line 224, in com.comsol.clientapi.impl.StudyClient.run
+Exception: Java Exception
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\VScode\project\BFHC\zigzag_family\ML\zigzag_runner.py", line 620, in _solve_prepared
+    j.study("std1").run()
+java.lang.java.lang.NullPointerException: java.lang.NullPointerException
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\BFHC\Lib\site-packages\optuna\study\_optimize.py", line 206, in _run_trial
+    value_or_values = func(trial)
+                      ^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\zigzag_family\ML\optuna_optimize.py", line 186, in objective
+    result = runner.evaluate(
+             ^^^^^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\zigzag_family\ML\zigzag_runner.py", line 883, in evaluate
+    r_now = self._solve_prepared(Vwork)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\zigzag_family\ML\zigzag_runner.py", line 667, in _solve_prepared
+    raise ServerDisconnectError(self._safe_exception_text(e))
+zigzag_runner.ServerDisconnectError: java.lang.NullPointerException
+[W 2026-05-06 17:14:58,621] Trial 126 failed with value None.
+Model does not exist.
+Error while disconnecting client at session clean-up.
+Traceback (most recent call last):
+  File "SourceFile", line 290, in com.comsol.model.util.ModelUtil.disconnect
+Exception: Java Exception
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\BFHC\Lib\site-packages\mph\session.py", line 160, in cleanup
+    client.disconnect()
+  File "D:\conda_envs\BFHC\Lib\site-packages\mph\client.py", line 441, in disconnect
+    self.java.disconnect()
+java.lang.java.lang.IllegalStateException: java.lang.IllegalStateException: Tried to disconnect while not connected.
