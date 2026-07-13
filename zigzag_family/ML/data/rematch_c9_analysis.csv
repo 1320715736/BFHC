@@ -1,0 +1,53 @@
+section,key,value,notes
+summary,total_trials,20,Completed C8 local-search trials
+summary,FAIL_EROSION_SOLVE,9,C8 local status count
+summary,OK,3,C8 local status count
+summary,PRUNE_LIFETIME,8,C8 local status count
+summary,ok_rate_pct,15.0,OK trials divided by total trials
+summary,pareto_count,1,Non-dominated by eta_E/R_L/U among OK trials
+summary,cap_limited_ok_count,1,OK candidates stopped by max_lifetime_h
+summary,measured_failure_ok_count,2,OK candidates that actually reached erosion failure
+best_lower_bound,trial,19,Best C8 local candidate by objectiveScore
+best_lower_bound,geometry,N=12; L_RUN_mm=92.0111; z_first_mm=2.2666; side_mm=0.4958,Main zigzag geometry parameters
+best_lower_bound,objectiveScore,3216.033012905267,BO scalar score
+best_lower_bound,lifetimeH,500.0,Cap-limited if capLimited=True
+best_lower_bound,R_L_pct,206.54404264988725,L_opt / L_ini * 100
+best_lower_bound,eta_L_pct,106.54404264988725,(L_opt - L_ini) / L_ini * 100
+best_lower_bound,lifeTotalP03sphere_J,3501653800.7629585,Lifecycle cumulative 0-3 um effective radiation energy
+best_lower_bound,eta_E_pct,3216.033012905267,(E_opt - E_ini) / E_ini * 100
+best_lower_bound,U_pct,97.09806128500705,Full-domain steady-state temperature uniformity
+best_lower_bound,maxErosionTmax_K,2868.8820158586905,Maximum temperature during erosion loop
+best_lower_bound,overtemp_margin_K,404.2679841413096,3273.15 K - maxErosionTmax_K
+best_lower_bound,failureReached,False,False means true failure lifetime is not measured
+best_lower_bound,capLimited,True,True means lower-bound result
+compare_cylinder68,E_gain_pct,1336.9938319480927,Against C5 cylinder lead trial 68
+compare_cylinder68,life_ratio_pct,132.15775446054064,Against C5 cylinder lead trial 68
+compare_cylinder68,U_reduction_pct,23.566925106755555,Against C5 cylinder lead trial 68
+compare_c8_verified,E_gain_pct,26.450913694768207,Against fixed C8 verified trial 19
+compare_c8_verified,life_ratio_pct,129.91495288319868,Against fixed C8 verified trial 19
+best_measured_failure,trial,0,Best candidate whose failureReached=True
+best_measured_failure,geometry,N=12; L_RUN_mm=89.0993; z_first_mm=2.1050; side_mm=0.5038,This is the conservative measured-failure candidate
+best_measured_failure,objectiveScore,2522.1048107544357,
+best_measured_failure,lifetimeH,384.8173914102409,
+best_measured_failure,eta_E_pct,2522.1048107544357,
+best_measured_failure,R_L_pct,158.96347940771028,
+best_measured_failure,U_pct,97.29239542462759,
+top_objective,rank_1,19,obj=3216.0330; eta_E=3216.0330%; R_L=206.5440%; U=97.0981%; cap_limited=True; measured_failure=False; N=12; L_RUN_mm=92.0111; z_first_mm=2.2666; side_mm=0.4958
+top_objective,rank_2,0,obj=2522.1048; eta_E=2522.1048%; R_L=158.9635%; U=97.2924%; cap_limited=False; measured_failure=True; N=12; L_RUN_mm=89.0993; z_first_mm=2.1050; side_mm=0.5038
+top_objective,rank_3,5,obj=1470.2762; eta_E=1470.2762%; R_L=90.3304%; U=97.3872%; cap_limited=False; measured_failure=True; N=10; L_RUN_mm=102.0693; z_first_mm=1.9239; side_mm=0.5154
+status_ranges,FAIL_EROSION_SOLVE_N_RUNS,min=10.0000; median=12.0000; mean=12.2222; max=14.0000,Distribution by status
+status_ranges,FAIL_EROSION_SOLVE_L_RUN_mm,min=90.9050; median=104.7894; mean=105.3911; max=118.2420,Distribution by status
+status_ranges,FAIL_EROSION_SOLVE_z_first_mm,min=1.7734; median=2.0022; mean=2.0427; max=2.4501,Distribution by status
+status_ranges,FAIL_EROSION_SOLVE_side_mm,min=0.4418; median=0.4622; mean=0.4620; max=0.4875,Distribution by status
+status_ranges,OK_N_RUNS,min=10.0000; median=12.0000; mean=11.3333; max=12.0000,Distribution by status
+status_ranges,OK_L_RUN_mm,min=89.0993; median=92.0111; mean=94.3933; max=102.0693,Distribution by status
+status_ranges,OK_z_first_mm,min=1.9239; median=2.1050; mean=2.0985; max=2.2666,Distribution by status
+status_ranges,OK_side_mm,min=0.4958; median=0.5038; mean=0.5050; max=0.5154,Distribution by status
+status_ranges,PRUNE_LIFETIME_N_RUNS,min=8.0000; median=9.0000; mean=9.2500; max=12.0000,Distribution by status
+status_ranges,PRUNE_LIFETIME_L_RUN_mm,min=73.2639; median=82.4322; mean=83.8120; max=96.6006,Distribution by status
+status_ranges,PRUNE_LIFETIME_z_first_mm,min=1.6240; median=2.0398; mean=1.9951; max=2.3635,Distribution by status
+status_ranges,PRUNE_LIFETIME_side_mm,min=0.5296; median=0.5951; mean=0.5971; max=0.6768,Distribution by status
+decision,zigzag_direction,continue,C8 local best strongly exceeds cylinder lead on eta_E and U
+decision,current_best_is_lower_bound,True,Do not treat cap-limited lifetime as final failure lifetime
+next_step,recommended,C10,Verify C8-local trial 19 with higher max_lifetime_h
+next_step,max_lifetime_h,800 or 1000,Needed to measure actual failure or a stronger lower bound
