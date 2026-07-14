@@ -1,0 +1,98 @@
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+  Building model: N=12 L=92.0mm zf=2.27mm side=0.4958mm nblk=25
+  Model init OK: sanity Tmax=590.8K I=1.9551A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=2905.8K P03sph=2389.2W steps=1
+  Phase 2: erosion loop...
+  SOLVING step=1 t=7.294h loss=0.0100
+  SOLVED step=1 Tmax=2898.0K P03escape=2345.58W
+  SOLVING step=2 t=15.247h loss=0.0200
+  SOLVED step=2 Tmax=2891.3K P03escape=2303.80W
+  SOLVING step=3 t=23.882h loss=0.0300
+  SOLVED step=3 Tmax=2884.5K P03escape=2262.16W
+  SOLVING step=4 t=33.264h loss=0.0400
+  SOLVED step=4 Tmax=2877.8K P03escape=2221.09W
+  SOLVING step=5 t=43.264h loss=0.0498
+  SOLVED step=5 Tmax=2871.1K P03escape=2180.93W
+  STEP=5 t=43.26h loss=0.0498
+  SOLVING step=6 t=53.264h loss=0.0588
+  SOLVED step=6 Tmax=2865.1K P03escape=2144.42W
+  SOLVING step=7 t=63.264h loss=0.0672
+  SOLVED step=7 Tmax=2859.4K P03escape=2110.96W
+  SOLVING step=8 t=73.264h loss=0.0750
+  SOLVED step=8 Tmax=2854.1K P03escape=2079.93W
+  SOLVING step=9 t=83.264h loss=0.0823
+  SOLVED step=9 Tmax=2849.1K P03escape=2050.95W
+  SOLVING step=10 t=93.264h loss=0.0891
+  SOLVED step=10 Tmax=2844.4K P03escape=2023.78W
+  STEP=10 t=93.26h loss=0.0891
+  SOLVING step=11 t=103.264h loss=0.0956
+  SOLVED step=11 Tmax=2840.0K P03escape=1998.61W
+  SOLVING step=12 t=113.264h loss=0.1017
+  SOLVED step=12 Tmax=2835.8K P03escape=1974.85W
+  SOLVING step=13 t=123.264h loss=0.1075
+  SOLVED step=13 Tmax=2831.8K P03escape=1952.41W
+  SOLVING step=14 t=133.264h loss=0.1130
+  SOLVED step=14 Tmax=2828.0K P03escape=1931.22W
+  SOLVING step=15 t=143.264h loss=0.1182
+  SOLVED step=15 Tmax=2824.5K P03escape=1911.36W
+  STEP=15 t=143.26h loss=0.1182
+  SOLVING step=16 t=153.264h loss=0.1232
+  SOLVED step=16 Tmax=2821.0K P03escape=1892.24W
+  SOLVING step=17 t=163.264h loss=0.1280
+  SOLVED step=17 Tmax=2817.6K P03escape=1873.64W
+  SOLVING step=18 t=173.264h loss=0.1326
+  SOLVED step=18 Tmax=2814.5K P03escape=1856.46W
+  SOLVING step=19 t=183.264h loss=0.1370
+  SOLVED step=19 Tmax=2811.3K P03escape=1839.68W
+  SOLVING step=20 t=193.264h loss=0.1412
+  SOLVED step=20 Tmax=2808.4K P03escape=1823.59W
+  STEP=20 t=193.26h loss=0.1412
+  SOLVING step=21 t=203.264h loss=0.1453
+  SOLVED step=21 Tmax=2805.6K P03escape=1808.29W
+  SOLVING step=22 t=213.264h loss=0.1492
+  SOLVED step=22 Tmax=2802.8K P03escape=1793.69W
+  SOLVING step=23 t=223.264h loss=0.1530
+  SOLVED step=23 Tmax=2800.2K P03escape=1779.58W
+  SOLVING step=24 t=233.264h loss=0.1567
+  SOLVED step=24 Tmax=2797.7K P03escape=1766.08W
+  SOLVING step=25 t=243.264h loss=0.1602
+  SOLVED step=25 Tmax=2795.2K P03escape=1752.99W
+  STEP=25 t=243.26h loss=0.1602
+  SOLVING step=26 t=253.264h loss=0.1636
+  SOLVED step=26 Tmax=2792.8K P03escape=1740.44W
+  SOLVING step=27 t=263.264h loss=0.1669
+  SOLVED step=27 Tmax=2790.4K P03escape=1728.26W
+  SOLVING step=28 t=273.264h loss=0.1701
+  SOLVED step=28 Tmax=2788.2K P03escape=1716.61W
+  SOLVING step=29 t=283.264h loss=0.1733
+  SOLVED step=29 Tmax=2786.0K P03escape=1705.16W
+  SOLVING step=30 t=293.264h loss=0.1763
+  SOLVED step=30 Tmax=2783.8K P03escape=1694.22W
+  STEP=30 t=293.26h loss=0.1763
+  SOLVING step=31 t=303.264h loss=0.1792
+  SOLVED step=31 Tmax=2781.6K P03escape=1683.42W
+  SOLVING step=32 t=313.264h loss=0.1821
+  SOLVED step=32 Tmax=2779.6K P03escape=1673.18W
+  SOLVING step=33 t=323.264h loss=0.1849
+  SOLVED step=33 Tmax=2777.6K P03escape=1663.15W
+  SOLVING step=34 t=333.264h loss=0.1876
+  SOLVED step=34 Tmax=2775.7K P03escape=1653.44W
+  SOLVING step=35 t=343.264h loss=0.1902
+  SOLVED step=35 Tmax=2773.8K P03escape=1643.68W
+  STEP=35 t=343.26h loss=0.1902
+  SOLVING step=36 t=353.264h loss=0.1928
+  SOLVED step=36 Tmax=2771.9K P03escape=1634.57W
+  SOLVING step=37 t=363.264h loss=0.1953
+  SOLVED step=37 Tmax=2770.1K P03escape=1625.75W
+  SOLVING step=38 t=373.264h loss=0.1978
+  SOLVED step=38 Tmax=2768.4K P03escape=1616.81W
+  SOLVING step=39 t=382.424h loss=0.2000
+  SOLVED step=39 Tmax=2766.8K P03escape=1608.70W
+  SOLVING step=40 t=382.476h loss=0.2000
+  SOLVED step=40 Tmax=2766.8K P03escape=1608.80W
+  STEP=40 t=382.48h loss=0.2000
+{"case_id": "D1_C10_zigzag_trial19", "family": "zigzag", "role": "legacy_lead_control", "runMode": "lifecycle", "timestamp": "2026-07-14T00:24:43.735652+08:00", "N_RUNS": 12, "L_RUN_mm": 92.01113160151677, "z_first_mm": 2.266631002891225, "side_mm": 0.49582922105223914, "pathLength_mm": 1118.1335792182015, "maxLifetimeCap_h": 1000.0, "maxErosionSteps": 150, "physicsVersion": "thermal_s2s_v2", "metricVersion": "radiation_escape_v2", "geometryVersion": "zigzag_blocks_v1", "radiationEscapeMethod": "s2s_radiosity_famb", "spectralSplit_um": 3.0, "thermalAmbient_K": 293.15, "scoreAmbientTarget_K": 0.0, "gitCommit": "39b4545", "gitDirty": true, "pythonVersion": "3.11.15", "mphVersion": "1.3.1", "Vwork_V": 100.0, "initialTmax_K": 2905.8401204112733, "Tmin_K": 292.11997185555515, "Tmean_K": 2689.064887201041, "U_pct": 97.19810633785981, "lifetimeH": 382.47647844370107, "initialP03gross_W": 2630.1188024971616, "initialPradGross_W": 2785.4080795475766, "initialP03escape_W": 2389.217232157785, "initialPradEscape_W": 2539.7038113607628, "initialP03sphere_W": 2389.217232157785, "initialPradSphere_W": 2539.7038113607628, "initialP03selfAbsorbed_W": 240.90157033937658, "initialSelfViewLossRaw_pct": 9.159341779947471, "initialSelfViewLoss_pct": 9.159341779947471, "initialRadiationNumericalExcess_pct": 0.0, "initialP03ambient_W": 4.95941344801382e-05, "initialAmbient03ToEscape_pct": 2.0757482330456833e-06, "initialFambAreaAvg": 0.8019122838461015, "lifeAvgP03gross_W": 2025.5766748516385, "lifeAvgPradGross_W": 2154.466851641884, "lifeAvgP03escape_W": 1876.253702060765, "lifeAvgPradEscape_W": 2001.8945038535846, "lifeAvgP03sphere_W": 1876.253702060765, "lifeAvgPradSphere_W": 2001.8945038535846, "lifeTotalP03gross_J": 2789047560.293843, "lifeTotalPradGross_J": 2966518419.6228323, "lifeTotalP03escape_J": 2583442471.0721703, "lifeTotalPradEscape_J": 2756439216.178989, "lifeTotalP03sphere_J": 2583442471.0721703, "lifeTotalP03selfAbsorbed_J": 205605089.22167253, "selfViewLossRaw_pct": 7.371874619449326, "selfViewLoss_pct": 7.371874619449326, "radiationNumericalExcess_pct": 0.0, "maxErosionTmax_K": 2905.8401204112733, "failureReached": true, "erosionSteps": 40, "erosionSolveRetries": 0, "status": "OK", "elapsed_sec": 3253.2, "voltagePolicy": "max_safe", "voltageObjective": "lifeTotalP03sphere_J", "voltageCandidateCount": 1, "voltageMaxSafe_V": 100.0, "runnerStatus": "OK"}
+COMSOL disconnected.

@@ -1,0 +1,14 @@
+Model does not exist.
+Error while disconnecting client at session clean-up.
+Traceback (most recent call last):
+  File "SourceFile", line 290, in com.comsol.model.util.ModelUtil.disconnect
+Exception: Java Exception
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\BFHC\Lib\site-packages\mph\session.py", line 160, in cleanup
+    client.disconnect()
+  File "D:\conda_envs\BFHC\Lib\site-packages\mph\client.py", line 441, in disconnect
+    self.java.disconnect()
+java.lang.java.lang.IllegalStateException: java.lang.IllegalStateException: Tried to disconnect while not connected.

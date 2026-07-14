@@ -1,0 +1,31 @@
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+  Building model...
+  Model init OK: sanity Tmax=2754.5K, I=2736.2809A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.1719V Tmax=3256.1K P03sph=144.5W steps=12
+  Phase 2: erosion loop...
+  SOLVING step=1 t=10.000h loss=0.0146
+  SOLVED step=1 Tmax=3258.1K P03escape=141.67W
+  SOLVING step=2 t=20.000h loss=0.0284
+  SOLVED step=2 Tmax=3260.1K P03escape=139.12W
+  SOLVING step=3 t=30.000h loss=0.0417
+  SOLVED step=3 Tmax=3261.9K P03escape=136.54W
+  SOLVING step=4 t=40.000h loss=0.0544
+  SOLVED step=4 Tmax=3263.9K P03escape=133.96W
+  SOLVING step=5 t=50.000h loss=0.0666
+  SOLVED step=5 Tmax=3265.7K P03escape=131.41W
+  STEP=5 t=50.00h loss=0.0666
+  SOLVING step=6 t=60.000h loss=0.0782
+  SOLVED step=6 Tmax=3267.6K P03escape=128.92W
+  SOLVING step=7 t=70.000h loss=0.0894
+  SOLVED step=7 Tmax=3269.3K P03escape=126.51W
+  SOLVING step=8 t=80.000h loss=0.1001
+  SOLVED step=8 Tmax=3270.8K P03escape=124.11W
+  SOLVING step=9 t=90.000h loss=0.1103
+  SOLVED step=9 Tmax=3272.5K P03escape=121.78W
+  SOLVING step=10 t=100.000h loss=0.1202
+  SOLVED step=10 Tmax=3274.2K P03escape=119.56W
+{"case_id": "D1_B2_official_cylinder", "family": "cylinder", "role": "official_baseline_control", "runMode": "lifecycle", "timestamp": "2026-07-13T23:38:39.631046+08:00", "radii_mm": "[2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5]", "physicsVersion": "thermal_s2s_v2", "metricVersion": "radiation_escape_v2", "geometryVersion": "cylinder_segmented_v1", "radiationEscapeMethod": "s2s_radiosity_famb", "spectralSplit_um": 3.0, "thermalAmbient_K": 293.15, "scoreAmbientTarget_K": 0.0, "gitCommit": "39b4545", "gitDirty": true, "pythonVersion": "3.11.15", "mphVersion": "1.3.1", "Vwork_V": 1.171875, "initialTmax_K": 3256.1220829508993, "Tmin_K": 293.1500178875092, "Tmean_K": 1989.2558539256486, "U_pct": 148.94876690779543, "lifetimeH": 100.0, "initialP03gross_W": 144.47075311037514, "initialPradGross_W": 153.97435567783583, "initialP03escape_W": 144.46923017842835, "initialPradEscape_W": 154.0727976478777, "initialP03sphere_W": 144.46923017842835, "initialPradSphere_W": 154.0727976478777, "initialP03selfAbsorbed_W": 0.0015229319467948699, "initialSelfViewLossRaw_pct": 0.0010541455028101332, "initialSelfViewLoss_pct": 0.0010541455028101332, "initialRadiationNumericalExcess_pct": 0.0, "initialP03ambient_W": 7.35499843397364e-06, "initialAmbient03ToEscape_pct": 5.091048401718322e-06, "initialFambAreaAvg": 1.0, "lifeAvgP03gross_W": 133.60693096128824, "lifeAvgPradGross_W": 142.74172156022968, "lifeAvgP03escape_W": 131.602819869932, "lifeAvgPradEscape_W": 140.7639783658399, "lifeAvgP03sphere_W": 131.602819869932, "lifeAvgPradSphere_W": 140.7639783658399, "lifeTotalP03gross_J": 48098495.14606377, "lifeTotalPradGross_J": 51387019.76168268, "lifeTotalP03escape_J": 47377015.153175525, "lifeTotalPradEscape_J": 50675032.21170236, "lifeTotalP03sphere_J": 47377015.153175525, "lifeTotalP03selfAbsorbed_J": 721479.992888242, "selfViewLossRaw_pct": 1.500005334256882, "selfViewLoss_pct": 1.500005334256882, "radiationNumericalExcess_pct": 0.0, "maxErosionTmax_K": 3274.2138703652863, "overtempStep": 10, "overtempTimeH": 100.0, "overtempTmax_K": 3274.2138703652863, "failureReached": false, "erosionSteps": 10, "erosionSolveRetries": 0, "status": "FAIL_OVERTEMP_DURING_EROSION", "elapsed_sec": 766.0, "voltagePolicy": "max_safe", "voltageObjective": "lifeTotalP03sphere_J", "voltageCandidateCount": 1, "voltageMaxSafe_V": 1.171875, "runnerStatus": "FAIL_OVERTEMP_DURING_EROSION"}
+COMSOL disconnected.

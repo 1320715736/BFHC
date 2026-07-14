@@ -1,0 +1,36 @@
+Traceback (most recent call last):
+  File "SourceFile", line 99, in com.comsol.model.util.ModelUtil.createUnique
+Exception: Java Exception
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\VScode\project\BFHC\cylinder_family\ML\d1_metric_v2_controls.py", line 182, in main
+    result = runner.evaluate(radii_m)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\cylinder_family\ML\comsol_runner.py", line 1118, in evaluate
+    self._init_model(radii_m)
+  File "D:\VScode\project\BFHC\cylinder_family\ML\comsol_runner.py", line 150, in _init_model
+    self.model = self.client.create("tungsten_opt")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\conda_envs\BFHC\Lib\site-packages\mph\client.py", line 360, in create
+    java = self.java.createUnique('model')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+com.comsol.util.exceptions.com.comsol.util.exceptions.FlException: Exception:
+	com.comsol.util.exceptions.FlException: 未连接到服务器。
+Messages:
+	Not connected to a server
+
+Error while disconnecting client at session clean-up.
+Traceback (most recent call last):
+  File "SourceFile", line 290, in com.comsol.model.util.ModelUtil.disconnect
+Exception: Java Exception
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\BFHC\Lib\site-packages\mph\session.py", line 160, in cleanup
+    client.disconnect()
+  File "D:\conda_envs\BFHC\Lib\site-packages\mph\client.py", line 441, in disconnect
+    self.java.disconnect()
+java.lang.java.lang.IllegalStateException: java.lang.IllegalStateException: Tried to disconnect while not connected.

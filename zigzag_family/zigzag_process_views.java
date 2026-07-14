@@ -391,7 +391,7 @@
         // S2S（MultipleSpectralBands，ε₀₃=0.35，ε_rest=0.15）
         model.component("comp1").physics().create("rad","SurfaceToSurfaceRadiation","geom1");
         model.component("comp1").physics("rad").prop("RadiationSettings").set("wavelengthDependenceOfSurfaceProperties","MultipleSpectralBands");
-        model.component("comp1").physics("rad").prop("RadiationSettings").set("lambda_r","lam03");
+        model.component("comp1").physics("rad").prop("RadiationSettings").set("lambda_r","3");
         model.component("comp1").physics("rad").create("dsZZ","DiffuseSurface",2);
         model.component("comp1").physics("rad").feature("dsZZ").selection().all();
         model.component("comp1").physics("rad").feature("dsZZ").set("defineSurfaceEmissivityOnEachSide","0");
@@ -446,11 +446,17 @@
     model.result().numerical("IinZZ").selection().named("selInZZ");
     model.result().numerical("IinZZ").set("expr",new String[]{"ec.Jx*nx+ec.Jy*ny+ec.Jz*nz"});
     model.result().numerical().create("P03emitZZ","IntSurface");
-    model.result().numerical("P03emitZZ").selection().named("selFreeZZ");
-    model.result().numerical("P03emitZZ").set("expr",new String[]{q03Expr});
+    model.result().numerical("P03emitZZ").selection().all();
+    model.result().numerical("P03emitZZ").set("expr",new String[]{"rad.epsilonu_band1*rad.ebu1"});
     model.result().numerical().create("PradEmitZZ","IntSurface");
-    model.result().numerical("PradEmitZZ").selection().named("selFreeZZ");
-    model.result().numerical("PradEmitZZ").set("expr",new String[]{qradExpr});
+    model.result().numerical("PradEmitZZ").selection().all();
+    model.result().numerical("PradEmitZZ").set("expr",new String[]{"rad.epsilonu_band1*rad.ebu1+rad.epsilonu_band2*rad.ebu2"});
+    model.result().numerical().create("P03escapeZZ","IntSurface");
+    model.result().numerical("P03escapeZZ").selection().all();
+    model.result().numerical("P03escapeZZ").set("expr",new String[]{"rad.J_band1*rad.Famb1"});
+    model.result().numerical().create("PradEscapeZZ","IntSurface");
+    model.result().numerical("PradEscapeZZ").selection().all();
+    model.result().numerical("PradEscapeZZ").set("expr",new String[]{"rad.J_band1*rad.Famb1+rad.J_band2*rad.Famb2"});
 
     for(int bi=0;bi<blkCount;bi++){
         String tTag="TintBlk_"+(bi+1);
@@ -493,7 +499,8 @@
         double Icur=Math.abs(model.result().numerical("IinZZ").getReal()[0][0]);
         double P03=model.result().numerical("P03emitZZ").getReal()[0][0];
         double Prad=model.result().numerical("PradEmitZZ").getReal()[0][0];
-        double PradSph=Prad, P03Sph=P03;
+        double P03Sph=model.result().numerical("P03escapeZZ").getReal()[0][0];
+        double PradSph=model.result().numerical("PradEscapeZZ").getReal()[0][0];
         double vErr=Math.abs(Vol-V0)/V0;
         solRes[0]=Tmx; solRes[1]=Tmn; solRes[2]=Icur; solRes[3]=P03; solRes[4]=Prad;
         solRes[5]=P03Sph; solRes[6]=PradSph; solRes[7]=vErr;
@@ -521,7 +528,8 @@
                 double Icur=Math.abs(model.result().numerical("IinZZ").getReal()[0][0]);
                 double P03=model.result().numerical("P03emitZZ").getReal()[0][0];
                 double Prad=model.result().numerical("PradEmitZZ").getReal()[0][0];
-                double PradSph=Prad; double P03Sph=P03;
+                double P03Sph=model.result().numerical("P03escapeZZ").getReal()[0][0];
+                double PradSph=model.result().numerical("PradEscapeZZ").getReal()[0][0];
                 double vErr=Math.abs(Vol-V0)/V0;
                 double[] gRes={Tmx,Tmn,Icur,P03,Prad,P03Sph,PradSph,vErr,(Tmx<tempLimitK)?1:0,(vErr<=volTol)?1:0,(Icur>currentTol)?1:0};
                 if(gRes[8]>0&&gRes[9]>0&&gRes[10]>0){lowV=gV;lowRes=gRes;}
@@ -540,7 +548,8 @@
             double Icur=Math.abs(model.result().numerical("IinZZ").getReal()[0][0]);
             double P03=model.result().numerical("P03emitZZ").getReal()[0][0];
             double Prad=model.result().numerical("PradEmitZZ").getReal()[0][0];
-            double PradSph=Prad; double P03Sph=P03;
+            double P03Sph=model.result().numerical("P03escapeZZ").getReal()[0][0];
+            double PradSph=model.result().numerical("PradEscapeZZ").getReal()[0][0];
             double vErr=Math.abs(Vol-V0)/V0;
             double[] nRes={Tmx,Tmn,Icur,P03,Prad,P03Sph,PradSph,vErr,(Tmx<tempLimitK)?1:0,(vErr<=volTol)?1:0,(Icur>currentTol)?1:0};
             if(nRes[8]>0&&nRes[9]>0&&nRes[10]>0){lowV=nV;lowRes=nRes;}
@@ -559,7 +568,8 @@
             double Icur=Math.abs(model.result().numerical("IinZZ").getReal()[0][0]);
             double P03=model.result().numerical("P03emitZZ").getReal()[0][0];
             double Prad=model.result().numerical("PradEmitZZ").getReal()[0][0];
-            double PradSph=Prad; double P03Sph=P03;
+            double P03Sph=model.result().numerical("P03escapeZZ").getReal()[0][0];
+            double PradSph=model.result().numerical("PradEscapeZZ").getReal()[0][0];
             double vErr=Math.abs(Vol-V0)/V0;
             double[] mRes={Tmx,Tmn,Icur,P03,Prad,P03Sph,PradSph,vErr,(Tmx<tempLimitK)?1:0,(vErr<=volTol)?1:0,(Icur>currentTol)?1:0};
             if(mRes[8]>0&&mRes[9]>0&&mRes[10]>0){lowV=mV;lowRes=mRes;}
@@ -773,8 +783,8 @@
                 double Ic=Math.abs(model.result().numerical("IinZZ").getReal()[0][0]);
                 curP03=model.result().numerical("P03emitZZ").getReal()[0][0];
                 curPrad=model.result().numerical("PradEmitZZ").getReal()[0][0];
-                curPrads=curPrad;
-                curP03s=curP03;
+                curP03s=model.result().numerical("P03escapeZZ").getReal()[0][0];
+                curPrads=model.result().numerical("PradEscapeZZ").getReal()[0][0];
             } catch(Exception solEx) {
                 System.out.println("  WARN solve step "+macro+": "+solEx.getMessage());
                 failed=true;
@@ -826,9 +836,11 @@
     //  Phase 3: 输出
     // ================================================================
     double lifetimeH=timeS/3600.0;
+    double avgP03gross=(timeS>0)?p03Int/timeS:Double.NaN;
     double avgP03s=(timeS>0)?p03sInt/timeS:Double.NaN;
     double avgPrads=(timeS>0)?pradsInt/timeS:Double.NaN;
-    double svLoss=(p03Int>0)?(1.0-p03sInt/p03Int)*100.0:Double.NaN;
+    double svLossRaw=(p03Int>0)?(1.0-p03sInt/p03Int)*100.0:Double.NaN;
+    double svLoss=Double.isNaN(svLossRaw)?Double.NaN:Math.max(0.0,svLossRaw);
 
     System.out.println("============================================================");
     System.out.println("  ZIGZAG BASELINE RESULT  (MultipleSpectralBands S2S)");
@@ -850,7 +862,7 @@
     System.out.println("  status             = "+status);
     System.out.println("============================================================");
 
-    System.out.println("RESULT_HEADER=Vwork_V,initialTmax_K,Tmin_K,Tmean_K,U_pct,maxErosionTmax_K,lifetimeH,initialP03sphere_W,initialPradSphere_W,lifeAvgP03sphere_W,lifeAvgPradSphere_W,lifeTotalP03sphere_J,selfViewLoss_pct,failureReached,erosionSteps,overtempStep,overtempTimeH,overtempTmax_K,status");
+    System.out.println("RESULT_HEADER=Vwork_V,initialTmax_K,Tmin_K,Tmean_K,U_pct,maxErosionTmax_K,lifetimeH,initialP03sphere_W,initialPradSphere_W,lifeAvgP03sphere_W,lifeAvgPradSphere_W,lifeTotalP03sphere_J,selfViewLoss_pct,failureReached,erosionSteps,overtempStep,overtempTimeH,overtempTmax_K,status,metricVersion,initialP03gross_W,initialP03escape_W,initialP03selfAbsorbed_W,lifeAvgP03gross_W,lifeAvgP03escape_W,lifeTotalP03gross_J,lifeTotalP03escape_J,selfViewLossRaw_pct");
     System.out.println("RESULT="
         +String.format("%.4f",Vwork)+","
         +String.format("%.1f",r0Res[0])+","
@@ -869,7 +881,12 @@
         +overtempStep+","
         +String.format("%.4f",overtempTimeH)+","
         +String.format("%.1f",overtempTmax)+","
-        +status);
+        +status+",radiation_escape_v2,"
+            +String.format("%.2f",r0Res[3])+","+String.format("%.2f",r0Res[5])+","
+        +String.format("%.2f",Math.max(0.0,r0Res[3]-r0Res[5]))+","
+        +String.format("%.2f",avgP03gross)+","+String.format("%.2f",avgP03s)+","
+        +String.format("%.2f",p03Int)+","+String.format("%.2f",p03sInt)+","
+        +String.format("%.6f",svLossRaw));
 
     // ================================================================
     // Phase 4: create four independent stage datasets in COMSOL Results.

@@ -65,6 +65,13 @@ class COMSOLRunner:
         self.max_voltage_iters = 20
         self.voltage_policy = "max_safe"
         self.voltage_objective = "lifeTotalP03sphere_J"
+        self.metric_version = "radiation_escape_v2"
+        self.physics_version = "thermal_s2s_v2"
+        self.geometry_version = "zigzag_blocks_v1"
+        self.radiation_escape_method = "s2s_radiosity_famb"
+        self.spectral_split_um = 3.0
+        self.thermal_ambient_K = 293.15
+        self.score_ambient_target_K = 0.0
         self.voltage_candidate_ratios = (
             1.0, 0.95, 0.90, 0.85, 0.80, 0.70, 0.60)
         self.Aev = 3.9e9
@@ -72,6 +79,7 @@ class COMSOLRunner:
         self.failure_fraction = 0.20
         self.MAX_BLOCK_SLOTS = 64
         self.max_erosion_steps = 50
+        self.max_erosion_solve_retries = 2
         self.max_lifetime_h = 200.0   # 侵蚀循环最大仿真时长，避免低蒸发率构型无限运行
 
         # 材料属性表达式（与 zigzag_baseline.java 一致，含 max guard）
@@ -263,6 +271,66 @@ class COMSOLRunner:
         except Exception:
             return False
 
+    def _radiation_loss_metrics(self, gross, escape):
+        """Return raw and reporting-safe self-view loss diagnostics."""
+        if (not self._finite_number(gross) or not self._finite_number(escape)
+                or float(gross) <= 0.0):
+            nan = float('nan')
+            return {
+                "self_absorbed": nan,
+                "loss_raw_pct": nan,
+                "loss_pct": nan,
+                "numerical_excess_pct": nan,
+            }
+
+        gross = float(gross)
+        escape = float(escape)
+        raw_pct = (1.0 - escape / gross) * 100.0
+        return {
+            "self_absorbed": max(0.0, gross - escape),
+            "loss_raw_pct": raw_pct,
+            "loss_pct": max(0.0, raw_pct),
+            "numerical_excess_pct": max(0.0, -raw_pct),
+        }
+
+    def _lifecycle_radiation_fields(
+            self, initial, time_s, p03_gross_j, prad_gross_j,
+            p03_escape_j, prad_escape_j):
+        """Build explicit v2 radiation fields plus legacy compatibility aliases."""
+        avg = lambda value: (value / time_s) if time_s > 0.0 else float('nan')
+        loss = self._radiation_loss_metrics(p03_gross_j, p03_escape_j)
+        return {
+            "initialP03gross_W": initial["P03steady"],
+            "initialPradGross_W": initial["PradSteady"],
+            "initialP03escape_W": initial["P03sphere"],
+            "initialPradEscape_W": initial["PradSphere"],
+            "initialP03sphere_W": initial["P03sphere"],
+            "initialPradSphere_W": initial["PradSphere"],
+            "initialP03selfAbsorbed_W": initial["P03selfAbsorbed"],
+            "initialSelfViewLossRaw_pct": initial["selfViewLossRaw_pct"],
+            "initialSelfViewLoss_pct": initial["selfViewLoss_pct"],
+            "initialRadiationNumericalExcess_pct":
+                initial["radiationNumericalExcess_pct"],
+            "initialP03ambient_W": initial["P03ambient"],
+            "initialAmbient03ToEscape_pct": initial["ambient03ToEscape_pct"],
+            "initialFambAreaAvg": initial["FambAreaAvg"],
+            "lifeAvgP03gross_W": avg(p03_gross_j),
+            "lifeAvgPradGross_W": avg(prad_gross_j),
+            "lifeAvgP03escape_W": avg(p03_escape_j),
+            "lifeAvgPradEscape_W": avg(prad_escape_j),
+            "lifeAvgP03sphere_W": avg(p03_escape_j),
+            "lifeAvgPradSphere_W": avg(prad_escape_j),
+            "lifeTotalP03gross_J": p03_gross_j,
+            "lifeTotalPradGross_J": prad_gross_j,
+            "lifeTotalP03escape_J": p03_escape_j,
+            "lifeTotalPradEscape_J": prad_escape_j,
+            "lifeTotalP03sphere_J": p03_escape_j,
+            "lifeTotalP03selfAbsorbed_J": loss["self_absorbed"],
+            "selfViewLossRaw_pct": loss["loss_raw_pct"],
+            "selfViewLoss_pct": loss["loss_pct"],
+            "radiationNumericalExcess_pct": loss["numerical_excess_pct"],
+        }
+
     def _is_server_alive(self):
         """Quick check: returns False if COMSOL server is disconnected."""
         if self.client is None:
@@ -272,6 +340,16 @@ class COMSOLRunner:
             return True
         except Exception:
             return False
+
+    def _restart_at_geometry(self, N_RUNS, L_RUN_m, z_first_m,
+                             blocks, side, R_env, voltage):
+        """Restart COMSOL and restore the exact current erosion geometry."""
+        print("  Restarting COMSOL and restoring current erosion geometry...")
+        self.stop()
+        self.start()
+        self._init_model(N_RUNS, L_RUN_m, z_first_m)
+        self._rebuild(blocks, side, R_env, geom_only=True)
+        return self._solve_prepared(voltage)
 
     def _clear_solutions(self, remove=False):
         """清理求解状态；初始建模可 remove，后续求解只 clearSolution。
@@ -417,7 +495,8 @@ class COMSOLRunner:
         j.param().set("eps03",   "0.35",  "Emissivity 0-3um")
         j.param().set("epsRest", "0.15",  "Emissivity >3um")
         j.param().set("rhoMassW", "19350[kg/m^3]", "Tungsten density")
-        j.param().set("Tamb",  "293.15[K]", "Ambient temperature for S2S solve")
+        j.param().set("Tamb", f"{self.thermal_ambient_K}[K]",
+                      "Ambient temperature for S2S solve")
         j.param().set("Telectrode", "293.15[K]", "Copper electrode temperature")
         j.param().set("Vapp",  "1[V]",      "Applied DC voltage")
         j.param().set("lam03", "3[um]",     "Upper wavelength bound")
@@ -501,12 +580,38 @@ class COMSOLRunner:
         j.result().numerical("AsurfZZ").set("expr", ["1"])
 
         j.result().numerical().create("P03emitZZ", "IntSurface")
-        j.result().numerical("P03emitZZ").selection().named("selFreeZZ")
-        j.result().numerical("P03emitZZ").set("expr", [self.q03_expr])
+        j.result().numerical("P03emitZZ").selection().all()
+        j.result().numerical("P03emitZZ").set(
+            "expr", ["rad.epsilonu_band1*rad.ebu1"])
 
         j.result().numerical().create("PradEmitZZ", "IntSurface")
-        j.result().numerical("PradEmitZZ").selection().named("selFreeZZ")
-        j.result().numerical("PradEmitZZ").set("expr", [self.qrad_expr])
+        j.result().numerical("PradEmitZZ").selection().all()
+        j.result().numerical("PradEmitZZ").set(
+            "expr", ["rad.epsilonu_band1*rad.ebu1+"
+                     "rad.epsilonu_band2*rad.ebu2"])
+
+        j.result().numerical().create("P03escapeZZ", "IntSurface")
+        j.result().numerical("P03escapeZZ").selection().all()
+        j.result().numerical("P03escapeZZ").set(
+            "expr", ["rad.J_band1*rad.Famb1"])
+
+        j.result().numerical().create("PradEscapeZZ", "IntSurface")
+        j.result().numerical("PradEscapeZZ").selection().all()
+        j.result().numerical("PradEscapeZZ").set(
+            "expr", ["rad.J_band1*rad.Famb1+"
+                     "rad.J_band2*rad.Famb2"])
+
+        j.result().numerical().create("P03ambientZZ", "IntSurface")
+        j.result().numerical("P03ambientZZ").selection().all()
+        j.result().numerical("P03ambientZZ").set("expr", ["rad.Gamb1"])
+
+        j.result().numerical().create("FambAreaZZ", "IntSurface")
+        j.result().numerical("FambAreaZZ").selection().all()
+        j.result().numerical("FambAreaZZ").set("expr", ["rad.Famb1"])
+
+        j.result().numerical().create("AradZZ", "IntSurface")
+        j.result().numerical("AradZZ").selection().all()
+        j.result().numerical("AradZZ").set("expr", ["1"])
 
         for i in range(self._n_blocks):
             int_t_tag = f"TintBlk_{i + 1}"
@@ -706,7 +811,7 @@ class COMSOLRunner:
         j.component("comp1").physics("rad").prop("RadiationSettings").set(
             "wavelengthDependenceOfSurfaceProperties", "MultipleSpectralBands")
         j.component("comp1").physics("rad").prop("RadiationSettings").set(
-            "lambda_r", "lam03")
+            "lambda_r", str(self.spectral_split_um))
 
         j.component("comp1").physics("rad").create("dsZZ", "DiffuseSurface", 2)
         ds = j.component("comp1").physics("rad").feature("dsZZ")
@@ -778,7 +883,14 @@ class COMSOLRunner:
             "Tmean": float('nan'), "U_pct": float('nan'),
             "I": float('nan'), "P03steady": float('nan'),
             "PradSteady": float('nan'), "P03sphere": float('nan'),
-            "PradSphere": float('nan'), "vol_err": float('nan'),
+            "PradSphere": float('nan'), "P03gross": float('nan'),
+            "PradGross": float('nan'), "P03escape": float('nan'),
+            "PradEscape": float('nan'), "P03selfAbsorbed": float('nan'),
+            "P03ambient": float('nan'), "ambient03ToEscape_pct": float('nan'),
+            "FambAreaAvg": float('nan'), "selfViewLossRaw_pct": float('nan'),
+            "selfViewLoss_pct": float('nan'),
+            "radiationNumericalExcess_pct": float('nan'),
+            "vol_err": float('nan'),
             "temp_ok": False, "volume_ok": False, "current_ok": False,
             "block_Tavg": [0.0] * self._n_blocks,
         }
@@ -809,15 +921,67 @@ class COMSOLRunner:
             I = abs(float(j.result().numerical("IinZZ").getReal()[0][0]))
             P03  = float(j.result().numerical("P03emitZZ").getReal()[0][0])
             Prad = float(j.result().numerical("PradEmitZZ").getReal()[0][0])
-
-            PradSphere = Prad
-            P03sphere = P03
+            P03sphere = float(
+                j.result().numerical("P03escapeZZ").getReal()[0][0])
+            PradSphere = float(
+                j.result().numerical("PradEscapeZZ").getReal()[0][0])
+            P03ambient = float(
+                j.result().numerical("P03ambientZZ").getReal()[0][0])
+            Famb_area = float(
+                j.result().numerical("FambAreaZZ").getReal()[0][0])
+            A_rad = float(j.result().numerical("AradZZ").getReal()[0][0])
+            Famb_area_avg = (Famb_area / A_rad
+                             if A_rad > 1e-20 else float('nan'))
+            ambient_ratio = (P03ambient / P03sphere * 100.0
+                             if P03sphere > 1e-20 else float('nan'))
+            loss = self._radiation_loss_metrics(P03, P03sphere)
 
             # Per-block temperatures drive erosion. Prefer COMSOL
             # lateral-surface integrals; fallback is local.
             block_Tavg = self._read_block_temperature_averages(Tmin, Tmax)
 
             vol_err = abs(V - self.V0) / self.V0
+
+            finite_checks = {
+                "Tmax": Tmax,
+                "Tmin": Tmin,
+                "Tmean": Tmean,
+                "U_pct": U_pct,
+                "volume": V,
+                "current": I,
+                "P03steady": P03,
+                "PradSteady": Prad,
+                "P03sphere": P03sphere,
+                "PradSphere": PradSphere,
+                "P03ambient": P03ambient,
+                "ambient03ToEscape_pct": ambient_ratio,
+                "FambAreaAvg": Famb_area_avg,
+                "selfViewLossRaw_pct": loss["loss_raw_pct"],
+                "selfViewLoss_pct": loss["loss_pct"],
+                "radiationNumericalExcess_pct": loss["numerical_excess_pct"],
+                "vol_err": vol_err,
+            }
+            invalid = [key for key, value in finite_checks.items()
+                       if not self._finite_number(value)]
+            invalid += [f"block_Tavg[{i}]"
+                        for i, value in enumerate(block_Tavg)
+                        if not self._finite_number(value)]
+            if invalid:
+                raise RuntimeError(
+                    "Invalid non-finite COMSOL result: " + ", ".join(invalid))
+            negative_powers = [
+                name for name, value in (
+                    ("P03steady", P03),
+                    ("PradSteady", Prad),
+                    ("P03sphere", P03sphere),
+                    ("PradSphere", PradSphere),
+                    ("P03ambient", P03ambient),
+                ) if value < 0.0
+            ]
+            if negative_powers:
+                raise RuntimeError(
+                    "Invalid negative radiation result: "
+                    + ", ".join(negative_powers))
 
             result.update({
                 "solve_ok": True,
@@ -828,6 +992,15 @@ class COMSOLRunner:
                 "Pelec": voltage * I,
                 "P03steady": P03, "PradSteady": Prad,
                 "P03sphere": P03sphere, "PradSphere": PradSphere,
+                "P03gross": P03, "PradGross": Prad,
+                "P03escape": P03sphere, "PradEscape": PradSphere,
+                "P03selfAbsorbed": loss["self_absorbed"],
+                "P03ambient": P03ambient,
+                "ambient03ToEscape_pct": ambient_ratio,
+                "FambAreaAvg": Famb_area_avg,
+                "selfViewLossRaw_pct": loss["loss_raw_pct"],
+                "selfViewLoss_pct": loss["loss_pct"],
+                "radiationNumericalExcess_pct": loss["numerical_excess_pct"],
                 "vol_err": vol_err,
                 "temp_ok":    Tmax < self.temp_limit_K,
                 "volume_ok":  vol_err <= self.vol_tol,
@@ -980,6 +1153,13 @@ class COMSOLRunner:
         result["voltagePolicy"] = policy
         result["voltageObjective"] = objective
         result["voltageCandidateCount"] = candidate_count
+        result["metricVersion"] = self.metric_version
+        result["physicsVersion"] = self.physics_version
+        result["geometryVersion"] = self.geometry_version
+        result["radiationEscapeMethod"] = self.radiation_escape_method
+        result["spectralSplit_um"] = self.spectral_split_um
+        result["thermalAmbient_K"] = self.thermal_ambient_K
+        result["scoreAmbientTarget_K"] = self.score_ambient_target_K
         if max_safe_v is not None:
             result["voltageMaxSafe_V"] = max_safe_v
         if scan_summary:
@@ -1171,6 +1351,7 @@ class COMSOLRunner:
         prev_prads = r0_res["PradSphere"]
         block_tavg = r0_res["block_Tavg"]
         max_erosion_tmax = r0_res["Tmax"]
+        erosion_retry_count = 0
 
         while macro < self.max_erosion_steps and not failed:
             macro += 1
@@ -1217,41 +1398,34 @@ class COMSOLRunner:
             geom_side = min(block_sides)
             new_blocks = self.eroded_blocks(self._blocks0, side0, geom_side)
             new_Renv = self.compute_envelope(new_blocks)
-            try:
-                # ★ geom_only=True：只重建几何+网格，不重建 S2S/EC/材料 ★
-                # 与 zigzag_baseline.java 侵蚀循环一致，避免反复重建 S2S 导致服务器崩溃
-                self._rebuild(new_blocks, geom_side, new_Renv, geom_only=True)
-                r_now = self._solve_prepared(Vwork)
-            except ServerDisconnectError:
-                raise  # 断线不静默处理，直接向上抛出
-            except Exception as e:
-                if not self._is_server_alive():
-                    raise ServerDisconnectError(self._safe_exception_text(e))
-                failure = self._safe_exception_text(e)
-                print(f"  WARN: rebuild failed step {macro}: {failure}")
-                return self._annotate_voltage_result({
-                    "Vwork_V": Vwork,
-                    "initialTmax_K": r0_res["Tmax"],
-                    "Tmin_K": r0_res["Tmin"],
-                    "Tmean_K": r0_res["Tmean"],
-                    "U_pct": r0_res["U_pct"],
-                    "lifetimeH": time_s / 3600.0,
-                    "initialP03sphere_W": r0_res["P03sphere"],
-                    "initialPradSphere_W": r0_res["PradSphere"],
-                    "lifeAvgP03sphere_W": float('nan'),
-                    "lifeAvgPradSphere_W": float('nan'),
-                    "lifeTotalP03sphere_J": p03s_int,
-                    "selfViewLoss_pct": float('nan'),
-                    "maxErosionTmax_K": max_erosion_tmax,
-                    "failureReached": failed,
-                    "erosionSteps": macro,
-                    "status": "FAIL_EROSION_SOLVE",
-                    "failure": failure,
-                    "elapsed_sec": round(time.time() - t_start, 1),
-                }, policy, objective, max_safe_v)
+            print(f"  SOLVING step={macro} t={time_s / 3600.0:.3f}h "
+                  f"loss={max_loss:.4f}")
+            r_now = None
+            failure = ""
+            for attempt in range(self.max_erosion_solve_retries + 1):
+                try:
+                    if attempt == 0:
+                        self._rebuild(
+                            new_blocks, geom_side, new_Renv, geom_only=True)
+                        r_now = self._solve_prepared(Vwork)
+                    else:
+                        erosion_retry_count += 1
+                        print(f"  RETRY step {macro}: {attempt}/"
+                              f"{self.max_erosion_solve_retries}")
+                        r_now = self._restart_at_geometry(
+                            N_RUNS, L_RUN_m, z_first_m,
+                            new_blocks, geom_side, new_Renv, Vwork)
+                    if r_now.get("solve_ok", False):
+                        break
+                    failure = r_now.get("failure", "unknown solve failure")
+                except Exception as exc:
+                    failure = self._safe_exception_text(exc)
+                    r_now = None
+                if attempt < self.max_erosion_solve_retries:
+                    print(f"  WARN step {macro} attempt {attempt + 1} failed: "
+                          f"{failure}")
 
-            if not r_now["solve_ok"]:
-                failure = r_now.get("failure", "")
+            if r_now is None or not r_now.get("solve_ok", False):
                 print(f"  WARN: solve failed step {macro}: {failure}")
                 return self._annotate_voltage_result({
                     "Vwork_V": Vwork,
@@ -1260,19 +1434,20 @@ class COMSOLRunner:
                     "Tmean_K": r0_res["Tmean"],
                     "U_pct": r0_res["U_pct"],
                     "lifetimeH": time_s / 3600.0,
-                    "initialP03sphere_W": r0_res["P03sphere"],
-                    "initialPradSphere_W": r0_res["PradSphere"],
-                    "lifeAvgP03sphere_W": float('nan'),
-                    "lifeAvgPradSphere_W": float('nan'),
-                    "lifeTotalP03sphere_J": p03s_int,
-                    "selfViewLoss_pct": float('nan'),
+                    **self._lifecycle_radiation_fields(
+                        r0_res, time_s, p03_int, prad_int,
+                        p03s_int, prads_int),
                     "maxErosionTmax_K": max_erosion_tmax,
                     "failureReached": failed,
                     "erosionSteps": macro,
+                    "erosionSolveRetries": erosion_retry_count,
                     "status": "FAIL_EROSION_SOLVE",
                     "failure": failure,
                     "elapsed_sec": round(time.time() - t_start, 1),
                 }, policy, objective, max_safe_v)
+
+            print(f"  SOLVED step={macro} Tmax={r_now['Tmax']:.1f}K "
+                  f"P03escape={r_now['P03sphere']:.2f}W")
 
             # (e) 梯形积分
             if r_now["solve_ok"] and r_now["Tmax"] > max_erosion_tmax:
@@ -1291,10 +1466,6 @@ class COMSOLRunner:
             if r_now["solve_ok"] and r_now["Tmax"] >= self.temp_limit_K:
                 elapsed = time.time() - t_start
                 lifetime_h = time_s / 3600.0
-                avg_p03s = (p03s_int / time_s) if time_s > 0 else float('nan')
-                avg_prads = (prads_int / time_s) if time_s > 0 else float('nan')
-                sv_loss = ((1.0 - p03s_int / p03_int) * 100.0
-                           if (time_s > 0 and p03_int > 0) else float('nan'))
                 return self._annotate_voltage_result({
                     "Vwork_V": Vwork,
                     "initialTmax_K": r0_res["Tmax"],
@@ -1302,18 +1473,16 @@ class COMSOLRunner:
                     "Tmean_K": r0_res["Tmean"],
                     "U_pct": r0_res["U_pct"],
                     "lifetimeH": lifetime_h,
-                    "initialP03sphere_W": r0_res["P03sphere"],
-                    "initialPradSphere_W": r0_res["PradSphere"],
-                    "lifeAvgP03sphere_W": avg_p03s,
-                    "lifeAvgPradSphere_W": avg_prads,
-                    "lifeTotalP03sphere_J": p03s_int,
-                    "selfViewLoss_pct": sv_loss,
+                    **self._lifecycle_radiation_fields(
+                        r0_res, time_s, p03_int, prad_int,
+                        p03s_int, prads_int),
                     "maxErosionTmax_K": max_erosion_tmax,
                     "overtempStep": macro,
                     "overtempTimeH": lifetime_h,
                     "overtempTmax_K": r_now["Tmax"],
                     "failureReached": failed,
                     "erosionSteps": macro,
+                    "erosionSolveRetries": erosion_retry_count,
                     "status": "FAIL_OVERTEMP_DURING_EROSION",
                     "elapsed_sec": round(elapsed, 1),
                 }, policy, objective, max_safe_v)
@@ -1330,31 +1499,40 @@ class COMSOLRunner:
 
         # ---- Phase 3: 汇总结果 ----
         lifetime_h = time_s / 3600.0
-        avg_p03s  = (p03s_int  / time_s) if time_s > 0 else float('nan')
-        avg_prads = (prads_int / time_s) if time_s > 0 else float('nan')
-        sv_loss = ((1.0 - p03s_int / p03_int) * 100.0
-                   if (time_s > 0 and p03_int > 0) else float('nan'))
 
         elapsed = time.time() - t_start
-        return self._annotate_voltage_result({
+        result = {
             "Vwork_V":              Vwork,
             "initialTmax_K":        r0_res["Tmax"],
             "Tmin_K":               r0_res["Tmin"],
             "Tmean_K":              r0_res["Tmean"],
             "U_pct":                r0_res["U_pct"],
             "lifetimeH":            lifetime_h,
-            "initialP03sphere_W":   r0_res["P03sphere"],
-            "initialPradSphere_W":  r0_res["PradSphere"],
-            "lifeAvgP03sphere_W":   avg_p03s,
-            "lifeAvgPradSphere_W":  avg_prads,
-            "lifeTotalP03sphere_J": p03s_int,
-            "selfViewLoss_pct":     sv_loss,
+            **self._lifecycle_radiation_fields(
+                r0_res, time_s, p03_int, prad_int, p03s_int, prads_int),
             "maxErosionTmax_K":     max_erosion_tmax,
             "failureReached":       failed,
             "erosionSteps":         macro,
+            "erosionSolveRetries":  erosion_retry_count,
             "status":               "OK",
             "elapsed_sec":          round(elapsed, 1),
-        }, policy, objective, max_safe_v)
+        }
+        required = [
+            "Vwork_V", "initialTmax_K", "Tmin_K", "Tmean_K", "U_pct",
+            "maxErosionTmax_K", "lifetimeH", "initialP03gross_W",
+            "initialP03escape_W", "lifeAvgP03gross_W",
+            "lifeAvgP03escape_W", "lifeTotalP03gross_J",
+            "lifeTotalP03escape_J", "selfViewLossRaw_pct",
+            "selfViewLoss_pct", "erosionSteps",
+        ]
+        invalid = [key for key in required
+                   if not self._finite_number(result.get(key))]
+        if invalid:
+            result["status"] = "FAIL_INVALID_RESULT"
+            result["failure"] = (
+                "Non-finite final metric(s): " + ", ".join(invalid))
+        return self._annotate_voltage_result(
+            result, policy, objective, max_safe_v)
 
     # ================================================================
     #  清理
@@ -1373,6 +1551,7 @@ class COMSOLRunner:
             except Exception:
                 pass  # 服务器已崩溃时 disconnect 会抛 IllegalStateException，静默忽略
             self.client = None
+        self.j = None
         print("COMSOL disconnected.")
 
 

@@ -1,0 +1,15 @@
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+  Building model: N=8 L=104.0mm zf=0.80mm side=0.5700mm nblk=17
+  Model init OK: sanity Tmax=668.9K I=3.0927A
+  Phase 1: voltage search...
+  PHASE1: Vwork=100.0000V Tmax=3254.5K P03sph=3578.3W steps=1
+  Phase 2: erosion loop...
+  STEP=5 t=1.11h loss=0.0500
+  STEP=10 t=2.64h loss=0.1000
+  STEP=15 t=4.80h loss=0.1500
+  STEP=20 t=7.91h loss=0.2000
+  STEP=21 t=7.91h loss=0.2000
+{"case_id": "D1_B3_reference_zigzag", "family": "zigzag", "role": "reference_baseline_control", "runMode": "lifecycle", "timestamp": "2026-07-13T23:07:43.212077+08:00", "N_RUNS": 8, "L_RUN_mm": 104.0, "z_first_mm": 0.8, "side_mm": 0.5700248399766747, "pathLength_mm": 846.0000000000001, "maxLifetimeCap_h": 200.0, "maxErosionSteps": 50, "physicsVersion": "thermal_s2s_v2", "metricVersion": "radiation_escape_v2", "geometryVersion": "zigzag_blocks_v1", "radiationEscapeMethod": "s2s_radiosity_famb", "spectralSplit_um": 3.0, "thermalAmbient_K": 293.15, "scoreAmbientTarget_K": 0.0, "gitCommit": "39b4545", "gitDirty": true, "pythonVersion": "3.11.15", "mphVersion": "1.3.1", "Vwork_V": 100.0, "initialTmax_K": 3254.4947448997386, "Tmin_K": 293.1499624586855, "Tmean_K": 3007.3885807255856, "U_pct": 98.4689774184943, "lifetimeH": 7.913366497541993, "initialP03gross_W": 3714.8004704960445, "initialPradGross_W": 3877.896142799593, "initialP03escape_W": 3578.345486528007, "initialPradEscape_W": 3739.43805647419, "initialP03sphere_W": 3578.345486528007, "initialPradSphere_W": 3739.43805647419, "initialP03selfAbsorbed_W": 136.4549839680376, "initialSelfViewLossRaw_pct": 3.6732789567515134, "initialSelfViewLoss_pct": 3.6732789567515134, "initialRadiationNumericalExcess_pct": 0.0, "initialP03ambient_W": 4.896861657014682e-05, "initialAmbient03ToEscape_pct": 1.3684708968015282e-06, "initialFambAreaAvg": 0.9048559471635264, "lifeAvgP03gross_W": 2943.165395797892, "lifeAvgPradGross_W": 3080.8377555963575, "lifeAvgP03escape_W": 2851.4046376955325, "lifeAvgPradEscape_W": 2987.7656208493254, "lifeAvgP03sphere_W": 2851.4046376955325, "lifeAvgPradSphere_W": 2987.7656208493254, "lifeTotalP03gross_J": 83845247.18339506, "lifeTotalPradGross_J": 87767273.80619526, "lifeTotalP03escape_J": 81231155.7511525, "lifeTotalPradEscape_J": 85115823.7195325, "lifeTotalP03sphere_J": 81231155.7511525, "lifeTotalP03selfAbsorbed_J": 2614091.4322425574, "selfViewLossRaw_pct": 3.1177574401143437, "selfViewLoss_pct": 3.1177574401143437, "radiationNumericalExcess_pct": 0.0, "maxErosionTmax_K": 3254.4947448997386, "failureReached": true, "erosionSteps": 21, "erosionSolveRetries": 0, "status": "OK", "elapsed_sec": 1807.5, "voltagePolicy": "max_safe", "voltageObjective": "lifeTotalP03sphere_J", "voltageCandidateCount": 1, "voltageMaxSafe_V": 100.0, "runnerStatus": "OK"}
+COMSOL disconnected.

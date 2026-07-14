@@ -65,10 +65,18 @@ CSV_HEADER = [
     "initialP03sphere_W", "initialPradSphere_W",
     "lifeAvgP03sphere_W", "lifeAvgPradSphere_W",
     "lifeTotalP03sphere_J", "eta_E_pct",
+    "initialP03gross_W", "initialP03escape_W",
+    "initialP03selfAbsorbed_W", "lifeAvgP03gross_W",
+    "lifeAvgP03escape_W", "lifeTotalP03gross_J",
+    "lifeTotalP03escape_J", "lifeTotalP03selfAbsorbed_J",
+    "selfViewLossRaw_pct", "radiationNumericalExcess_pct",
     "objectiveScore", "uPenalty_pctpt", "U_limit_pct",
     "selfViewLoss_pct", "failureReached", "erosionSteps",
     "overtempStep", "overtempTimeH", "overtempTmax_K",
     "runnerStatus", "status", "voltagePolicy", "voltageObjective",
+    "metricVersion", "physicsVersion", "geometryVersion",
+    "radiationEscapeMethod", "spectralSplit_um", "thermalAmbient_K",
+    "scoreAmbientTarget_K",
     "elapsed_sec",
 ]
 
@@ -99,9 +107,17 @@ def feasible_suggest_float(trial, name, lower, upper):
 
 
 def init_csv():
-    if not CSV_PATH.exists():
-        with open(CSV_PATH, "w", newline="", encoding="utf-8") as f:
-            csv.writer(f).writerow(CSV_HEADER)
+    if CSV_PATH.exists():
+        with open(CSV_PATH, newline="", encoding="utf-8") as f:
+            existing_header = next(csv.reader(f), [])
+        if existing_header != CSV_HEADER:
+            raise RuntimeError(
+                "Refusing to mix legacy and radiation_escape_v2 CSV rows. "
+                "Use new BFHC_CSV_FILE, BFHC_DB_FILE, and BFHC_STUDY_NAME values."
+            )
+        return
+    with open(CSV_PATH, "w", newline="", encoding="utf-8") as f:
+        csv.writer(f).writerow(CSV_HEADER)
 
 
 def append_csv(row_dict):

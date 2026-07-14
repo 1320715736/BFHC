@@ -1,0 +1,87 @@
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+  Building model...
+  Model init OK: sanity Tmax=2700.9K, I=1892.9002A
+  Phase 1: voltage search...
+  PHASE1: Vwork=1.1719V Tmax=3161.5K P03sph=197.0W steps=12
+  Phase 2: erosion loop...
+  SOLVING step=1 t=10.000h loss=0.0064
+  SOLVED step=1 Tmax=3164.2K P03escape=195.00W
+  SOLVING step=2 t=20.000h loss=0.0130
+  SOLVED step=2 Tmax=3166.5K P03escape=192.87W
+  SOLVING step=3 t=30.000h loss=0.0194
+  SOLVED step=3 Tmax=3168.3K P03escape=190.83W
+  SOLVING step=4 t=40.000h loss=0.0259
+  SOLVED step=4 Tmax=3171.1K P03escape=188.72W
+  SOLVING step=5 t=50.000h loss=0.0324
+  SOLVED step=5 Tmax=3173.4K P03escape=186.58W
+  STEP=5 t=50.00h loss=0.0324
+  SOLVING step=6 t=60.000h loss=0.0389
+  SOLVED step=6 Tmax=3175.5K P03escape=184.52W
+  SOLVING step=7 t=70.000h loss=0.0453
+  SOLVED step=7 Tmax=3177.8K P03escape=182.41W
+  SOLVING step=8 t=80.000h loss=0.0519
+  SOLVED step=8 Tmax=3180.1K P03escape=180.21W
+  SOLVING step=9 t=90.000h loss=0.0582
+  SOLVED step=9 Tmax=3182.5K P03escape=177.98W
+  SOLVING step=10 t=100.000h loss=0.0647
+  SOLVED step=10 Tmax=3184.6K P03escape=175.82W
+  STEP=10 t=100.00h loss=0.0647
+  SOLVING step=11 t=110.000h loss=0.0711
+  SOLVED step=11 Tmax=3186.8K P03escape=173.64W
+  SOLVING step=12 t=120.000h loss=0.0775
+  SOLVED step=12 Tmax=3189.0K P03escape=171.51W
+  SOLVING step=13 t=130.000h loss=0.0838
+  SOLVED step=13 Tmax=3191.2K P03escape=169.35W
+  SOLVING step=14 t=140.000h loss=0.0901
+  SOLVED step=14 Tmax=3193.5K P03escape=167.12W
+  SOLVING step=15 t=150.000h loss=0.0964
+  SOLVED step=15 Tmax=3195.6K P03escape=164.97W
+  STEP=15 t=150.00h loss=0.0964
+  SOLVING step=16 t=160.000h loss=0.1026
+  SOLVED step=16 Tmax=3197.9K P03escape=162.75W
+  SOLVING step=17 t=170.000h loss=0.1088
+  SOLVED step=17 Tmax=3200.0K P03escape=160.57W
+  SOLVING step=18 t=180.000h loss=0.1149
+  SOLVED step=18 Tmax=3202.2K P03escape=158.36W
+  SOLVING step=19 t=190.000h loss=0.1210
+  SOLVED step=19 Tmax=3204.2K P03escape=156.16W
+  SOLVING step=20 t=200.000h loss=0.1270
+  SOLVED step=20 Tmax=3206.3K P03escape=154.01W
+  STEP=20 t=200.00h loss=0.1270
+  SOLVING step=21 t=210.000h loss=0.1331
+  SOLVED step=21 Tmax=3208.2K P03escape=151.96W
+  SOLVING step=22 t=220.000h loss=0.1389
+  SOLVED step=22 Tmax=3210.5K P03escape=149.68W
+  SOLVING step=23 t=230.000h loss=0.1449
+  SOLVED step=23 Tmax=3212.4K P03escape=147.60W
+  SOLVING step=24 t=240.000h loss=0.1506
+  SOLVED step=24 Tmax=3214.4K P03escape=145.43W
+  SOLVING step=25 t=250.000h loss=0.1564
+  SOLVED step=25 Tmax=3216.2K P03escape=143.38W
+  STEP=25 t=250.00h loss=0.1564
+  SOLVING step=26 t=260.000h loss=0.1620
+  SOLVED step=26 Tmax=3217.9K P03escape=141.30W
+  SOLVING step=27 t=270.000h loss=0.1677
+  SOLVED step=27 Tmax=3220.0K P03escape=139.25W
+  SOLVING step=28 t=280.000h loss=0.1732
+  SOLVED step=28 Tmax=3222.0K P03escape=137.15W
+  SOLVING step=29 t=290.000h loss=0.1787
+  SOLVED step=29 Tmax=3223.9K P03escape=135.23W
+  SOLVING step=30 t=300.000h loss=0.1841
+  SOLVED step=30 Tmax=3225.4K P03escape=133.25W
+  STEP=30 t=300.00h loss=0.1841
+  SOLVING step=31 t=310.000h loss=0.1894
+  SOLVED step=31 Tmax=3227.4K P03escape=131.24W
+  SOLVING step=32 t=320.000h loss=0.1947
+  SOLVED step=32 Tmax=3228.9K P03escape=129.34W
+  SOLVING step=33 t=330.000h loss=0.1999
+  SOLVED step=33 Tmax=3230.7K P03escape=127.40W
+  SOLVING step=34 t=330.130h loss=0.2000
+  SOLVED step=34 Tmax=3230.8K P03escape=127.41W
+  SOLVING step=35 t=330.488h loss=0.2002
+  SOLVED step=35 Tmax=3230.8K P03escape=127.34W
+  STEP=35 t=330.49h loss=0.2002
+{"case_id": "D1_cylinder_trial68", "family": "cylinder", "role": "legacy_lead_control", "runMode": "lifecycle", "timestamp": "2026-07-13T23:54:11.233248+08:00", "radii_mm": "[1.9063832640319742, 1.9423869762989763, 3.6474884452463625, 2.0709089131869587, 2.0709089131869587, 3.6474884452463625, 1.9423869762989763, 1.9063832640319742]", "physicsVersion": "thermal_s2s_v2", "metricVersion": "radiation_escape_v2", "geometryVersion": "cylinder_segmented_v1", "radiationEscapeMethod": "s2s_radiosity_famb", "spectralSplit_um": 3.0, "thermalAmbient_K": 293.15, "scoreAmbientTarget_K": 0.0, "gitCommit": "39b4545", "gitDirty": true, "pythonVersion": "3.11.15", "mphVersion": "1.3.1", "Vwork_V": 1.171875, "initialTmax_K": 3161.5005385864924, "Tmin_K": 293.1494153603508, "Tmean_K": 2257.2500804860147, "U_pct": 127.07281076311001, "lifetimeH": 330.48816792051866, "initialP03gross_W": 219.6539422815144, "initialPradGross_W": 236.3539825572993, "initialP03escape_W": 197.01291562131382, "initialPradEscape_W": 212.99100366001522, "initialP03sphere_W": 197.01291562131382, "initialPradSphere_W": 212.99100366001522, "initialP03selfAbsorbed_W": 22.641026660200566, "initialSelfViewLossRaw_pct": 10.307589486003044, "initialSelfViewLoss_pct": 10.307589486003044, "initialRadiationNumericalExcess_pct": 0.0, "initialP03ambient_W": 8.027025156139405e-06, "initialAmbient03ToEscape_pct": 4.07436493735693e-06, "initialFambAreaAvg": 0.8204330201982615, "lifeAvgP03gross_W": 181.64089697556693, "lifeAvgPradGross_W": 196.8268858643768, "lifeAvgP03escape_W": 161.7800200847244, "lifeAvgPradEscape_W": 176.29364822292393, "lifeAvgP03sphere_W": 161.7800200847244, "lifeAvgPradSphere_W": 176.29364822292393, "lifeTotalP03gross_J": 216108602.13922125, "lifeTotalPradGross_J": 234176244.86454812, "lifeTotalP03escape_J": 192478976.798203, "lifeTotalPradEscape_J": 209746673.3419867, "lifeTotalP03sphere_J": 192478976.798203, "lifeTotalP03selfAbsorbed_J": 23629625.34101826, "selfViewLossRaw_pct": 10.93414380876686, "selfViewLoss_pct": 10.93414380876686, "radiationNumericalExcess_pct": 0.0, "maxErosionTmax_K": 3230.77509002435, "failureReached": true, "erosionSteps": 35, "erosionSolveRetries": 0, "status": "OK", "elapsed_sec": 1696.1, "voltagePolicy": "max_safe", "voltageObjective": "lifeTotalP03sphere_J", "voltageCandidateCount": 1, "voltageMaxSafe_V": 1.171875, "runnerStatus": "OK"}
+COMSOL disconnected.

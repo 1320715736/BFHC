@@ -12,12 +12,9 @@
     //           solvePrepared() 中用 Tavg[i] = TintSeg / AsegS2S 替换抛物线，
     //           若算子读取失败则回退到原抛物线近似并打印 WARN。
     //
-    //   [Fix-2] selfViewLoss 负值说明注释完善：
-    //           对凸圆柱体 selfViewLoss 物理上应 ≈ 0%；
-    //           出现约 −5% 的负值是 qRadNetOutExpr 表面积分不包含 S2S 面间辐射
-    //           Current baseline uses free-surface 0 K radiation integrals.
-    //           是 P03sphere 方法的固有误差，不影响形状间相对比较，
-    //           但竞赛汇报时需注明该系统偏差约 ±5%。
+    //   [Fix-2] metric v2：gross 使用 COMSOL 精确谱带发射积分，
+    //           sphere/escape 使用 radiosity × ambient view factor 积分；
+    //           原始负损失仅作数值诊断，正式 selfViewLoss 截断到非负值。
     //
     // S2S 面-面辐射 + 外接球统计口径 + 8 段半径参数化
     //
@@ -197,7 +194,7 @@
             model.component("comp1").physics("rad").prop("RadiationSettings")
                 .set("wavelengthDependenceOfSurfaceProperties", "MultipleSpectralBands");
             model.component("comp1").physics("rad").prop("RadiationSettings")
-                .set("lambda_r", "lam03");
+                .set("lambda_r", "3");
 
             model.component("comp1").physics("rad").create("dsLT", "DiffuseSurface", 2);
             model.component("comp1").physics("rad").feature("dsLT").selection().all();
@@ -376,9 +373,8 @@
                 double I = Math.abs(model.result().numerical("IinS2S").getReal()[0][0]);
                 r.P03steady = model.result().numerical("P03emitS2S").getReal()[0][0];
                 r.PradSteady = model.result().numerical("PradEmitS2S").getReal()[0][0];
-                // Current baseline: sphere stats reuse free-surface 0 K radiation integrals.
-                r.PradSphere = r.PradSteady;
-                r.P03sphere = r.P03steady;
+                r.P03sphere = model.result().numerical("P03escapeS2S").getReal()[0][0];
+                r.PradSphere = model.result().numerical("PradEscapeS2S").getReal()[0][0];
 
                 // [Fix-1] 各段侧面平均温度：优先用 IntSurface 算子直接读取，
                 // 失败时回退到原抛物线近似（算子未就绪或几何异常时的保护）
@@ -611,12 +607,20 @@
     model.result().numerical("AsurfS2S").set("expr", new String[]{"1"});
 
     model.result().numerical().create("P03emitS2S", "IntSurface");
-    model.result().numerical("P03emitS2S").selection().named("selFreeS2S");
-    model.result().numerical("P03emitS2S").set("expr", new String[]{q03NetOutExpr});
+    model.result().numerical("P03emitS2S").selection().all();
+    model.result().numerical("P03emitS2S").set("expr", new String[]{"rad.epsilonu_band1*rad.ebu1"});
 
     model.result().numerical().create("PradEmitS2S", "IntSurface");
-    model.result().numerical("PradEmitS2S").selection().named("selFreeS2S");
-    model.result().numerical("PradEmitS2S").set("expr", new String[]{qRadNetOutExpr});
+    model.result().numerical("PradEmitS2S").selection().all();
+    model.result().numerical("PradEmitS2S").set("expr", new String[]{"rad.epsilonu_band1*rad.ebu1+rad.epsilonu_band2*rad.ebu2"});
+
+    model.result().numerical().create("P03escapeS2S", "IntSurface");
+    model.result().numerical("P03escapeS2S").selection().all();
+    model.result().numerical("P03escapeS2S").set("expr", new String[]{"rad.J_band1*rad.Famb1"});
+
+    model.result().numerical().create("PradEscapeS2S", "IntSurface");
+    model.result().numerical("PradEscapeS2S").selection().all();
+    model.result().numerical("PradEscapeS2S").set("expr", new String[]{"rad.J_band1*rad.Famb1+rad.J_band2*rad.Famb2"});
 
     // ---- [Fix-1] 每段侧面平均温度算子：TintSeg_{i+1} = ∫T dA，AsegS2S_{i+1} = ∫1 dA ----
     // Tavg[i] = TintSeg_{i+1} / AsegS2S_{i+1}（面积加权平均温度，不依赖温度分布假设）
@@ -785,25 +789,19 @@
     // ---- Phase 3: 输出核心赛题指标（CSV 可解析格式）----
 
     double lifetimeH = timeS / 3600.0;
+    double avgP03gross = (timeS > 0.0) ? (p03Integral / timeS) : Double.NaN;
     double avgP03sphere = (timeS > 0.0) ? (p03SphereIntegral / timeS) : Double.NaN;
     double avgPradSphere = (timeS > 0.0) ? (pradSphereIntegral / timeS) : Double.NaN;
 
-    // [Fix-2] selfViewLoss 说明：
-    //   定义：selfViewLoss = (1 - P03sphere积分 / P03surface积分) × 100%
-    //   当前口径：P03sphere 与 PradSphere 直接采用自由表面 0 K 辐射积分。
-    //        P03surface / PradSurface 保留为同一自由表面选择下的诊断积分。
-    //   问题根源：qRadNetOutExpr 是局部自发射公式，不含 S2S 面间辐射交换的修正项，
-    //   若 selfViewLoss 明显偏离 0，应优先检查 selFreeS2S 和积分算子选择。
-    //   从而 P03sphere > P03surface，selfViewLoss 呈负值（约 −5%）。
-    //   物理真值：对凸圆柱体无自遮挡，selfViewLoss 应 ≈ 0%。
-    //   影响评估：此偏差为系统性固定偏移，不影响不同形状之间的相对比较，
-    //   ML 优化阶段可正常使用 P03sphere 和寿命作为目标。竞赛汇报时需注明
-    //   汇报时按官方 0 K 统计面口径说明即可。
-    double selfViewLoss = (timeS > 0.0 && p03Integral > 0.0)
+    // metric v2: gross is thermal emission; sphere is final S2S escape.
+    // Keep the raw residual for diagnostics and clamp the reporting loss at zero.
+    double selfViewLossRaw = (timeS > 0.0 && p03Integral > 0.0)
         ? (1.0 - p03SphereIntegral / p03Integral) * 100.0 : Double.NaN;
+    double selfViewLoss = Double.isNaN(selfViewLossRaw)
+        ? Double.NaN : Math.max(0.0, selfViewLossRaw);
 
     // CSV header + data（方便 ML pipeline 解析）
-    System.out.println("RESULT_HEADER=Vwork_V,initialTmax_K,Tmin_K,Tmean_K,U_pct,maxErosionTmax_K,lifetimeH,initialP03sphere_W,initialPradSphere_W,lifeAvgP03sphere_W,lifeAvgPradSphere_W,lifeTotalP03sphere_J,selfViewLoss_pct,failureReached,erosionSteps,overtempStep,overtempTimeH,overtempTmax_K,status");
+    System.out.println("RESULT_HEADER=Vwork_V,initialTmax_K,Tmin_K,Tmean_K,U_pct,maxErosionTmax_K,lifetimeH,initialP03sphere_W,initialPradSphere_W,lifeAvgP03sphere_W,lifeAvgPradSphere_W,lifeTotalP03sphere_J,selfViewLoss_pct,failureReached,erosionSteps,overtempStep,overtempTimeH,overtempTmax_K,status,metricVersion,initialP03gross_W,initialP03escape_W,initialP03selfAbsorbed_W,lifeAvgP03gross_W,lifeAvgP03escape_W,lifeTotalP03gross_J,lifeTotalP03escape_J,selfViewLossRaw_pct");
     System.out.println("RESULT="
         + String.format("%.6f", Vwork) + ","
         + String.format("%.1f", r0.Tmax) + ","
@@ -823,13 +821,20 @@
         + overtempStep + ","
         + String.format("%.4f", overtempTimeH) + ","
         + String.format("%.1f", overtempTmax) + ","
-        + status);
+        + status + ",radiation_escape_v2,"
+        + String.format("%.2f", r0.P03steady) + ","
+        + String.format("%.2f", r0.P03sphere) + ","
+        + String.format("%.2f", Math.max(0.0, r0.P03steady-r0.P03sphere)) + ","
+        + String.format("%.2f", avgP03gross) + ","
+        + String.format("%.2f", avgP03sphere) + ","
+        + String.format("%.2f", p03Integral) + ","
+        + String.format("%.2f", p03SphereIntegral) + ","
+        + String.format("%.6f", selfViewLossRaw));
 
     // [Fix-2] 输出 selfViewLoss 诊断行，提醒负值是已知系统误差
-    if (!Double.isNaN(selfViewLoss) && selfViewLoss < -1.0) {
-        System.out.println("NOTE: selfViewLoss=" + String.format("%.2f", selfViewLoss)
-            + "% (<0). Current baseline uses free-surface 0 K statistics;"
-            + " check selFreeS2S and P03/Prad integrals if this is unexpected.");
+    if (!Double.isNaN(selfViewLossRaw) && selfViewLossRaw < -0.1) {
+        System.out.println("NOTE: raw selfViewLoss=" + String.format("%.4f", selfViewLossRaw)
+            + "% (<0); check S2S energy balance and ambient contamination.");
     }
 
     // 输入半径回显（方便核查）
