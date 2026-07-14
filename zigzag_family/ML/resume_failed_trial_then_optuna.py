@@ -74,6 +74,8 @@ def _resume_one_failed_trial():
             N_RUNS=int(params["N_RUNS"]),
             L_RUN_m=float(params["L_RUN_mm"]) * 1.0e-3,
             z_first_m=float(params["z_first_mm"]) * 1.0e-3,
+            voltage_policy="max_safe",
+            electrode_boundary_mode="fixed_temperature",
         )
         elapsed = time.time() - t_start
 

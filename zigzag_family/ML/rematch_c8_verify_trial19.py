@@ -147,6 +147,8 @@ def main():
             N_RUNS=N_RUNS,
             L_RUN_m=L_RUN_MM * 1e-3,
             z_first_m=Z_FIRST_MM * 1e-3,
+            voltage_policy="max_safe",
+            electrode_boundary_mode="fixed_temperature",
         )
         elapsed = time.time() - t_start
         row = dict(base_row)

@@ -228,6 +228,8 @@ def main():
                         N_RUNS=case["N_RUNS"],
                         L_RUN_m=case["L_RUN_mm"] * 1e-3,
                         z_first_m=case["z_first_mm"] * 1e-3,
+                        voltage_policy="max_safe",
+                        electrode_boundary_mode="fixed_temperature",
                     )
                     result["runnerStatus"] = result.get("status", "UNKNOWN")
                 base.update(result)

@@ -65,10 +65,11 @@ class COMSOLRunner:
         self.voltage_floor = 1e-3
         self.voltage_tol = 0.05
         self.max_voltage_iters = 20
-        self.voltage_policy = "max_safe"
-        self.voltage_objective = "lifeTotalP03sphere_J"
+        self.voltage_policy = "rated_lifecycle_scan"
+        self.voltage_objective = "lifeTotalP03escape_J"
+        self.operating_point_version = "rated_lifecycle_energy_v1"
         self.metric_version = "radiation_escape_v2"
-        self.physics_version = "thermal_s2s_v2"
+        self.physics_version = "thermal_s2s_d3_v1"
         self.geometry_version = "zigzag_local_erosion_v2"
         self.lifecycle_version = "lifecycle_v2"
         self.erosion_model = "local_blocks_turn_caps_and_terminal_stubs"
@@ -78,15 +79,26 @@ class COMSOLRunner:
         self.spectral_split_um = 3.0
         self.thermal_ambient_K = 293.15
         self.score_ambient_target_K = 0.0
+        self.temperature_statistic_version = "temperature_domains_v1"
+        self.temperature_primary_domain = "all_tungsten_volume"
+        self.active_temperature_trim_m = 0.5e-3
+        self.electrode_temperature_K = 293.15
+        self.electrode_temperature_tolerance_K = 1.0
+        self.electrode_boundary_mode = "fixed_temperature"
+        self._active_electrode_boundary_mode = self.electrode_boundary_mode
+        self.electrode_boundary_version = "electrode_thermal_v1"
+        self.copper_thermal_conductivity_W_mK = 400.0
+        self.electrode_boundary_approximation = (
+            "circular_contact_half_space_spreading_resistance")
         self.voltage_candidate_ratios = (
             1.0, 0.95, 0.90, 0.85, 0.80, 0.70, 0.60)
         self.Aev = 3.9e9
         self.Bev = 1.023e5
         self.failure_fraction = 0.20
         self.MAX_BLOCK_SLOTS = 64
-        self.max_erosion_steps = 50
+        self.max_erosion_steps = 150
         self.max_erosion_solve_retries = 2
-        self.max_lifetime_h = 200.0   # 侵蚀循环最大仿真时长，避免低蒸发率构型无限运行
+        self.max_lifetime_h = 1000.0
         self.max_erosion_step_s = 36000.0
         self.erosion_rel_tol = 1.0e-10
         self.erosion_time_tol_s = 1.0e-6
@@ -380,6 +392,88 @@ class COMSOLRunner:
             return math.isfinite(float(value))
         except Exception:
             return False
+
+    @staticmethod
+    def _temperature_uniformity(t_max, t_min, t_mean):
+        """Return the official full-domain temperature nonuniformity."""
+        values = (t_max, t_min, t_mean)
+        if not all(math.isfinite(float(value)) for value in values):
+            return float('nan')
+        if float(t_mean) <= 1.0e-20 or float(t_max) < float(t_min):
+            return float('nan')
+        return ((float(t_max) - float(t_min))
+                / float(t_mean) * 100.0)
+
+    def _copper_spreading_h(self, contact_radius_m):
+        """Equivalent Robin coefficient for a circular half-space contact."""
+        radius = float(contact_radius_m)
+        if not math.isfinite(radius) or radius <= 0.0:
+            raise ValueError("electrode contact radius must be positive")
+        return (4.0 * self.copper_thermal_conductivity_W_mK
+                / (math.pi * radius))
+
+    @staticmethod
+    def _canonical_electrode_boundary_mode(mode):
+        aliases = {
+            "fixed": "fixed_temperature",
+            "fixed_temperature": "fixed_temperature",
+            "semi_infinite_copper": "semi_infinite_copper_spreading",
+            "semi_infinite_copper_spreading": (
+                "semi_infinite_copper_spreading"),
+        }
+        try:
+            return aliases[str(mode)]
+        except KeyError as exc:
+            raise ValueError(
+                "electrode_boundary_mode must be fixed_temperature or "
+                "semi_infinite_copper_spreading") from exc
+
+    def _configure_electrode_thermal_boundary(self):
+        """Create the selected main or sensitivity electrode heat boundary."""
+        ht = self.j.component("comp1").physics("ht")
+        for tag in ("tempInZZ", "tempOutZZ", "fluxInZZ", "fluxOutZZ"):
+            self._remove_safe(ht.feature(), tag)
+
+        mode = self._active_electrode_boundary_mode
+        if mode == "fixed_temperature":
+            for tag, selection in (
+                    ("tempInZZ", "selInZZ"),
+                    ("tempOutZZ", "selOutZZ")):
+                ht.create(tag, "TemperatureBoundary", 2)
+                ht.feature(tag).selection().named(selection)
+                ht.feature(tag).set("T0", "Telectrode")
+            return
+
+        for tag, selection, coefficient in (
+                ("fluxInZZ", "selInZZ", "hCuIn"),
+                ("fluxOutZZ", "selOutZZ", "hCuOut")):
+            ht.create(tag, "HeatFluxBoundary", 2)
+            ht.feature(tag).selection().named(selection)
+            ht.feature(tag).set(
+                "HeatFluxType", "GeneralInwardHeatFlux")
+            ht.feature(tag).set(
+                "q0", f"{coefficient}*(Telectrode-T)")
+
+    def _set_electrode_spreading_params(self, stub_radii):
+        self.j.param().set(
+            "hCuIn", f"{self._copper_spreading_h(stub_radii[0])}"
+            "[W/(m^2*K)]", "Equivalent inlet copper spreading coefficient")
+        self.j.param().set(
+            "hCuOut", f"{self._copper_spreading_h(stub_radii[-1])}"
+            "[W/(m^2*K)]", "Equivalent outlet copper spreading coefficient")
+
+    def _temperature_output_fields(self, steady_result):
+        """Map one steady solve onto the versioned D3 output contract."""
+        keys = (
+            "TmaxAll_K", "TminAll_K", "TmeanAll_K", "UAll_pct",
+            "TmaxActive_K", "TminActive_K", "TmeanActive_K",
+            "UActive_pct", "activeVolumeFraction",
+            "TmaxFreeSurface_K", "TminFreeSurface_K",
+            "TmeanFreeSurface_K", "UFreeSurface_pct",
+            "freeSurfaceArea_m2", "electrodeTemperatureUndershoot_K",
+            "temperatureFallbackUsed",
+        )
+        return {key: steady_result[key] for key in keys}
 
     def _radiation_loss_metrics(self, gross, escape):
         """Return raw and reporting-safe self-view loss diagnostics."""
@@ -957,7 +1051,12 @@ class COMSOLRunner:
         j.param().set("rhoMassW", "19350[kg/m^3]", "Tungsten density")
         j.param().set("Tamb", f"{self.thermal_ambient_K}[K]",
                       "Ambient temperature for S2S solve")
-        j.param().set("Telectrode", "293.15[K]", "Copper electrode temperature")
+        j.param().set(
+            "Telectrode", f"{self.electrode_temperature_K}[K]",
+            "Copper electrode reference temperature")
+        j.param().set(
+            "activeTrim", f"{self.active_temperature_trim_m}[m]",
+            "Axial trim used only for active-region temperature diagnostics")
         j.param().set("Vapp",  "1[V]",      "Applied DC voltage")
         j.param().set("lam03", "3[um]",     "Upper wavelength bound")
         j.param().set("c2bb",  "1.438776877e-2[m*K]",
@@ -1030,6 +1129,39 @@ class COMSOLRunner:
         j.result().numerical().create("TintVolZZ", "IntVolume")
         j.result().numerical("TintVolZZ").selection().all()
         j.result().numerical("TintVolZZ").set("expr", ["T"])
+
+        active_condition = "z>activeTrim&&z<L0-activeTrim"
+        j.result().numerical().create("maxTActiveZZ", "MaxVolume")
+        j.result().numerical("maxTActiveZZ").selection().all()
+        j.result().numerical("maxTActiveZZ").set(
+            "expr", [f"if({active_condition},T,0[K])"])
+
+        j.result().numerical().create("minTActiveZZ", "MinVolume")
+        j.result().numerical("minTActiveZZ").selection().all()
+        j.result().numerical("minTActiveZZ").set(
+            "expr", [f"if({active_condition},T,1e9[K])"])
+
+        j.result().numerical().create("volActiveZZ", "IntVolume")
+        j.result().numerical("volActiveZZ").selection().all()
+        j.result().numerical("volActiveZZ").set(
+            "expr", [f"if({active_condition},1,0)"])
+
+        j.result().numerical().create("TintActiveZZ", "IntVolume")
+        j.result().numerical("TintActiveZZ").selection().all()
+        j.result().numerical("TintActiveZZ").set(
+            "expr", [f"if({active_condition},T,0[K])"])
+
+        j.result().numerical().create("maxTFreeZZ", "MaxSurface")
+        j.result().numerical("maxTFreeZZ").selection().named("selFreeZZ")
+        j.result().numerical("maxTFreeZZ").set("expr", ["T"])
+
+        j.result().numerical().create("minTFreeZZ", "MinSurface")
+        j.result().numerical("minTFreeZZ").selection().named("selFreeZZ")
+        j.result().numerical("minTFreeZZ").set("expr", ["T"])
+
+        j.result().numerical().create("TintFreeZZ", "IntSurface")
+        j.result().numerical("TintFreeZZ").selection().named("selFreeZZ")
+        j.result().numerical("TintFreeZZ").set("expr", ["T"])
 
         j.result().numerical().create("IinZZ", "IntSurface")
         j.result().numerical("IinZZ").selection().named("selInZZ")
@@ -1138,6 +1270,7 @@ class COMSOLRunner:
             raise ValueError("block geometry and side arrays must align")
         if len(stub_radii) != 2:
             raise ValueError("two terminal stub radii are required")
+        self._set_electrode_spreading_params(stub_radii)
 
         # 清旧几何
         self._remove_safe(geom.feature(), "uniZZ")
@@ -1269,16 +1402,9 @@ class COMSOLRunner:
             ec.create("gndZZ", "Ground", 2)
             ec.feature("gndZZ").selection().named("selOutZZ")
 
-            # Electrode contact faces are held at copper room temperature.
-            ht = j.component("comp1").physics("ht")
-            self._remove_safe(ht.feature(), "tempInZZ")
-            self._remove_safe(ht.feature(), "tempOutZZ")
-            ht.create("tempInZZ", "TemperatureBoundary", 2)
-            ht.feature("tempInZZ").selection().named("selInZZ")
-            ht.feature("tempInZZ").set("T0", "Telectrode")
-            ht.create("tempOutZZ", "TemperatureBoundary", 2)
-            ht.feature("tempOutZZ").selection().named("selOutZZ")
-            ht.feature("tempOutZZ").set("T0", "Telectrode")
+            # Fixed room-temperature copper is primary. The half-space
+            # spreading resistance boundary is a D3 sensitivity case only.
+            self._configure_electrode_thermal_boundary()
 
             # S2S 面-面辐射（MultipleSpectralBands）
             # ★ 只在初始建模时创建，侵蚀循环不重建 ★
@@ -1430,6 +1556,18 @@ class COMSOLRunner:
             "solve_ok": False, "applied_V": voltage,
             "Tmax": float('nan'), "Tmin": float('nan'),
             "Tmean": float('nan'), "U_pct": float('nan'),
+            "TmaxAll_K": float('nan'), "TminAll_K": float('nan'),
+            "TmeanAll_K": float('nan'), "UAll_pct": float('nan'),
+            "TmaxActive_K": float('nan'), "TminActive_K": float('nan'),
+            "TmeanActive_K": float('nan'), "UActive_pct": float('nan'),
+            "activeVolumeFraction": float('nan'),
+            "TmaxFreeSurface_K": float('nan'),
+            "TminFreeSurface_K": float('nan'),
+            "TmeanFreeSurface_K": float('nan'),
+            "UFreeSurface_pct": float('nan'),
+            "freeSurfaceArea_m2": float('nan'),
+            "electrodeTemperatureUndershoot_K": float('nan'),
+            "temperatureFallbackUsed": False,
             "I": float('nan'), "P03steady": float('nan'),
             "PradSteady": float('nan'), "P03sphere": float('nan'),
             "PradSphere": float('nan'), "P03gross": float('nan'),
@@ -1466,16 +1604,46 @@ class COMSOLRunner:
             j.study("std1").run()
 
             Tmax = float(j.result().numerical("maxTZZ").getReal()[0][0])
-            try:
-                Tmin = float(j.result().numerical("minTZZ").getReal()[0][0])
-            except Exception:
-                Tmin = Tmax * 0.95
+            Tmin = float(j.result().numerical("minTZZ").getReal()[0][0])
 
             V = float(j.result().numerical("volZZ").getReal()[0][0])
             TintVol = float(j.result().numerical("TintVolZZ").getReal()[0][0])
             Tmean = TintVol / V if V > 1e-20 else float('nan')
-            U_pct = ((Tmax - Tmin) / Tmean * 100.0
-                     if Tmean > 1e-20 else float('nan'))
+            U_pct = self._temperature_uniformity(Tmax, Tmin, Tmean)
+
+            Tmax_active = float(j.result().numerical(
+                "maxTActiveZZ").getReal()[0][0])
+            Tmin_active = float(j.result().numerical(
+                "minTActiveZZ").getReal()[0][0])
+            V_active = float(j.result().numerical(
+                "volActiveZZ").getReal()[0][0])
+            Tint_active = float(j.result().numerical(
+                "TintActiveZZ").getReal()[0][0])
+            Tmean_active = (Tint_active / V_active
+                            if V_active > 1e-20 else float('nan'))
+            U_active = self._temperature_uniformity(
+                Tmax_active, Tmin_active, Tmean_active)
+
+            Tmax_free = float(j.result().numerical(
+                "maxTFreeZZ").getReal()[0][0])
+            Tmin_free = float(j.result().numerical(
+                "minTFreeZZ").getReal()[0][0])
+            A_free = float(j.result().numerical(
+                "AsurfZZ").getReal()[0][0])
+            Tint_free = float(j.result().numerical(
+                "TintFreeZZ").getReal()[0][0])
+            Tmean_free = (Tint_free / A_free
+                          if A_free > 1e-20 else float('nan'))
+            U_free = self._temperature_uniformity(
+                Tmax_free, Tmin_free, Tmean_free)
+            active_volume_fraction = (
+                V_active / V if V > 1e-20 else float('nan'))
+            electrode_undershoot = max(
+                0.0, self.electrode_temperature_K - Tmin)
+            if electrode_undershoot > self.electrode_temperature_tolerance_K:
+                raise RuntimeError(
+                    "temperature minimum is below the electrode reference "
+                    f"by {electrode_undershoot:.6g} K")
             I = abs(float(j.result().numerical("IinZZ").getReal()[0][0]))
             P03  = float(j.result().numerical("P03emitZZ").getReal()[0][0])
             Prad = float(j.result().numerical("PradEmitZZ").getReal()[0][0])
@@ -1523,6 +1691,17 @@ class COMSOLRunner:
                 "Tmin": Tmin,
                 "Tmean": Tmean,
                 "U_pct": U_pct,
+                "TmaxActive_K": Tmax_active,
+                "TminActive_K": Tmin_active,
+                "TmeanActive_K": Tmean_active,
+                "UActive_pct": U_active,
+                "activeVolumeFraction": active_volume_fraction,
+                "TmaxFreeSurface_K": Tmax_free,
+                "TminFreeSurface_K": Tmin_free,
+                "TmeanFreeSurface_K": Tmean_free,
+                "UFreeSurface_pct": U_free,
+                "freeSurfaceArea_m2": A_free,
+                "electrodeTemperatureUndershoot_K": electrode_undershoot,
                 "volume": V,
                 "expectedVolume_m3": expected_volume,
                 "volumeLossFromInitial_pct": volume_loss_pct,
@@ -1564,6 +1743,12 @@ class COMSOLRunner:
             if invalid:
                 raise RuntimeError(
                     "Invalid non-finite COMSOL result: " + ", ".join(invalid))
+            if not 0.0 < active_volume_fraction <= 1.0 + 1.0e-6:
+                raise RuntimeError(
+                    "Invalid active-region volume fraction: "
+                    f"{active_volume_fraction}")
+            if A_free <= 0.0:
+                raise RuntimeError("Invalid non-positive free surface area")
             negative_powers = [
                 name for name, value in (
                     ("P03steady", P03),
@@ -1582,6 +1767,20 @@ class COMSOLRunner:
                 "solve_ok": True,
                 "Tmax": Tmax, "Tmin": Tmin,
                 "Tmean": Tmean, "U_pct": U_pct,
+                "TmaxAll_K": Tmax, "TminAll_K": Tmin,
+                "TmeanAll_K": Tmean, "UAll_pct": U_pct,
+                "TmaxActive_K": Tmax_active,
+                "TminActive_K": Tmin_active,
+                "TmeanActive_K": Tmean_active,
+                "UActive_pct": U_active,
+                "activeVolumeFraction": active_volume_fraction,
+                "TmaxFreeSurface_K": Tmax_free,
+                "TminFreeSurface_K": Tmin_free,
+                "TmeanFreeSurface_K": Tmean_free,
+                "UFreeSurface_pct": U_free,
+                "freeSurfaceArea_m2": A_free,
+                "electrodeTemperatureUndershoot_K": electrode_undershoot,
+                "temperatureFallbackUsed": False,
                 "I": I,
                 "R": (voltage / I) if I > self.current_tol else float('nan'),
                 "Pelec": voltage * I,
@@ -1730,18 +1929,53 @@ class COMSOLRunner:
         return sorted(candidates, reverse=True)
 
     def _voltage_score(self, result, objective):
-        """Return the scalar score used by A4 voltage candidate selection."""
+        """Return the scalar score used by the D3 rated-point selection."""
         value = result.get(objective, float('nan'))
         if self._finite_number(value):
             return float(value)
 
-        if objective == "lifeTotalP03sphere_J":
-            avg = result.get("lifeAvgP03sphere_W", float('nan'))
+        if objective in ("lifeTotalP03sphere_J", "lifeTotalP03escape_J"):
+            avg_key = ("lifeAvgP03escape_W"
+                       if objective.endswith("escape_J")
+                       else "lifeAvgP03sphere_W")
+            avg = result.get(avg_key, float('nan'))
             life_h = result.get("lifetimeH", float('nan'))
             if self._finite_number(avg) and self._finite_number(life_h):
                 return float(avg) * float(life_h) * 3600.0
 
         return float('nan')
+
+    def _rated_voltage_candidate_eligible(self, result, objective):
+        """Only exact, constraint-clean lifecycle results can be rated."""
+        voltage = result.get("Vwork_V", float('nan'))
+        max_temperature = result.get("maxErosionTmax_K", float('nan'))
+        score = self._voltage_score(result, objective)
+        return (
+            result.get("status") == "OK"
+            and result.get("failureReached") is True
+            and result.get("lifetimeExact") is True
+            and result.get("censored") is False
+            and result.get("capLimited") is False
+            and result.get("stepLimited") is False
+            and self._finite_number(voltage)
+            and 0.0 < float(voltage) <= self.voltage_upper
+            and self._finite_number(max_temperature)
+            and float(max_temperature) < self.temp_limit_K
+            and self._finite_number(score)
+        )
+
+    def _rated_voltage_sort_key(self, result, objective):
+        score = self._voltage_score(result, objective)
+        uniformity = result.get("U_pct", float('inf'))
+        lifetime_h = result.get("lifetimeH", float('-inf'))
+        voltage = result.get("Vwork_V", float('inf'))
+        uniformity = (float(uniformity)
+                      if self._finite_number(uniformity) else float('inf'))
+        lifetime_h = (float(lifetime_h)
+                      if self._finite_number(lifetime_h) else float('-inf'))
+        voltage = (float(voltage)
+                   if self._finite_number(voltage) else float('inf'))
+        return float(score), -uniformity, lifetime_h, -voltage
 
     def _voltage_scan_summary(self, results, objective):
         parts = []
@@ -1749,9 +1983,10 @@ class COMSOLRunner:
             voltage = item.get("Vwork_V", float('nan'))
             status = item.get("status", "UNKNOWN")
             score = self._voltage_score(item, objective)
+            exact = self._rated_voltage_candidate_eligible(item, objective)
             v_txt = f"{voltage:.4g}V" if self._finite_number(voltage) else "nanV"
             s_txt = f"{score:.4g}" if self._finite_number(score) else "nan"
-            parts.append(f"{v_txt}:{status}:{s_txt}")
+            parts.append(f"{v_txt}:{status}:exact={int(exact)}:{s_txt}")
         return "; ".join(parts)
 
     def _annotate_voltage_result(self, result, policy, objective,
@@ -1760,6 +1995,12 @@ class COMSOLRunner:
         result["voltagePolicy"] = policy
         result["voltageObjective"] = objective
         result["voltageCandidateCount"] = candidate_count
+        result["operatingPointVersion"] = self.operating_point_version
+        result.setdefault("ratedVoltageEligible", False)
+        result.setdefault("ratedVoltageExactCandidateCount", 0)
+        result.setdefault("ratedVoltageSelectionReason", "not_rated_scan")
+        result["voltageCandidateRatios"] = ",".join(
+            f"{ratio:g}" for ratio in self.voltage_candidate_ratios)
         result["metricVersion"] = self.metric_version
         result["physicsVersion"] = self.physics_version
         result["geometryVersion"] = self.geometry_version
@@ -1775,6 +2016,29 @@ class COMSOLRunner:
         result["spectralSplit_um"] = self.spectral_split_um
         result["thermalAmbient_K"] = self.thermal_ambient_K
         result["scoreAmbientTarget_K"] = self.score_ambient_target_K
+        result["temperatureStatisticVersion"] = (
+            self.temperature_statistic_version)
+        result["temperaturePrimaryDomain"] = self.temperature_primary_domain
+        result["activeTemperatureTrim_mm"] = (
+            self.active_temperature_trim_m * 1.0e3)
+        result["electrodeBoundaryMode"] = (
+            self._active_electrode_boundary_mode)
+        result["electrodeBoundaryVersion"] = self.electrode_boundary_version
+        result["electrodeBoundaryApproximation"] = (
+            self.electrode_boundary_approximation
+            if self._active_electrode_boundary_mode
+            == "semi_infinite_copper_spreading"
+            else "none_fixed_temperature")
+        result["electrodeTemperature_K"] = self.electrode_temperature_K
+        result["copperThermalConductivity_W_mK"] = (
+            self.copper_thermal_conductivity_W_mK)
+        radii = [self.R0, self.R0]
+        result["electrodeContactRadiusIn_mm"] = radii[0] * 1.0e3
+        result["electrodeContactRadiusOut_mm"] = radii[-1] * 1.0e3
+        result["electrodeSpreadingHIn_W_m2K"] = (
+            self._copper_spreading_h(radii[0]))
+        result["electrodeSpreadingHOut_W_m2K"] = (
+            self._copper_spreading_h(radii[-1]))
         if max_safe_v is not None:
             result["voltageMaxSafe_V"] = max_safe_v
         if scan_summary:
@@ -1782,38 +2046,71 @@ class COMSOLRunner:
         return result
 
     def _select_voltage_scan_result(self, results, objective):
-        scored = []
-        for item in results:
-            score = self._voltage_score(item, objective)
-            if self._finite_number(score):
-                ok = item.get("status") == "OK"
-                scored.append((ok, score, item))
+        eligible = [item for item in results
+                    if self._rated_voltage_candidate_eligible(
+                        item, objective)]
+        if eligible:
+            selected = dict(max(
+                eligible,
+                key=lambda item: self._rated_voltage_sort_key(
+                    item, objective)))
+            selected["ratedVoltageEligible"] = True
+            selected["ratedVoltageExactCandidateCount"] = len(eligible)
+            selected["ratedVoltageSelectionReason"] = (
+                "maximum_exact_lifecycle_0_3um_escape_energy")
+            selected["ratedVoltageSourceStatus"] = selected.get("status", "")
+            return selected
 
-        if not scored:
-            return results[0]
-
-        eligible = [item for item in scored if item[0]]
-        pool = eligible if eligible else scored
-        return max(pool, key=lambda item: item[1])[2]
+        finite = [item for item in results
+                  if self._finite_number(
+                      self._voltage_score(item, objective))]
+        if finite:
+            diagnostic = max(
+                finite,
+                key=lambda item: self._rated_voltage_sort_key(
+                    item, objective))
+        elif results:
+            diagnostic = results[0]
+        else:
+            diagnostic = {}
+        selected = dict(diagnostic)
+        selected["ratedVoltageSourceStatus"] = selected.get("status", "")
+        selected["status"] = "FAIL_RATED_VOLTAGE_INCONCLUSIVE"
+        selected["failure"] = (
+            "No voltage candidate completed an exact, uncensored 20% "
+            "failure lifecycle within all temperature constraints.")
+        selected["ratedVoltageEligible"] = False
+        selected["ratedVoltageExactCandidateCount"] = 0
+        selected["ratedVoltageSelectionReason"] = (
+            "no_exact_constraint_clean_lifecycle_candidate")
+        selected["lifetimeExact"] = False
+        return selected
 
     def evaluate_voltage_candidates(self, N_RUNS, L_RUN_m, z_first_m,
-                                    voltage_candidates=None, objective=None):
+                                    voltage_candidates=None, objective=None,
+                                    electrode_boundary_mode=None):
         """Run full lifecycle evaluations for candidate working voltages."""
         objective = objective or self.voltage_objective
         scan_start = time.time()
+        boundary_mode = self._canonical_electrode_boundary_mode(
+            electrode_boundary_mode or self.electrode_boundary_mode)
 
-        print("  A4 voltage scan: evaluating max-safe voltage first...")
+        print("  D3 rated scan: evaluating max-safe voltage first...")
         first = self.evaluate(
             N_RUNS=N_RUNS,
             L_RUN_m=L_RUN_m,
             z_first_m=z_first_m,
             voltage_policy="max_safe",
             voltage_objective=objective,
+            electrode_boundary_mode=boundary_mode,
         )
         if not self._finite_number(first.get("Vwork_V", float('nan'))):
-            first["voltageScanElapsed_sec"] = round(time.time() - scan_start, 1)
+            selected = self._select_voltage_scan_result([first], objective)
+            selected["voltageScanElapsed_sec"] = round(
+                time.time() - scan_start, 1)
             return self._annotate_voltage_result(
-                first, "full_scan", objective, None, 0)
+                selected, "rated_lifecycle_scan", objective, None, 1,
+                self._voltage_scan_summary([first], objective))
 
         max_safe_v = float(first["Vwork_V"])
         candidates = self._build_voltage_candidates(
@@ -1823,7 +2120,7 @@ class COMSOLRunner:
         for voltage in candidates:
             if abs(voltage - max_safe_v) <= self.voltage_tol:
                 continue
-            print(f"  A4 voltage scan: evaluating {voltage:.4f}V...")
+            print(f"  D3 rated scan: evaluating {voltage:.4f}V...")
             result = self.evaluate(
                 N_RUNS=N_RUNS,
                 L_RUN_m=L_RUN_m,
@@ -1831,6 +2128,7 @@ class COMSOLRunner:
                 voltage_policy="fixed",
                 voltage_objective=objective,
                 voltage_override=voltage,
+                electrode_boundary_mode=boundary_mode,
             )
             results.append(result)
 
@@ -1838,7 +2136,7 @@ class COMSOLRunner:
         selected["voltageScanElapsed_sec"] = round(time.time() - scan_start, 1)
         return self._annotate_voltage_result(
             selected,
-            "full_scan",
+            "rated_lifecycle_scan",
             objective,
             max_safe_v=max_safe_v,
             candidate_count=len(results),
@@ -1851,7 +2149,7 @@ class COMSOLRunner:
 
     def evaluate(self, N_RUNS, L_RUN_m, z_first_m, voltage_policy=None,
                  voltage_candidates=None, voltage_objective=None,
-                 voltage_override=None):
+                 voltage_override=None, electrode_boundary_mode=None):
         """
         完整评估流程：几何预检 → 建模 → 电压搜索 → 侵蚀循环。
 
@@ -1864,15 +2162,27 @@ class COMSOLRunner:
             dict: 包含所有赛题指标；status != "OK" 表示失败
         """
         policy = voltage_policy or self.voltage_policy
+        if policy in ("full_scan", "scan"):
+            policy = "rated_lifecycle_scan"
+        if voltage_override is not None:
+            policy = "fixed"
         objective = voltage_objective or self.voltage_objective
-        if policy in ("full_scan", "scan") and voltage_override is None:
+        self._active_electrode_boundary_mode = (
+            self._canonical_electrode_boundary_mode(
+                electrode_boundary_mode or self.electrode_boundary_mode))
+        if policy == "rated_lifecycle_scan" and voltage_override is None:
             return self.evaluate_voltage_candidates(
                 N_RUNS=N_RUNS,
                 L_RUN_m=L_RUN_m,
                 z_first_m=z_first_m,
                 voltage_candidates=voltage_candidates,
                 objective=objective,
+                electrode_boundary_mode=(
+                    self._active_electrode_boundary_mode),
             )
+        if policy not in ("max_safe", "fixed"):
+            raise ValueError(
+                "voltage_policy must be rated_lifecycle_scan, max_safe, or fixed")
 
         t_start = time.time()
 
@@ -2039,6 +2349,7 @@ class COMSOLRunner:
                 "Tmin_K": r0_res["Tmin"],
                 "Tmean_K": r0_res["Tmean"],
                 "U_pct": r0_res["U_pct"],
+                **self._temperature_output_fields(r0_res),
                 "lifetimeH": time_s / 3600.0,
                 **self._lifecycle_radiation_fields(
                     r0_res, time_s, p03_int, prad_int,
@@ -2310,6 +2621,11 @@ class COMSOLRunner:
         result = build_result(status)
         required = [
             "Vwork_V", "initialTmax_K", "Tmin_K", "Tmean_K", "U_pct",
+            "TmaxAll_K", "TminAll_K", "TmeanAll_K", "UAll_pct",
+            "TmaxActive_K", "TminActive_K", "TmeanActive_K",
+            "UActive_pct", "activeVolumeFraction",
+            "TmaxFreeSurface_K", "TminFreeSurface_K",
+            "TmeanFreeSurface_K", "UFreeSurface_pct",
             "maxErosionTmax_K", "lifetimeH", "initialP03gross_W",
             "initialP03escape_W", "lifeAvgP03gross_W",
             "lifeAvgP03escape_W", "lifeTotalP03gross_J",

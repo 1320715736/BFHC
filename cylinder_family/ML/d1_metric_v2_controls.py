@@ -220,7 +220,10 @@ def main():
                     result = stationary_result(
                         runner, radii_m, case["smoke_voltage_V"])
                 else:
-                    result = runner.evaluate(radii_m)
+                    result = runner.evaluate(
+                        radii_m,
+                        voltage_policy="max_safe",
+                        electrode_boundary_mode="fixed_temperature")
                     result["runnerStatus"] = result.get("status", "UNKNOWN")
                 base.update(result)
             except Exception as exc:

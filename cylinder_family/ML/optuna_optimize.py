@@ -61,6 +61,11 @@ runner: COMSOLRunner | None = None
 CSV_HEADER = [
     "trial", "r1_mm", "r2_mm", "r3_mm", "r4_mm",
     "Vwork_V", "initialTmax_K", "Tmin_K", "Tmean_K", "U_pct",
+    "TmaxAll_K", "TminAll_K", "TmeanAll_K", "UAll_pct",
+    "TmaxActive_K", "TminActive_K", "TmeanActive_K", "UActive_pct",
+    "activeVolumeFraction", "TmaxFreeSurface_K", "TminFreeSurface_K",
+    "TmeanFreeSurface_K", "UFreeSurface_pct", "freeSurfaceArea_m2",
+    "electrodeTemperatureUndershoot_K", "temperatureFallbackUsed",
     "maxErosionTmax_K", "lifetimeH", "R_L_pct", "eta_L_pct",
     "initialP03sphere_W", "initialPradSphere_W",
     "lifeAvgP03sphere_W", "lifeAvgPradSphere_W",
@@ -83,11 +88,21 @@ CSV_HEADER = [
     "finalShoulderArea_m2", "maxShoulderArea_m2",
     "overtempStep", "overtempTimeH", "overtempTmax_K",
     "runnerStatus", "status", "voltagePolicy", "voltageObjective",
+    "operatingPointVersion", "ratedVoltageEligible",
+    "ratedVoltageExactCandidateCount", "ratedVoltageSelectionReason",
+    "ratedVoltageSourceStatus", "voltageCandidateCount",
+    "voltageMaxSafe_V", "voltageCandidateRatios", "voltageScanSummary",
     "metricVersion", "physicsVersion", "geometryVersion",
     "lifecycleVersion", "erosionModel", "failureFraction",
     "maxErosionStep_s", "geometryVolumeTolerance_rel",
     "radiationEscapeMethod", "spectralSplit_um", "thermalAmbient_K",
-    "scoreAmbientTarget_K",
+    "scoreAmbientTarget_K", "temperatureStatisticVersion",
+    "temperaturePrimaryDomain", "activeTemperatureTrim_mm",
+    "electrodeBoundaryMode", "electrodeBoundaryVersion",
+    "electrodeBoundaryApproximation", "electrodeTemperature_K",
+    "copperThermalConductivity_W_mK", "electrodeContactRadiusIn_mm",
+    "electrodeContactRadiusOut_mm", "electrodeSpreadingHIn_W_m2K",
+    "electrodeSpreadingHOut_W_m2K",
     "elapsed_sec",
 ]
 
@@ -123,7 +138,7 @@ def init_csv():
             existing_header = next(csv.reader(f), [])
         if existing_header != CSV_HEADER:
             raise RuntimeError(
-                "Refusing to mix legacy and geometry/lifecycle v2 CSV rows. "
+                "Refusing to mix pre-D3 and D3 CSV rows. "
                 "Use new BFHC_CSV_FILE, BFHC_DB_FILE, and BFHC_STUDY_NAME values."
             )
         return
@@ -143,7 +158,7 @@ def compact_status(status, limit=240):
 
 def add_scores(row):
     lifetime_h = float(row.get("lifetimeH", float("nan")))
-    energy_j = float(row.get("lifeTotalP03sphere_J", float("nan")))
+    energy_j = float(row.get("lifeTotalP03escape_J", float("nan")))
     u_pct = float(row.get("U_pct", float("nan")))
 
     r_l_pct = lifetime_h / BASELINE_LIFETIME_H * 100.0
@@ -246,7 +261,12 @@ def objective(trial):
     }
 
     try:
-        result = runner.evaluate(radii_m)
+        result = runner.evaluate(
+            radii_m,
+            voltage_policy="rated_lifecycle_scan",
+            voltage_objective="lifeTotalP03escape_J",
+            electrode_boundary_mode="fixed_temperature",
+        )
     except Exception as exc:
         elapsed = time.time() - t_start
         row = dict(base_row)
@@ -269,7 +289,7 @@ def objective(trial):
         prune_with_row(row, row["runnerStatus"])
 
     required = [
-        "lifetimeH", "lifeTotalP03sphere_J", "U_pct",
+        "lifetimeH", "lifeTotalP03escape_J", "U_pct",
         "Vwork_V", "maxErosionTmax_K",
     ]
     invalid = [key for key in required if not finite_number(result.get(key))]
