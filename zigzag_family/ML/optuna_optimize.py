@@ -73,11 +73,30 @@ CSV_HEADER = [
     "lifeTotalP03escape_J", "lifeTotalP03selfAbsorbed_J",
     "selfViewLossRaw_pct", "radiationNumericalExcess_pct",
     "objectiveScore", "uPenalty_pctpt", "U_limit_pct",
-    "selfViewLoss_pct", "failureReached", "capLimited", "erosionSteps",
+    "selfViewLoss_pct", "failureReached", "capLimited", "stepLimited",
+    "censored", "lifetimeExact", "terminationReason", "failureFeature",
+    "failureIndex", "maxFeatureLoss_pct", "erosionSteps",
+    "erosionAttemptedSteps", "erosionSolveRetries", "maxErosionSteps",
+    "initialCOMSOLVolume_m3", "initialExpectedVolume_m3",
+    "initialGeometryVolumeError_rel", "initialTargetVolumeDeviation_rel",
+    "initialBlockMaskAreaRatioMin", "initialBlockMaskAreaRatioMax",
+    "initialErosionStateVolume_m3", "finalErosionStateVolume_m3",
+    "erosionStateVolumeLoss_pct", "finalGeometryStateVolume_m3",
+    "maxGeometrySideProjectionError_pct", "initialTurnCapArea_m2",
+    "finalTurnCapArea_m2", "maxTurnCapArea_m2",
+    "initialStubShoulderArea_m2", "finalStubShoulderArea_m2",
+    "maxStubShoulderArea_m2", "finalMinBlockSide_mm",
+    "finalMaxBlockSide_mm", "finalBlockSideSpread_mm",
+    "finalGeometryMinBlockSide_mm", "finalGeometryMaxBlockSide_mm",
+    "finalGeometryBlockSideSpread_mm",
+    "finalStubInRadius_mm", "finalStubOutRadius_mm",
     "overtempStep", "overtempTimeH", "overtempTmax_K",
     "runnerStatus", "status", "voltagePolicy", "voltageObjective",
     "voltageCandidateCount", "voltageMaxSafe_V", "voltageScanSummary",
     "metricVersion", "physicsVersion", "geometryVersion",
+    "lifecycleVersion", "erosionModel", "turnConnectorRule",
+    "geometrySideQuantum_pct",
+    "failureFraction", "maxErosionStep_s", "geometryVolumeTolerance_rel",
     "radiationEscapeMethod", "spectralSplit_um", "thermalAmbient_K",
     "scoreAmbientTarget_K",
     "elapsed_sec",
@@ -97,7 +116,7 @@ def init_csv():
             existing_header = next(csv.reader(f), [])
         if existing_header != CSV_HEADER:
             raise RuntimeError(
-                "Refusing to mix legacy and radiation_escape_v2 CSV rows. "
+                "Refusing to mix legacy and geometry/lifecycle v2 CSV rows. "
                 "Use new BFHC_CSV_FILE, BFHC_DB_FILE, and BFHC_STUDY_NAME values."
             )
         return
@@ -141,19 +160,6 @@ def bool_value(value):
     if isinstance(value, bool):
         return value
     return str(value).strip().lower() == "true"
-
-
-def add_cap_status(row):
-    lifetime_h = row.get("lifetimeH")
-    cap_limited = False
-    if finite_number(lifetime_h):
-        cap_limited = (
-            not bool_value(row.get("failureReached"))
-            and float(lifetime_h) >= MAX_LIFETIME_H - 1e-6
-        )
-    row["capLimited"] = cap_limited
-    row["maxLifetimeCap_h"] = MAX_LIFETIME_H
-    return row
 
 
 def prune_with_row(row, message):
@@ -260,7 +266,6 @@ def objective(trial):
         row["status"] = "PRUNE_INVALID_METRIC"
         prune_with_row(row, "Invalid metric(s): " + ", ".join(invalid))
 
-    row = add_cap_status(row)
     row = add_scores(row)
     lifetime_h = float(row["lifetimeH"])
     u_pct = float(row["U_pct"])

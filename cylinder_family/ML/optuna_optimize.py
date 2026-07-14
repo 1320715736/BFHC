@@ -71,10 +71,21 @@ CSV_HEADER = [
     "lifeTotalP03escape_J", "lifeTotalP03selfAbsorbed_J",
     "selfViewLossRaw_pct", "radiationNumericalExcess_pct",
     "objectiveScore", "uPenalty_pctpt", "U_limit_pct",
-    "selfViewLoss_pct", "failureReached", "erosionSteps",
+    "selfViewLoss_pct", "failureReached", "capLimited", "stepLimited",
+    "censored", "lifetimeExact", "terminationReason", "failureFeature",
+    "failureIndex", "maxFeatureLoss_pct", "erosionSteps",
+    "erosionAttemptedSteps", "erosionSolveRetries", "maxLifetimeCap_h",
+    "maxErosionSteps", "initialCOMSOLVolume_m3",
+    "initialExpectedVolume_m3", "initialGeometryVolumeError_rel",
+    "initialTargetVolumeDeviation_rel", "initialSegmentMaskAreaRatioMin",
+    "initialSegmentMaskAreaRatioMax", "initialVolume_m3", "finalVolume_m3",
+    "volumeLoss_pct", "initialShoulderArea_m2",
+    "finalShoulderArea_m2", "maxShoulderArea_m2",
     "overtempStep", "overtempTimeH", "overtempTmax_K",
     "runnerStatus", "status", "voltagePolicy", "voltageObjective",
     "metricVersion", "physicsVersion", "geometryVersion",
+    "lifecycleVersion", "erosionModel", "failureFraction",
+    "maxErosionStep_s", "geometryVolumeTolerance_rel",
     "radiationEscapeMethod", "spectralSplit_um", "thermalAmbient_K",
     "scoreAmbientTarget_K",
     "elapsed_sec",
@@ -112,7 +123,7 @@ def init_csv():
             existing_header = next(csv.reader(f), [])
         if existing_header != CSV_HEADER:
             raise RuntimeError(
-                "Refusing to mix legacy and radiation_escape_v2 CSV rows. "
+                "Refusing to mix legacy and geometry/lifecycle v2 CSV rows. "
                 "Use new BFHC_CSV_FILE, BFHC_DB_FILE, and BFHC_STUDY_NAME values."
             )
         return

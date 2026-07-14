@@ -1,0 +1,76 @@
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+  Model init OK: sanity Tmax=2700.9K, I=1892.9002A
+COMSOL disconnected.
+{
+  "timestamp": "2026-07-14T23:36:51.168425+08:00",
+  "status": "OK",
+  "controls": [
+    {
+      "family": "cylinder",
+      "geometryVersion": "cylinder_segmented_erosion_v2",
+      "lifecycleVersion": "lifecycle_v2",
+      "erosionModel": "local_sidewall_plus_shoulder_volume_balance",
+      "initialShoulderArea_m2": 0.00011740372417791767,
+      "updatedShoulderArea_m2": 0.000115755443009889,
+      "initialSegmentMaskAreaRatios": [
+        1.016928689593361,
+        1.0141482549753567,
+        0.9042329520432713,
+        0.9734595427756677,
+        0.9734595427756679,
+        0.9042329520432727,
+        1.0086256094574029,
+        1.0101779935686923
+      ],
+      "updatedSegmentMaskAreaRatios": [
+        1.0156696308262871,
+        1.0159377708665684,
+        0.9042329008758777,
+        1.0136632558356258,
+        1.0205460796466446,
+        0.9042329008758779,
+        1.013132790636992,
+        1.0120474185370862
+      ],
+      "initial": {
+        "Tmax": 3161.500543870086,
+        "Tmin": 293.14941479970196,
+        "Tmean": 2257.250082069514,
+        "U_pct": 127.0728109328761,
+        "P03gross": 219.65394317500136,
+        "P03escape": 197.0129163254849,
+        "PradGross": 236.3539834737631,
+        "PradEscape": 212.99100440333535,
+        "volume_m3": 2.945187613085308e-07,
+        "expectedVolume_m3": 2.945243112740431e-07,
+        "volumeLossFromInitial_pct": 0.0,
+        "geometryVolumeError_rel": 1.8843828165719723e-05,
+        "targetVolumeDeviation_rel": 0.0,
+        "vol_err": 1.8843828165719723e-05,
+        "solve_ok": true,
+        "failure": ""
+      },
+      "locallyEroded": {
+        "Tmax": 3161.8803154714906,
+        "Tmin": 293.14861705695705,
+        "Tmean": 2256.0142256304907,
+        "U_pct": 127.15929118810436,
+        "P03gross": 217.75416488391946,
+        "P03escape": 195.68299419540588,
+        "PradGross": 234.31005332117797,
+        "PradEscape": 211.53901909841647,
+        "volume_m3": 2.918210849517367e-07,
+        "expectedVolume_m3": 2.918237692877431e-07,
+        "volumeLossFromInitial_pct": 0.9169164931132734,
+        "geometryVolumeError_rel": 9.114140679296924e-06,
+        "targetVolumeDeviation_rel": 0.00916916493113275,
+        "vol_err": 9.114140679296924e-06,
+        "solve_ok": true,
+        "failure": ""
+      }
+    }
+  ],
+  "elapsed_sec": 126.9
+}

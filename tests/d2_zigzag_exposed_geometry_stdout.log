@@ -1,0 +1,91 @@
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+  Model init OK: sanity Tmax=668.8K I=3.0921A
+COMSOL disconnected.
+{
+  "timestamp": "2026-07-14T23:56:31.743816+08:00",
+  "status": "OK",
+  "controls": [
+    {
+      "family": "zigzag",
+      "geometryVersion": "zigzag_local_erosion_v2",
+      "lifecycleVersion": "lifecycle_v2",
+      "erosionModel": "local_blocks_turn_caps_and_terminal_stubs",
+      "blockCount": 17,
+      "initialSide_mm": 0.5700248399766747,
+      "exactStateMinSide_mm": 0.5529240947773744,
+      "exactStateMaxSide_mm": 0.564324591576908,
+      "updatedMinSide_mm": 0.5529240947773745,
+      "updatedMaxSide_mm": 0.564324591576908,
+      "geometrySideQuantum_pct": 1.0,
+      "maxProjectionError_pct": 1.9020261863147398e-14,
+      "updatedStubRadii_mm": [
+        2.4975,
+        2.495
+      ],
+      "stubTemperatures_K": [
+        293.2948319053844,
+        293.29577463496247
+      ],
+      "blockMaskAreaRatios": [
+        1.0416666666666692,
+        0.9995969712518629,
+        0.9987305600809671,
+        0.9997467669841321,
+        0.9963188099297356,
+        1.0000207115270674,
+        0.9875904153466415,
+        0.9998818451189774,
+        0.9985967505379122,
+        0.9988196589635623,
+        0.9937544533490564,
+        1.0001077507870202,
+        0.9909767901638964,
+        1.0000022201696432,
+        0.9972063501845317,
+        0.9994128595792383,
+        1.0416666666668528
+      ],
+      "maxLocalBlockLossRate_pct_per_h": 2.01606844922563,
+      "topologyRefresh": "clear_solution",
+      "initial": {
+        "Tmax": 3132.4810641071713,
+        "Tmin": 293.1499832177425,
+        "Tmean": 2894.6460701489677,
+        "U_pct": 98.08905863034605,
+        "P03gross": 3159.573183566069,
+        "P03escape": 3043.7224130250065,
+        "PradGross": 3312.7091135075493,
+        "PradEscape": 3195.042031790496,
+        "volume_m3": 2.945240900448888e-07,
+        "expectedVolume_m3": 2.945243112740431e-07,
+        "volumeLossFromInitial_pct": 0.0,
+        "geometryVolumeError_rel": 7.511405538389827e-07,
+        "targetVolumeDeviation_rel": 0.0,
+        "vol_err": 7.511405538389827e-07,
+        "solve_ok": true,
+        "failure": ""
+      },
+      "locallyEroded": {
+        "Tmax": 3156.6016621645167,
+        "Tmin": 293.1499806849278,
+        "Tmean": 2876.83944999785,
+        "U_pct": 99.53463623010762,
+        "P03gross": 3051.566809861592,
+        "P03escape": 2942.4020251160505,
+        "PradGross": 3200.87238094695,
+        "PradEscape": 3090.00468780065,
+        "volume_m3": 2.8428651596920794e-07,
+        "expectedVolume_m3": 2.8428676252969737e-07,
+        "volumeLossFromInitial_pct": 3.475960507321274,
+        "geometryVolumeError_rel": 8.371481741395198e-07,
+        "targetVolumeDeviation_rel": 0.03475960507321279,
+        "vol_err": 8.371481741395198e-07,
+        "solve_ok": true,
+        "failure": ""
+      }
+    }
+  ],
+  "elapsed_sec": 243.8
+}

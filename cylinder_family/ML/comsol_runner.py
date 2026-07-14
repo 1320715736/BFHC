@@ -22,6 +22,10 @@ import mph
 from jpype.types import JInt  # 避免 set(str, int) 与 set(str, boolean) 歧义
 
 
+class ServerDisconnectError(RuntimeError):
+    """COMSOL client lost its server and needs a fresh Python process."""
+
+
 class COMSOLRunner:
     """通过 mph 库控制 COMSOL 服务器，评估钨棒配置。"""
 
@@ -34,6 +38,9 @@ class COMSOLRunner:
         self.seg_count = 8
         self.L0 = 15e-3
         self.Lseg = self.L0 / self.seg_count
+        self.reference_radius = 2.5e-3
+        self.reference_volume = (
+            math.pi * self.reference_radius ** 2 * self.L0)
         self.temp_limit_K = 3000.0 + 273.15
         self.rho_mass = 19350.0
         self.vol_tol = 1.0e-4
@@ -44,11 +51,18 @@ class COMSOLRunner:
         self.voltage_tol = 0.05
         self.max_voltage_iters = 16
         self.max_erosion_solve_retries = 2
+        self.max_erosion_steps = 50
+        self.max_lifetime_h = 1000.0
+        self.max_erosion_step_s = 36000.0
+        self.erosion_rel_tol = 1.0e-10
+        self.erosion_time_tol_s = 1.0e-6
         self.voltage_policy = "max_safe"
         self.voltage_objective = "lifeTotalP03sphere_J"
         self.metric_version = "radiation_escape_v2"
         self.physics_version = "thermal_s2s_v2"
-        self.geometry_version = "cylinder_segmented_v1"
+        self.geometry_version = "cylinder_segmented_erosion_v2"
+        self.lifecycle_version = "lifecycle_v2"
+        self.erosion_model = "local_sidewall_plus_shoulder_volume_balance"
         self.radiation_escape_method = "s2s_radiosity_famb"
         self.spectral_split_um = 3.0
         self.thermal_ambient_K = 293.15
@@ -133,6 +147,15 @@ class COMSOLRunner:
             (0.5 * self.L0) ** 2 + r_max ** 2)
         A_env = 4.0 * math.pi * R_env ** 2
         return r_max, R_env, A_env
+
+    def _segment_lateral_mask(self, index, radius):
+        """Return a pointwise z mask and analytic active cylindrical area."""
+        inset = 0.10 * self.Lseg
+        z_lo = index * self.Lseg + inset
+        z_hi = (index + 1) * self.Lseg - inset
+        condition = f"z>{z_lo:.16g}[m]&&z<{z_hi:.16g}[m]"
+        active_area = 2.0 * math.pi * radius * (z_hi - z_lo)
+        return condition, active_area
 
     # ================================================================
     #  模型构建
@@ -301,21 +324,23 @@ class COMSOLRunner:
         for i in range(self.seg_count):
             int_t_tag = f"TintSeg_{i + 1}"
             int_a_tag = f"AsegS2S_{i + 1}"
-            sel_tag   = f"selSegLat_{i + 1}"
+            condition, _ = self._segment_lateral_mask(i, radii_m[i])
             try:
                 j.result().numerical().remove(int_t_tag)
             except Exception:
                 pass
             j.result().numerical().create(int_t_tag, "IntSurface")
-            j.result().numerical(int_t_tag).selection().named(sel_tag)
-            j.result().numerical(int_t_tag).set("expr", ["T"])
+            j.result().numerical(int_t_tag).selection().all()
+            j.result().numerical(int_t_tag).set(
+                "expr", [f"if({condition},T,0[K])"])
             try:
                 j.result().numerical().remove(int_a_tag)
             except Exception:
                 pass
             j.result().numerical().create(int_a_tag, "IntSurface")
-            j.result().numerical(int_a_tag).selection().named(sel_tag)
-            j.result().numerical(int_a_tag).set("expr", ["1"])
+            j.result().numerical(int_a_tag).selection().all()
+            j.result().numerical(int_a_tag).set(
+                "expr", [f"if({condition},1,0)"])
 
         # 健全性检查
         sanity_Tmax = float(
@@ -358,14 +383,19 @@ class COMSOLRunner:
     def _ensure_server_ready(self):
         """轻量心跳检查，避免 COMSOL server 断联后继续产出无效结果。"""
         if self.client is None:
-            raise RuntimeError("COMSOL server is not initialized.")
+            raise ServerDisconnectError("COMSOL server is not initialized.")
+        try:
+            self.client.names()
+        except Exception as exc:
+            raise ServerDisconnectError(
+                f"COMSOL server heartbeat failed: {exc}") from exc
         if self.model is None or self.j is None:
             return
         try:
             # 只读访问；server 断联、模型失效或 JVM 异常时这里会抛错。
             self.j.label()
         except Exception as exc:
-            raise RuntimeError(f"COMSOL server/model heartbeat failed: {exc}") from exc
+            raise RuntimeError(f"COMSOL model heartbeat failed: {exc}") from exc
 
     def _clear_mesh_safe(self):
         """清理旧网格，失败时忽略（不同 COMSOL 版本 API 行为略有差异）。"""
@@ -434,6 +464,136 @@ class COMSOLRunner:
             "loss_pct": max(0.0, raw_pct),
             "numerical_excess_pct": max(0.0, -raw_pct),
         }
+
+    @staticmethod
+    def _feature_volume(radii_m, segment_length_m):
+        """Return the volume of a piecewise-constant cylinder profile."""
+        return sum(math.pi * radius ** 2 * segment_length_m
+                   for radius in radii_m)
+
+    @staticmethod
+    def _shoulder_areas(radii_m):
+        """Map each exposed inter-segment annulus to its larger segment.
+
+        The two electrode contact faces are deliberately excluded. At an
+        internal radius step, only the annulus outside the smaller neighbour
+        is exposed and therefore contributes sublimation mass loss.
+        """
+        areas = [0.0] * len(radii_m)
+        for index in range(len(radii_m) - 1):
+            left = float(radii_m[index])
+            right = float(radii_m[index + 1])
+            if left > right:
+                areas[index] += math.pi * (left ** 2 - right ** 2)
+            elif right > left:
+                areas[index + 1] += math.pi * (right ** 2 - left ** 2)
+        return areas
+
+    def _cylinder_erosion_rates(self, radii_m, temperatures_K):
+        """Return radius recession rates including all exposed shoulders.
+
+        Shoulder normal recession cannot be represented exactly by the eight
+        fixed-length radius degrees of freedom. D2 therefore maps its volume
+        loss conservatively onto the owning (larger) segment radius. The
+        mapped radial volume loss exactly equals the sidewall plus shoulder
+        surface-flux volume loss at the current state.
+        """
+        count = len(radii_m)
+        if len(temperatures_K) != count:
+            raise ValueError("radii and temperature arrays must have equal length")
+
+        speeds = [
+            self.Aev * math.exp(-self.Bev / float(temp)) / self.rho_mass
+            for temp in temperatures_K
+        ]
+        volume_rates = [
+            speeds[i] * 2.0 * math.pi * radii_m[i] * self.Lseg
+            for i in range(count)
+        ]
+        shoulder_areas = [0.0] * count
+
+        for index in range(count - 1):
+            left = float(radii_m[index])
+            right = float(radii_m[index + 1])
+            if math.isclose(left, right, rel_tol=0.0, abs_tol=1.0e-15):
+                continue
+            owner = index if left > right else index + 1
+            area = math.pi * abs(left ** 2 - right ** 2)
+            # The interface temperature is bracketed by its two adjacent
+            # segment averages; use their mean in the exponential flux law.
+            interface_temp = 0.5 * (
+                float(temperatures_K[index])
+                + float(temperatures_K[index + 1]))
+            interface_speed = (
+                self.Aev * math.exp(-self.Bev / interface_temp)
+                / self.rho_mass)
+            shoulder_areas[owner] += area
+            volume_rates[owner] += interface_speed * area
+
+        rates = []
+        for index, radius in enumerate(radii_m):
+            derivative = 2.0 * math.pi * float(radius) * self.Lseg
+            rates.append(volume_rates[index] / derivative)
+        return rates, shoulder_areas, volume_rates
+
+    def _next_erosion_timestep(self, current, limits, rates,
+                               resolution_delta, time_s):
+        """Choose an exact, non-overshooting erosion interval."""
+        candidates = [self.max_erosion_step_s]
+        for value, limit, rate in zip(current, limits, rates):
+            if rate <= 0.0:
+                continue
+            candidates.append(resolution_delta / rate)
+            remaining = value - limit
+            tolerance = self.erosion_rel_tol * max(abs(value), abs(limit), 1.0)
+            if remaining > tolerance:
+                candidates.append(remaining / rate)
+
+        cap_remaining = self.max_lifetime_h * 3600.0 - time_s
+        if cap_remaining <= self.erosion_time_tol_s:
+            return 0.0
+        candidates.append(cap_remaining)
+        dt = min(candidates)
+        return dt if dt > self.erosion_time_tol_s else 0.0
+
+    def _advance_erosion_features(self, current, initial, limits, rates, dt):
+        """Advance features and clamp floating-point noise at 20% failure."""
+        updated = []
+        losses = []
+        failed_indices = []
+        for index, (value, start, limit, rate) in enumerate(
+                zip(current, initial, limits, rates)):
+            candidate = max(limit, value - rate * dt)
+            tolerance = self.erosion_rel_tol * max(abs(start), 1.0)
+            if candidate <= limit + tolerance:
+                candidate = limit
+                failed_indices.append(index)
+            updated.append(candidate)
+            losses.append((start - candidate) / start)
+        return updated, losses, failed_indices
+
+    @staticmethod
+    def _overtemperature_fraction(previous_K, current_K, limit_K):
+        """Linear endpoint interpolation for the first overtemperature time."""
+        if current_K < limit_K:
+            return 1.0
+        delta = current_K - previous_K
+        if delta <= 0.0:
+            return 0.0
+        return min(1.0, max(0.0, (limit_K - previous_K) / delta))
+
+    @staticmethod
+    def _lifecycle_terminal_status(
+            failed, cap_limited, step_limited, termination_reason):
+        if failed:
+            return "OK"
+        if cap_limited:
+            return "CENSORED_LIFETIME_CAP"
+        if step_limited:
+            return "CENSORED_STEP_LIMIT"
+        if termination_reason == "negligible_erosion":
+            return "CENSORED_NEGLIGIBLE_EROSION"
+        return "CENSORED_UNRESOLVED"
 
     def _lifecycle_radiation_fields(
             self, initial, time_s, p03_gross_j, prad_gross_j,
@@ -672,7 +832,6 @@ class COMSOLRunner:
     def _solve_prepared(self, radii_m, voltage):
         """在已建好的模型上设置参数并求解一次稳态。返回结果 dict。"""
         j = self.j
-        r0 = self._r0
         _, R_env, A_env = self._compute_geom(radii_m)
         self._set_params(radii_m, R_env, A_env, voltage)
 
@@ -691,9 +850,15 @@ class COMSOLRunner:
             "FambAreaAvg": float('nan'), "selfViewLossRaw_pct": float('nan'),
             "selfViewLoss_pct": float('nan'),
             "radiationNumericalExcess_pct": float('nan'),
+            "volume_m3": float('nan'),
+            "expectedVolume_m3": float('nan'),
+            "volumeLossFromInitial_pct": float('nan'),
+            "geometryVolumeError_rel": float('nan'),
+            "targetVolumeDeviation_rel": float('nan'),
             "vol_err": float('nan'),
             "temp_ok": False, "volume_ok": False, "current_ok": False,
             "seg_Tavg": [0.0] * self.seg_count,
+            "segMaskAreaRatio": [0.0] * self.seg_count,
         }
 
         try:
@@ -743,30 +908,45 @@ class COMSOLRunner:
                              if P03sphere > 1e-20 else float('nan'))
             loss = self._radiation_loss_metrics(P03steady, P03sphere)
 
-            # [Fix-1] 各段侧面平均温度：优先 IntSurface 算子，失败回退到抛物线
+            # D2: every segment erosion rate must use its COMSOL surface value.
             seg_Tavg = []
+            seg_mask_area_ratios = []
             for i in range(self.seg_count):
-                read_ok = False
                 try:
                     Tint = float(j.result().numerical(
                         f"TintSeg_{i + 1}").getReal()[0][0])
                     Aseg = float(j.result().numerical(
                         f"AsegS2S_{i + 1}").getReal()[0][0])
                     if Aseg > 1e-20:
-                        seg_Tavg.append(Tint / Aseg)
-                        read_ok = True
-                except Exception:
-                    pass
-                if not read_ok:
-                    eta = ((i + 0.5) * self.Lseg) / self.L0
-                    seg_Tavg.append(
-                        Tmin + (Tmax - Tmin) * 4.0 * eta * (1.0 - eta))
+                        _, expected_area = self._segment_lateral_mask(
+                            i, radii_m[i])
+                        value = Tint / Aseg
+                        ratio = Aseg / expected_area
+                        if (not self._finite_number(value)
+                                or not self._finite_number(ratio)
+                                or not 0.50 <= ratio <= 1.50):
+                            raise RuntimeError(
+                                f"invalid masked area ratio {ratio}")
+                        seg_Tavg.append(value)
+                        seg_mask_area_ratios.append(ratio)
+                    else:
+                        raise RuntimeError("non-positive segment area")
+                except Exception as exc:
+                    raise RuntimeError(
+                        f"local surface integral failed for segment {i + 1}") from exc
 
             # 体积误差
             V0now = sum(
                 math.pi * r ** 2 * self.Lseg for r in radii_m)
-            V0ref = math.pi * r0 ** 2 * self.L0
-            vol_err = abs(V - V0now) / V0ref
+            V0ref = self.reference_volume
+            geometry_vol_err = abs(V - V0now) / V0ref
+            target_volume_deviation = abs(V0now - V0ref) / V0ref
+            initial_volume = self._feature_volume(
+                self._initial_radii, self.Lseg)
+            volume_loss_pct = 100.0 * (1.0 - V0now / initial_volume)
+            initial_state = all(
+                math.isclose(value, initial, rel_tol=0.0, abs_tol=1.0e-14)
+                for value, initial in zip(radii_m, self._initial_radii))
 
             finite_checks = {
                 "Tmax": Tmax,
@@ -774,6 +954,10 @@ class COMSOLRunner:
                 "Tmean": Tmean,
                 "U_pct": U_pct,
                 "volume": V,
+                "expectedVolume_m3": V0now,
+                "volumeLossFromInitial_pct": volume_loss_pct,
+                "geometryVolumeError_rel": geometry_vol_err,
+                "targetVolumeDeviation_rel": target_volume_deviation,
                 "current": I,
                 "P03steady": P03steady,
                 "PradSteady": PradSteady,
@@ -785,12 +969,18 @@ class COMSOLRunner:
                 "selfViewLossRaw_pct": loss["loss_raw_pct"],
                 "selfViewLoss_pct": loss["loss_pct"],
                 "radiationNumericalExcess_pct": loss["numerical_excess_pct"],
-                "vol_err": vol_err,
+                "volume_m3": V,
+                "expectedVolume_m3": V0now,
+                "volumeLossFromInitial_pct": volume_loss_pct,
+                "vol_err": geometry_vol_err,
             }
             invalid = [k for k, v in finite_checks.items()
                        if not self._finite_number(v)]
             invalid += [f"seg_Tavg[{i}]" for i, v in enumerate(seg_Tavg)
                         if not self._finite_number(v)]
+            invalid += [f"segMaskAreaRatio[{i}]"
+                        for i, value in enumerate(seg_mask_area_ratios)
+                        if not self._finite_number(value)]
             if invalid:
                 raise RuntimeError(
                     "Invalid non-finite COMSOL result: " + ", ".join(invalid))
@@ -825,14 +1015,27 @@ class COMSOLRunner:
                 "selfViewLossRaw_pct": loss["loss_raw_pct"],
                 "selfViewLoss_pct": loss["loss_pct"],
                 "radiationNumericalExcess_pct": loss["numerical_excess_pct"],
-                "vol_err": vol_err,
+                "volume_m3": V,
+                "expectedVolume_m3": V0now,
+                "volumeLossFromInitial_pct": volume_loss_pct,
+                "geometryVolumeError_rel": geometry_vol_err,
+                "targetVolumeDeviation_rel": target_volume_deviation,
+                "vol_err": geometry_vol_err,
                 "temp_ok": Tmax < self.temp_limit_K,
-                "volume_ok": vol_err <= self.vol_tol,
+                "volume_ok": (
+                    geometry_vol_err <= self.vol_tol
+                    and (not initial_state
+                         or target_volume_deviation <= self.vol_tol)),
                 "current_ok": I > self.current_tol,
                 "R": (voltage / I) if I > self.current_tol else float('nan'),
                 "seg_Tavg": seg_Tavg,
+                "segMaskAreaRatio": seg_mask_area_ratios,
             })
         except Exception as e:
+            try:
+                self.client.names()
+            except Exception:
+                raise ServerDisconnectError(str(e)) from e
             result["failure"] = str(e)
 
         return result
@@ -978,6 +1181,11 @@ class COMSOLRunner:
         result["metricVersion"] = self.metric_version
         result["physicsVersion"] = self.physics_version
         result["geometryVersion"] = self.geometry_version
+        result["lifecycleVersion"] = self.lifecycle_version
+        result["erosionModel"] = self.erosion_model
+        result["failureFraction"] = self.failure_fraction
+        result["maxErosionStep_s"] = self.max_erosion_step_s
+        result["geometryVolumeTolerance_rel"] = self.vol_tol
         result["radiationEscapeMethod"] = self.radiation_escape_method
         result["spectralSplit_um"] = self.spectral_split_um
         result["thermalAmbient_K"] = self.thermal_ambient_K
@@ -1072,10 +1280,26 @@ class COMSOLRunner:
         return self._solve_prepared(radii_m, voltage)
 
     def _restart_at_radii(self, initial_radii, current_radii, voltage):
-        """Restart COMSOL and restore the exact current erosion radii."""
-        print("  Restarting COMSOL and restoring current erosion radii...")
-        self.stop()
-        self.start()
+        """Rebuild the model on the live client and restore erosion state.
+
+        mph only permits one client per Python process. Disconnecting and then
+        calling mph.start() returns the same disconnected client, so a genuine
+        server loss must be handled by the outer process-level resume worker.
+        """
+        try:
+            self.client.names()
+        except Exception as exc:
+            raise ServerDisconnectError(
+                "COMSOL server disconnected; process restart is required"
+            ) from exc
+        print("  Rebuilding COMSOL model and restoring current erosion radii...")
+        if self.model is not None:
+            try:
+                self.client.remove(self.model)
+            except Exception:
+                pass
+        self.model = None
+        self.j = None
         self._init_model(initial_radii)
         return self._solve_at_voltage(current_radii, voltage)
 
@@ -1143,193 +1367,271 @@ class COMSOLRunner:
                 "elapsed_sec": round(time.time() - t_start, 1),
             }, policy, objective, max_safe_v)
 
-        # ---- Phase 2: 侵蚀循环 ----
-        print("  Phase 2: erosion loop...")
+        # ---- Phase 2: geometry/lifecycle v2 erosion loop ----
+        print("  Phase 2: geometry/lifecycle v2 erosion loop...")
         time_s = 0.0
         p03_integral = 0.0
         prad_integral = 0.0
         p03_sphere_integral = 0.0
         prad_sphere_integral = 0.0
         macro_step = 0
+        attempted_steps = 0
         failed = False
-        max_macro_steps = 50
+        cap_limited = False
+        step_limited = False
+        censored = False
+        termination_reason = ""
+        failure_feature = ""
+        failure_index = ""
+        max_loss_frac = 0.0
+
+        initial_volume = self._feature_volume(
+            self._initial_radii, self.Lseg)
+        initial_shoulder_area = sum(
+            self._shoulder_areas(self._initial_radii))
+        max_shoulder_area = initial_shoulder_area
 
         prev_P03 = r0_res["P03steady"]
         prev_Prad = r0_res["PradSteady"]
         prev_P03sphere = r0_res["P03sphere"]
         prev_PradSphere = r0_res["PradSphere"]
+        prev_Tmax = r0_res["Tmax"]
         Tavg = r0_res["seg_Tavg"]
         max_erosion_tmax = r0_res["Tmax"]
         erosion_retry_count = 0
+        overtemp_fields = {}
+        failure_text = ""
 
-        while macro_step < max_macro_steps and not failed:
-            macro_step += 1
+        def build_result(status):
+            final_volume = self._feature_volume(radii, self.Lseg)
+            final_shoulder_area = sum(self._shoulder_areas(radii))
+            return {
+                "Vwork_V": Vwork,
+                "initialTmax_K": r0_res["Tmax"],
+                "Tmin_K": r0_res["Tmin"],
+                "Tmean_K": r0_res["Tmean"],
+                "U_pct": r0_res["U_pct"],
+                "lifetimeH": time_s / 3600.0,
+                **self._lifecycle_radiation_fields(
+                    r0_res, time_s, p03_integral, prad_integral,
+                    p03_sphere_integral, prad_sphere_integral),
+                "maxErosionTmax_K": max_erosion_tmax,
+                "failureReached": failed,
+                "capLimited": cap_limited,
+                "stepLimited": step_limited,
+                "censored": censored,
+                "lifetimeExact": failed and status == "OK",
+                "terminationReason": termination_reason,
+                "failureFeature": failure_feature,
+                "failureIndex": failure_index,
+                "maxFeatureLoss_pct": 100.0 * max_loss_frac,
+                "erosionSteps": macro_step,
+                "erosionAttemptedSteps": attempted_steps,
+                "erosionSolveRetries": erosion_retry_count,
+                "maxLifetimeCap_h": self.max_lifetime_h,
+                "maxErosionSteps": self.max_erosion_steps,
+                "initialCOMSOLVolume_m3": r0_res["volume_m3"],
+                "initialExpectedVolume_m3": r0_res["expectedVolume_m3"],
+                "initialGeometryVolumeError_rel": (
+                    r0_res["geometryVolumeError_rel"]),
+                "initialTargetVolumeDeviation_rel": (
+                    r0_res["targetVolumeDeviation_rel"]),
+                "initialSegmentMaskAreaRatioMin": min(
+                    r0_res["segMaskAreaRatio"]),
+                "initialSegmentMaskAreaRatioMax": max(
+                    r0_res["segMaskAreaRatio"]),
+                "initialVolume_m3": initial_volume,
+                "finalVolume_m3": final_volume,
+                "volumeLoss_pct": 100.0 * (
+                    1.0 - final_volume / initial_volume),
+                "initialShoulderArea_m2": initial_shoulder_area,
+                "finalShoulderArea_m2": final_shoulder_area,
+                "maxShoulderArea_m2": max_shoulder_area,
+                **overtemp_fields,
+                "status": status,
+                "failure": failure_text,
+                "elapsed_sec": round(time.time() - t_start, 1),
+            }
 
-            # (a) 蒸发速率
-            drdt = [0.0] * self.seg_count
-            max_drdt = 0.0
-            for i in range(self.seg_count):
-                gamma = self.Aev * math.exp(-self.Bev / Tavg[i])
-                drdt[i] = gamma / self.rho_mass
-                max_drdt = max(max_drdt, drdt[i])
-
-            if max_drdt < 1e-15:
-                print("  Evaporation negligible. Infinite lifetime.")
+        while macro_step < self.max_erosion_steps and not failed:
+            drdt, _, _ = self._cylinder_erosion_rates(radii, Tavg)
+            if max(drdt) < 1.0e-15:
+                remaining = max(
+                    0.0, self.max_lifetime_h * 3600.0 - time_s)
+                p03_integral += prev_P03 * remaining
+                prad_integral += prev_Prad * remaining
+                p03_sphere_integral += prev_P03sphere * remaining
+                prad_sphere_integral += prev_PradSphere * remaining
+                time_s += remaining
+                termination_reason = "negligible_erosion"
+                censored = True
+                print("  Evaporation negligible; integrated constant power "
+                      "to the lifecycle cap and censored the lifetime.")
                 break
 
-            # (b) 宏步时长
-            dt_macro = float('inf')
-            for i in range(self.seg_count):
-                if drdt[i] > 1e-20:
-                    dt_macro = min(dt_macro,
-                                   resolve_threshold / drdt[i])
-                    t_fail = (radii[i] - self._fail_radii[i]) / drdt[i]
-                    if t_fail > 0:
-                        dt_macro = min(dt_macro, t_fail)
-            dt_macro = max(1.0, min(36000.0, dt_macro))
+            dt_macro = self._next_erosion_timestep(
+                radii, self._fail_radii, drdt,
+                resolve_threshold, time_s)
+            if dt_macro <= 0.0:
+                cap_limited = True
+                censored = True
+                termination_reason = "lifetime_cap"
+                break
 
-            # (c) 推进半径
-            max_loss_frac = 0.0
-            for i in range(self.seg_count):
-                radii[i] -= drdt[i] * dt_macro
-                radii[i] = max(1e-6, radii[i])
-                loss_frac = ((self._initial_radii[i] - radii[i])
-                             / self._initial_radii[i])
-                max_loss_frac = max(max_loss_frac, loss_frac)
-            time_s += dt_macro
+            candidate_radii, candidate_losses, failed_indices = (
+                self._advance_erosion_features(
+                    radii, self._initial_radii, self._fail_radii,
+                    drdt, dt_macro))
+            candidate_time_s = time_s + dt_macro
+            candidate_max_loss = max(candidate_losses)
+            attempted_steps += 1
 
-            if max_loss_frac >= self.failure_fraction:
-                failed = True
-
-            # (d) 求解
-            print(f"  SOLVING step={macro_step} t={time_s / 3600.0:.3f}h "
-                  f"loss={max_loss_frac:.4f}")
+            print(f"  SOLVING step={attempted_steps} "
+                  f"t={candidate_time_s / 3600.0:.3f}h "
+                  f"loss={candidate_max_loss:.6f}")
             r_now = None
-            failure = ""
+            solve_failure = ""
             for attempt in range(self.max_erosion_solve_retries + 1):
                 try:
                     if attempt == 0:
-                        r_now = self._solve_at_voltage(radii, Vwork)
+                        r_now = self._solve_at_voltage(candidate_radii, Vwork)
                     else:
                         erosion_retry_count += 1
-                        print(f"  RETRY step {macro_step}: {attempt}/"
+                        print(f"  RETRY step {attempted_steps}: {attempt}/"
                               f"{self.max_erosion_solve_retries}")
                         r_now = self._restart_at_radii(
-                            self._initial_radii, radii, Vwork)
+                            self._initial_radii, candidate_radii, Vwork)
                     if r_now.get("solve_ok", False):
                         break
-                    failure = r_now.get("failure", "unknown solve failure")
+                    solve_failure = r_now.get(
+                        "failure", "unknown solve failure")
+                except ServerDisconnectError:
+                    raise
                 except Exception as exc:
                     try:
-                        failure = str(exc)
+                        solve_failure = str(exc)
                     except Exception:
-                        failure = exc.__class__.__name__
+                        solve_failure = exc.__class__.__name__
                     r_now = None
                 if attempt < self.max_erosion_solve_retries:
-                    print(f"  WARN step {macro_step} attempt {attempt + 1} failed: "
-                          f"{failure}")
+                    print(f"  WARN step {attempted_steps} attempt "
+                          f"{attempt + 1} failed: {solve_failure}")
 
             if r_now is None or not r_now.get("solve_ok", False):
-                print(f"  WARN: solve failed step {macro_step}: {failure}")
-                return self._annotate_voltage_result({
-                    "Vwork_V": Vwork,
-                    "initialTmax_K": r0_res["Tmax"],
-                    "Tmin_K": r0_res["Tmin"],
-                    "Tmean_K": r0_res["Tmean"],
-                    "U_pct": r0_res["U_pct"],
-                    "lifetimeH": time_s / 3600.0,
-                    **self._lifecycle_radiation_fields(
-                        r0_res, time_s, p03_integral, prad_integral,
-                        p03_sphere_integral, prad_sphere_integral),
-                    "maxErosionTmax_K": max_erosion_tmax,
-                    "failureReached": failed,
-                    "erosionSteps": macro_step,
-                    "erosionSolveRetries": erosion_retry_count,
-                    "status": "FAIL_EROSION_SOLVE",
-                    "failure": failure,
-                    "elapsed_sec": round(time.time() - t_start, 1),
-                }, policy, objective, max_safe_v)
+                # The candidate interval is not committed until its endpoint
+                # has solved. Report only the last verified state and energy.
+                censored = True
+                termination_reason = "erosion_solve_failure"
+                failure_text = solve_failure
+                print(f"  WARN: solve failed step {attempted_steps}: "
+                      f"{solve_failure}")
+                result = build_result("FAIL_EROSION_SOLVE")
+                return self._annotate_voltage_result(
+                    result, policy, objective, max_safe_v)
 
-            print(f"  SOLVED step={macro_step} Tmax={r_now['Tmax']:.1f}K "
+            print(f"  SOLVED step={attempted_steps} "
+                  f"Tmax={r_now['Tmax']:.1f}K "
                   f"P03escape={r_now['P03sphere']:.2f}W")
+            max_erosion_tmax = max(max_erosion_tmax, r_now["Tmax"])
 
-            # (e) 梯形积分
-            if r_now["Tmax"] > max_erosion_tmax:
-                max_erosion_tmax = r_now["Tmax"]
+            cur_P03 = r_now["P03steady"]
+            cur_Prad = r_now["PradSteady"]
+            cur_P03sphere = r_now["P03sphere"]
+            cur_PradSphere = r_now["PradSphere"]
 
-            cur_P03 = (r_now["P03steady"]
-                       if r_now["solve_ok"] else prev_P03)
-            cur_Prad = (r_now["PradSteady"]
-                        if r_now["solve_ok"] else prev_Prad)
-            cur_P03sphere = (r_now["P03sphere"]
-                             if r_now["solve_ok"] else prev_P03sphere)
-            cur_PradSphere = (r_now["PradSphere"]
-                              if r_now["solve_ok"] else prev_PradSphere)
+            if r_now["Tmax"] >= self.temp_limit_K:
+                fraction = self._overtemperature_fraction(
+                    prev_Tmax, r_now["Tmax"], self.temp_limit_K)
+                valid_dt = fraction * dt_macro
 
+                def at_crossing(previous, current):
+                    return previous + fraction * (current - previous)
+
+                cross_P03 = at_crossing(prev_P03, cur_P03)
+                cross_Prad = at_crossing(prev_Prad, cur_Prad)
+                cross_P03sphere = at_crossing(
+                    prev_P03sphere, cur_P03sphere)
+                cross_PradSphere = at_crossing(
+                    prev_PradSphere, cur_PradSphere)
+                p03_integral += 0.5 * (prev_P03 + cross_P03) * valid_dt
+                prad_integral += 0.5 * (prev_Prad + cross_Prad) * valid_dt
+                p03_sphere_integral += 0.5 * (
+                    prev_P03sphere + cross_P03sphere) * valid_dt
+                prad_sphere_integral += 0.5 * (
+                    prev_PradSphere + cross_PradSphere) * valid_dt
+
+                radii, crossing_losses, crossing_failed = (
+                    self._advance_erosion_features(
+                        radii, self._initial_radii, self._fail_radii,
+                        drdt, valid_dt))
+                time_s += valid_dt
+                macro_step += 1
+                max_loss_frac = max(crossing_losses)
+                failed = bool(crossing_failed)
+                if crossing_failed:
+                    failure_feature = "segment_radius"
+                    failure_index = crossing_failed[0] + 1
+                censored = not failed
+                termination_reason = "overtemperature"
+                overtemp_fields = {
+                    "overtempStep": macro_step,
+                    "overtempTimeH": time_s / 3600.0,
+                    "overtempTmax_K": r_now["Tmax"],
+                    "overtempInterpolationFraction": fraction,
+                    "overtempBracketEndTimeH": candidate_time_s / 3600.0,
+                }
+                result = build_result("FAIL_OVERTEMP_DURING_EROSION")
+                return self._annotate_voltage_result(
+                    result, policy, objective, max_safe_v)
+
+            # Commit the verified endpoint, then integrate the exact interval.
             p03_integral += 0.5 * (prev_P03 + cur_P03) * dt_macro
             prad_integral += 0.5 * (prev_Prad + cur_Prad) * dt_macro
             p03_sphere_integral += 0.5 * (
                 prev_P03sphere + cur_P03sphere) * dt_macro
             prad_sphere_integral += 0.5 * (
                 prev_PradSphere + cur_PradSphere) * dt_macro
-
-            if r_now["Tmax"] >= self.temp_limit_K:
-                elapsed = time.time() - t_start
-                lifetime_h = time_s / 3600.0
-                return self._annotate_voltage_result({
-                    "Vwork_V": Vwork,
-                    "initialTmax_K": r0_res["Tmax"],
-                    "Tmin_K": r0_res["Tmin"],
-                    "Tmean_K": r0_res["Tmean"],
-                    "U_pct": r0_res["U_pct"],
-                    "lifetimeH": lifetime_h,
-                    **self._lifecycle_radiation_fields(
-                        r0_res, time_s, p03_integral, prad_integral,
-                        p03_sphere_integral, prad_sphere_integral),
-                    "maxErosionTmax_K": max_erosion_tmax,
-                    "overtempStep": macro_step,
-                    "overtempTimeH": lifetime_h,
-                    "overtempTmax_K": r_now["Tmax"],
-                    "failureReached": failed,
-                    "erosionSteps": macro_step,
-                    "erosionSolveRetries": erosion_retry_count,
-                    "status": "FAIL_OVERTEMP_DURING_EROSION",
-                    "elapsed_sec": round(elapsed, 1),
-                }, policy, objective, max_safe_v)
+            radii = candidate_radii
+            time_s = candidate_time_s
+            macro_step += 1
+            max_loss_frac = candidate_max_loss
+            max_shoulder_area = max(
+                max_shoulder_area, sum(self._shoulder_areas(radii)))
 
             prev_P03 = cur_P03
             prev_Prad = cur_Prad
             prev_P03sphere = cur_P03sphere
             prev_PradSphere = cur_PradSphere
+            prev_Tmax = r_now["Tmax"]
             Tavg = r_now["seg_Tavg"]
 
-            if macro_step % 5 == 0 or failed:
+            if failed_indices:
+                failed = True
+                termination_reason = "feature_loss_20pct"
+                failure_feature = "segment_radius"
+                failure_index = failed_indices[0] + 1
+            elif time_s >= (self.max_lifetime_h * 3600.0
+                            - self.erosion_time_tol_s):
+                cap_limited = True
+                censored = True
+                termination_reason = "lifetime_cap"
+
+            if macro_step % 5 == 0 or failed or cap_limited:
                 print(f"  STEP={macro_step} t={time_s / 3600:.2f}h "
-                      f"loss={max_loss_frac:.4f}")
+                      f"loss={max_loss_frac:.6f}")
+            if cap_limited:
+                break
 
-        # ---- Phase 3: 汇总结果 ----
-        lifetime_h = time_s / 3600.0
+        if not termination_reason:
+            step_limited = not failed
+            censored = step_limited
+            termination_reason = (
+                "step_limit" if step_limited else "feature_loss_20pct")
 
-        elapsed = time.time() - t_start
+        status = self._lifecycle_terminal_status(
+            failed, cap_limited, step_limited, termination_reason)
 
-        result = {
-            "Vwork_V": Vwork,
-            "initialTmax_K": r0_res["Tmax"],
-            "Tmin_K": r0_res["Tmin"],
-            "Tmean_K": r0_res["Tmean"],
-            "U_pct": r0_res["U_pct"],
-            "lifetimeH": lifetime_h,
-            **self._lifecycle_radiation_fields(
-                r0_res, time_s, p03_integral, prad_integral,
-                p03_sphere_integral, prad_sphere_integral),
-            "maxErosionTmax_K": max_erosion_tmax,
-            "failureReached": failed,
-            "erosionSteps": macro_step,
-            "erosionSolveRetries": erosion_retry_count,
-            "status": "OK",
-            "elapsed_sec": round(elapsed, 1),
-        }
-
+        result = build_result(status)
         required = [
             "Vwork_V", "initialTmax_K", "Tmin_K", "Tmean_K", "U_pct",
             "maxErosionTmax_K", "lifetimeH",
@@ -1341,10 +1643,14 @@ class COMSOLRunner:
             "lifeTotalP03escape_J", "selfViewLossRaw_pct",
             "selfViewLoss_pct", "erosionSteps",
         ]
-        invalid = [k for k in required if not self._finite_number(result[k])]
+        invalid = [key for key in required
+                   if not self._finite_number(result.get(key))]
         if invalid:
             result["status"] = "FAIL_INVALID_RESULT"
-            result["failure"] = "Non-finite final metric(s): " + ", ".join(invalid)
+            result["failure"] = (
+                "Non-finite final metric(s): " + ", ".join(invalid))
+            result["censored"] = True
+            result["lifetimeExact"] = False
 
         return self._annotate_voltage_result(
             result, policy, objective, max_safe_v)

@@ -1,0 +1,46 @@
+Traceback (most recent call last):
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 180, in main
+    run_cylinder() if family == "cylinder" else run_zigzag())
+                                                ^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 117, in run_zigzag
+    eroded_result = runner._restart_at_geometry(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\zigzag_family\ML\zigzag_runner.py", line 589, in _restart_at_geometry
+    self._init_model(
+  File "D:\VScode\project\BFHC\zigzag_family\ML\zigzag_runner.py", line 819, in _init_model
+    raise RuntimeError(
+RuntimeError: Phase-0 warm-up failed at 1V/10V/100V: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 10 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (-0.000283302,0.000283302,0.00682673), (-0.000283302,-0.000283302,0.00682673), (-0.000283302,2.71051e-20,0.00682673), (-0.000283872,-0.000283872,0.00682673), (-0.000283587,-0.000283587,0.00682673), ...
+
+Traceback (most recent call last):
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 201, in <module>
+    main()
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 180, in main
+    run_cylinder() if family == "cylinder" else run_zigzag())
+                                                ^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 117, in run_zigzag
+    eroded_result = runner._restart_at_geometry(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\zigzag_family\ML\zigzag_runner.py", line 589, in _restart_at_geometry
+    self._init_model(
+  File "D:\VScode\project\BFHC\zigzag_family\ML\zigzag_runner.py", line 819, in _init_model
+    raise RuntimeError(
+RuntimeError: Phase-0 warm-up failed at 1V/10V/100V: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 10 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (-0.000283302,0.000283302,0.00682673), (-0.000283302,-0.000283302,0.00682673), (-0.000283302,2.71051e-20,0.00682673), (-0.000283872,-0.000283872,0.00682673), (-0.000283587,-0.000283587,0.00682673), ...
+

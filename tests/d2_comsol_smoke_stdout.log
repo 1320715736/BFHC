@@ -1,0 +1,13 @@
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+  Model init OK: sanity Tmax=2700.9K, I=1892.9002A
+COMSOL disconnected.
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up failed (non-fatal): Exception:
+	com.comsol.util.exceptions.FlException: 未连接到服务器。
+Messages:
+	Not connected to a server
+
+COMSOL disconnected.

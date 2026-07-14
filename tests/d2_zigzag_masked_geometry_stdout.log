@@ -1,0 +1,12 @@
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+  Model init OK: sanity Tmax=668.8K I=3.0921A
+  WARN solve failed: masked local surface integral failed for block 17
+  WARN solve failed: Exception:
+	com.comsol.util.exceptions.FlException: 未知特征。
+Messages:
+	未知特征。
+	- 标记: maxTZZ
+
+  Rebuilding COMSOL model and restoring erosion geometry...

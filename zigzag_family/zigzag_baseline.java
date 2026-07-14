@@ -1,8 +1,12 @@
 {
     // zigzag_baseline.java — 完整生命周期仿真
+    // D2 NOTICE: 本 Java Shell 文件冻结在 D1 的全局最小边长退蚀近似。
+    // geometry/lifecycle v2 的唯一权威执行路径是 ML/zigzag_runner.py；
+    // 禁止用本文件生成 D2/E1 评分数据。
     // 赛题：MultipleSpectralBands S2S + 电压搜索 + 侵蚀循环
     // 修复：solver 只 clearSolution()，不 remove()，避免 result dataset 失效
     // 用法: COMSOL Desktop → Java Shell → Ctrl+Enter
+    System.out.println("MODEL_AUTHORITY=LEGACY_D1_ONLY;D2_RUNNER=zigzag_family/ML/zigzag_runner.py");
 
     // ================================================================
     //  常量

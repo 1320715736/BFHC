@@ -1,0 +1,48 @@
+Traceback (most recent call last):
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 185, in main
+    run_cylinder() if family == "cylinder" else run_zigzag())
+                                                ^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 122, in run_zigzag
+    eroded_result = runner._restart_at_geometry(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\zigzag_family\ML\zigzag_runner.py", line 640, in _restart_at_geometry
+    process. In that case the process-level resume worker must retry the
+  File "D:\VScode\project\BFHC\zigzag_family\ML\zigzag_runner.py", line 870, in _init_model
+    # Tu_band1 初始化为 0，导致 MultipleSpectralBands 的 Planck 积分除零。
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Phase-0 warm-up failed at 1V/10V/100V: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 10 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (0.000284442,2.72291e-06,0.0120013), (0.000284442,-0.000283872,0.0120018), (0.000284442,-0.000140575,0.0120016), (0.000284442,-0.000284157,0.0120016), (0.000284442,-0.000284442,0.0120013), ...
+
+Traceback (most recent call last):
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 206, in <module>
+    main()
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 185, in main
+    run_cylinder() if family == "cylinder" else run_zigzag())
+                                                ^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 122, in run_zigzag
+    eroded_result = runner._restart_at_geometry(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\zigzag_family\ML\zigzag_runner.py", line 640, in _restart_at_geometry
+    process. In that case the process-level resume worker must retry the
+  File "D:\VScode\project\BFHC\zigzag_family\ML\zigzag_runner.py", line 870, in _init_model
+    # Tu_band1 初始化为 0，导致 MultipleSpectralBands 的 Planck 积分除零。
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Phase-0 warm-up failed at 1V/10V/100V: Exception:
+	com.comsol.util.exceptions.FlException: 以下特征遇到问题：
+Messages:
+	以下特征遇到问题：
+	- 特征: 稳态求解器 1 (sol1/s1)
+
+	找到未定义的值。
+	- 详细信息: 在  中找到未定义的值方程残余矢量.
+有 10 个自由度，在变量 comp1.T 的矢量中为 NaN/Inf。
+ 位于坐标： (0.000284442,2.72291e-06,0.0120013), (0.000284442,-0.000283872,0.0120018), (0.000284442,-0.000140575,0.0120016), (0.000284442,-0.000284157,0.0120016), (0.000284442,-0.000284442,0.0120013), ...
+

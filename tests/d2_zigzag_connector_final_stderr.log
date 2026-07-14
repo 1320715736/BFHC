@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 185, in main
+    run_cylinder() if family == "cylinder" else run_zigzag())
+                                                ^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 100, in run_zigzag
+    initial = finite_summary(runner._solve_prepared(voltage))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 44, in finite_summary
+    raise RuntimeError(f"non-finite smoke field: {field}={value}")
+RuntimeError: non-finite smoke field: volume_m3=nan
+Traceback (most recent call last):
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 206, in <module>
+    main()
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 185, in main
+    run_cylinder() if family == "cylinder" else run_zigzag())
+                                                ^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 100, in run_zigzag
+    initial = finite_summary(runner._solve_prepared(voltage))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 44, in finite_summary
+    raise RuntimeError(f"non-finite smoke field: {field}={value}")
+RuntimeError: non-finite smoke field: volume_m3=nan

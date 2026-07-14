@@ -1,0 +1,52 @@
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+  Model init OK: sanity Tmax=2700.9K, I=1892.9002A
+COMSOL disconnected.
+{
+  "timestamp": "2026-07-14T23:14:24.492833+08:00",
+  "status": "OK",
+  "controls": [
+    {
+      "family": "cylinder",
+      "geometryVersion": "cylinder_segmented_erosion_v2",
+      "lifecycleVersion": "lifecycle_v2",
+      "erosionModel": "local_sidewall_plus_shoulder_volume_balance",
+      "initialShoulderArea_m2": 0.00011740372417791767,
+      "updatedShoulderArea_m2": 0.000115755443009889,
+      "initial": {
+        "Tmax": 3161.5005541990445,
+        "Tmin": 293.14941099840735,
+        "Tmean": 2257.25008415679,
+        "U_pct": 127.0728114413662,
+        "P03gross": 219.65394472140008,
+        "P03escape": 197.01291684986754,
+        "PradGross": 236.35398505509846,
+        "PradEscape": 212.99100512032626,
+        "volume_m3": 2.945187613085308e-07,
+        "expectedVolume_m3": 2.945243112740431e-07,
+        "volumeLossFromInitial_pct": 53.02225482627549,
+        "vol_err": 8.852405576666336e-06,
+        "solve_ok": true,
+        "failure": ""
+      },
+      "locallyEroded": {
+        "Tmax": 3161.880293051711,
+        "Tmin": 293.1486214279111,
+        "Tmean": 2256.0142177948155,
+        "U_pct": 127.15929044223387,
+        "P03gross": 217.75416053953975,
+        "P03escape": 195.68299149597948,
+        "PradGross": 234.31004886095812,
+        "PradEscape": 211.53901622474433,
+        "volume_m3": 2.918210849517367e-07,
+        "expectedVolume_m3": 2.918237692877431e-07,
+        "volumeLossFromInitial_pct": 53.45300151986609,
+        "vol_err": 4.281617783094872e-06,
+        "solve_ok": true,
+        "failure": ""
+      }
+    }
+  ],
+  "elapsed_sec": 125.5
+}

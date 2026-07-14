@@ -16,9 +16,11 @@ S2S 辐射模型：MultipleSpectralBands，ε₀₃=0.35（0-3μm），ε_rest=0
   总体积 = 2×π×R0²×STUB_LEN（terminal stubs）+ side²×pathLength（折线段）
   = π×R0²×L0（与圆柱基准体积相等）
 
-侵蚀模型：
-  dside/dt = 2γ/ρ，γ = Aev·exp(-Bev/T)（方截面 4 面蒸发）
-  失效准则：任意 block 边长损失 ≥ 20%
+退蚀模型（geometry/lifecycle v2）：
+  - 每个方截面路径段保留独立边长；较大截面的 connector cube 连接转角
+  - 侧壁、转角肩面、两端 stub 侧壁及内肩面统一换算为体积损失
+  - 接触电极的两个外端面不辐射、不升华
+  - 任意 block 边长或 stub 半径损失达到 20% 时失效
 
 用法：
     runner = COMSOLRunner()
@@ -56,7 +58,7 @@ class COMSOLRunner:
         self.STUB_LEN = 0.5e-3      # terminal stub 长度 (m)
         self.temp_limit_K = 3273.15
         self.rho_mass = 19350.0
-        self.vol_tol = 0.03
+        self.vol_tol = 1.0e-4
         self.current_tol = 1e-9
         self.sphere_margin = 1.05
         self.voltage_upper = 100.0
@@ -67,7 +69,11 @@ class COMSOLRunner:
         self.voltage_objective = "lifeTotalP03sphere_J"
         self.metric_version = "radiation_escape_v2"
         self.physics_version = "thermal_s2s_v2"
-        self.geometry_version = "zigzag_blocks_v1"
+        self.geometry_version = "zigzag_local_erosion_v2"
+        self.lifecycle_version = "lifecycle_v2"
+        self.erosion_model = "local_blocks_turn_caps_and_terminal_stubs"
+        self.turn_connector_rule = "max_adjacent_side_cube_split_external_faces"
+        self.geometry_side_quantum_fraction = 0.01
         self.radiation_escape_method = "s2s_radiosity_famb"
         self.spectral_split_um = 3.0
         self.thermal_ambient_K = 293.15
@@ -81,6 +87,9 @@ class COMSOLRunner:
         self.max_erosion_steps = 50
         self.max_erosion_solve_retries = 2
         self.max_lifetime_h = 200.0   # 侵蚀循环最大仿真时长，避免低蒸发率构型无限运行
+        self.max_erosion_step_s = 36000.0
+        self.erosion_rel_tol = 1.0e-10
+        self.erosion_time_tol_s = 1.0e-6
 
         # 材料属性表达式（与 zigzag_baseline.java 一致，含 max guard）
         self.rhoe_expr = (
@@ -99,6 +108,13 @@ class COMSOLRunner:
         # 运行时状态（每次 evaluate 设置）
         self._blocks0 = None
         self._current_blocks = None
+        self._path_points = None
+        self._segment_endpoints = None
+        self._turn_flags = None
+        self._block_lengths = None
+        self._current_block_sides = None
+        self._current_stub_radii = None
+        self._last_block_mask_area_ratios = []
         self._init_side = None
         self._n_blocks = None
 
@@ -166,34 +182,112 @@ class COMSOLRunner:
 
     @staticmethod
     def build_blocks(pts, side):
-        """将 Manhattan 路径分解为 Block 数据列表。
-        返回 [(tag, x0, y0, z0, sx, sy, sz), ...]
+        """Build equal-side path segments; turns are separate connector cubes."""
+        count = sum(
+            1 for p0, p1 in zip(pts[:-1], pts[1:])
+            if abs(p1[0] - p0[0]) + abs(p1[1] - p0[1]) > 1.0e-12)
+        return COMSOLRunner.build_blocks_with_sides(pts, [side] * count)
+
+    @staticmethod
+    def build_blocks_with_sides(pts, sides):
+        """Build one exact centreline-length cuboid per path segment.
+
+        A turn is completed by :meth:`build_turn_blocks`. Keeping segment
+        cuboids at their exact centreline length avoids the non-manifold,
+        micron-wide ledges created when unequal segments both extend through
+        the same corner.
         """
-        blocks = []
-        half = 0.5 * side
-        for i in range(len(pts) - 1):
-            p0, p1 = pts[i], pts[i + 1]
+        segments = []
+        for p0, p1 in zip(pts[:-1], pts[1:]):
             dx, dz = p1[0] - p0[0], p1[1] - p0[1]
-            if abs(dx) < 1e-12 and abs(dz) < 1e-12:
+            if abs(dx) < 1.0e-12 and abs(dz) < 1.0e-12:
                 continue
-            ext_s = 0.0 if i == 0 else half
-            ext_e = 0.0 if i == len(pts) - 2 else half
-            tag = f"blk_{len(blocks) + 1}"
-            if abs(dx) > 1e-12:  # 水平段
-                d = 1.0 if dx > 0 else -1.0
-                xa = p0[0] - d * ext_s
-                xb = p1[0] + d * ext_e
-                x_lo, x_hi = min(xa, xb), max(xa, xb)
+            segments.append((p0, p1, dx, dz))
+        if len(sides) != len(segments):
+            raise ValueError("one block side is required per non-zero path segment")
+
+        blocks = []
+        for index, ((p0, p1, dx, dz), side_value) in enumerate(
+                zip(segments, sides)):
+            side = float(side_value)
+            if side <= 0.0:
+                raise ValueError("block sides must be positive")
+            half = 0.5 * side
+            tag = f"blk_{index + 1}"
+            if abs(dx) > 1.0e-12:
+                x_lo, x_hi = sorted((p0[0], p1[0]))
                 blocks.append((tag, x_lo, -half, p0[1] - half,
                                x_hi - x_lo, side, side))
-            else:  # 垂直段
-                d = 1.0 if dz > 0 else -1.0
-                za = p0[1] - d * ext_s
-                zb = p1[1] + d * ext_e
-                z_lo, z_hi = min(za, zb), max(za, zb)
+            else:
+                z_lo, z_hi = sorted((p0[1], p1[1]))
                 blocks.append((tag, p0[0] - half, -half, z_lo,
                                side, side, z_hi - z_lo))
         return blocks
+
+    @staticmethod
+    def build_turn_blocks(pts, sides):
+        """Build robust 90-degree connector cubes owned by the larger side.
+
+        The max-side cube gives each incoming segment a finite-volume overlap
+        and turns a local side mismatch into a conventional shoulder. COMSOL
+        can mesh this topology reliably, unlike intersecting unequal cuboids
+        whose face terminates on another cuboid's edge.
+        """
+        path_points = []
+        segments = []
+        for p0, p1 in zip(pts[:-1], pts[1:]):
+            dx, dz = p1[0] - p0[0], p1[1] - p0[1]
+            if abs(dx) < 1.0e-12 and abs(dz) < 1.0e-12:
+                continue
+            if not path_points:
+                path_points.append(p0)
+            path_points.append(p1)
+            segments.append((dx, dz))
+        if len(sides) != len(segments):
+            raise ValueError("one block side is required per non-zero path segment")
+
+        turns = []
+        for index in range(len(segments) - 1):
+            dx0, dz0 = segments[index]
+            dx1, dz1 = segments[index + 1]
+            if (abs(dx0) > 1.0e-12) == (abs(dx1) > 1.0e-12):
+                continue
+            side = max(float(sides[index]), float(sides[index + 1]))
+            half = 0.5 * side
+            x, z = path_points[index + 1]
+            turns.append((f"turn_{index + 1}", x - half, -half, z - half,
+                          side, side, side))
+        return turns
+
+    @staticmethod
+    def path_segment_lengths(pts):
+        """Return centerline lengths for non-zero Manhattan segments."""
+        lengths = []
+        for p0, p1 in zip(pts[:-1], pts[1:]):
+            length = abs(p1[0] - p0[0]) + abs(p1[1] - p0[1])
+            if length > 1.0e-12:
+                lengths.append(length)
+        return lengths
+
+    @staticmethod
+    def path_segments(pts):
+        """Return endpoint pairs for non-zero Manhattan path segments."""
+        return [
+            (p0, p1) for p0, p1 in zip(pts[:-1], pts[1:])
+            if (abs(p1[0] - p0[0]) + abs(p1[1] - p0[1])
+                > 1.0e-12)
+        ]
+
+    @staticmethod
+    def turn_flags(segment_endpoints):
+        """Mark adjacent path segments joined by a 90-degree connector."""
+        flags = []
+        for (p0, p1), (q0, q1) in zip(
+                segment_endpoints[:-1], segment_endpoints[1:]):
+            first_horizontal = abs(p1[0] - p0[0]) > 1.0e-12
+            second_horizontal = abs(q1[0] - q0[0]) > 1.0e-12
+            flags.append(first_horizontal != second_horizontal)
+        return flags
 
     def compute_side_and_blocks(self, N_RUNS, L_RUN_m, z_first_m):
         """从参数计算 side、blocks、path 信息。"""
@@ -207,44 +301,60 @@ class COMSOLRunner:
         blocks = self.build_blocks(pts, side)
         return side, blocks, plen
 
-    def compute_envelope(self, blocks):
+    def compute_envelope(self, blocks, stub_radii=None, block_sides=None):
         """计算包含所有 blocks + terminal stubs 的外接球半径。"""
         max_dist = 0.0
-        for _, x0, y0, z0, sx, sy, sz in blocks:
+        envelope_blocks = list(blocks)
+        if block_sides is not None:
+            if self._path_points is None:
+                raise RuntimeError("path points are not initialized")
+            envelope_blocks.extend(
+                self.build_turn_blocks(self._path_points, block_sides))
+        for _, x0, y0, z0, sx, sy, sz in envelope_blocks:
             for x in (x0, x0 + sx):
                 for y in (y0, y0 + sy):
                     for z in (z0, z0 + sz):
                         max_dist = max(max_dist, math.sqrt(
                             x ** 2 + y ** 2 + (z - 0.5 * self.L0) ** 2))
-        for rx in (-self.R0, self.R0):
-            for ry in (-self.R0, self.R0):
-                for zz in (0, self.STUB_LEN,
-                           self.L0 - self.STUB_LEN, self.L0):
-                    max_dist = max(max_dist, math.sqrt(
-                        rx ** 2 + ry ** 2 + (zz - 0.5 * self.L0) ** 2))
+        radii = list(stub_radii or (self.R0, self.R0))
+        for radius, z_values in zip(
+                radii,
+                ((0.0, self.STUB_LEN),
+                 (self.L0 - self.STUB_LEN, self.L0))):
+            for zz in z_values:
+                max_dist = max(max_dist, math.sqrt(
+                    radius ** 2 + (zz - 0.5 * self.L0) ** 2))
         return self.sphere_margin * max_dist
 
     # ================================================================
     #  侵蚀后几何
     # ================================================================
 
-    @staticmethod
-    def eroded_blocks(blocks0, init_side, geom_side):
-        """按统一侵蚀后边长重新计算块位置/尺寸。"""
-        s0 = init_side
-        s_new = geom_side
-        shrink = (s0 - s_new) * 0.5
-        new_blocks = []
-        for idx, (_, x0, y0, z0, sx, sy, sz) in enumerate(blocks0):
-            tag = f"blk_{idx + 1}"
-            is_horiz = abs(sz - s0) < 1e-6 * s0
-            if is_horiz:
-                new_blocks.append((tag, x0, y0 + shrink, z0 + shrink,
-                                   sx, s_new, s_new))
-            else:
-                new_blocks.append((tag, x0 + shrink, y0 + shrink, z0,
-                                   s_new, s_new, sz))
-        return new_blocks
+    def eroded_blocks(self, block_sides):
+        """Rebuild every block from its own current side length."""
+        if self._path_points is None:
+            raise RuntimeError("path points are not initialized")
+        return self.build_blocks_with_sides(self._path_points, block_sides)
+
+    def _project_block_sides_to_geometry(self, exact_sides):
+        """Project exact erosion state onto mesh-resolvable local geometry.
+
+        Lifecycle state and the 20% failure check remain continuous. Only the
+        COMSOL geometry is quantized, to prevent sub-micron shoulder faces from
+        falling below the mesh/S2S resolution. D6 owns convergence of this
+        numerical quantum.
+        """
+        if self._init_side is None or self._init_side <= 0.0:
+            raise RuntimeError("initial block side is not initialized")
+        quantum = self.geometry_side_quantum_fraction * self._init_side
+        lower = (1.0 - self.failure_fraction) * self._init_side
+        projected = []
+        for side in exact_sides:
+            loss = max(0.0, self._init_side - float(side))
+            levels = math.floor(loss / quantum + 0.5 + 1.0e-12)
+            represented = self._init_side - levels * quantum
+            projected.append(min(self._init_side, max(lower, represented)))
+        return projected
 
     # ================================================================
     #  工具
@@ -292,6 +402,299 @@ class COMSOLRunner:
             "loss_pct": max(0.0, raw_pct),
             "numerical_excess_pct": max(0.0, -raw_pct),
         }
+
+    @staticmethod
+    def _turn_cap_areas(block_sides):
+        """Map each connector shoulder to its larger adjacent block."""
+        areas = [0.0] * len(block_sides)
+        for index in range(len(block_sides) - 1):
+            left = float(block_sides[index])
+            right = float(block_sides[index + 1])
+            if left > right:
+                areas[index] += left ** 2 - right ** 2
+            elif right > left:
+                areas[index + 1] += right ** 2 - left ** 2
+        return areas
+
+    @staticmethod
+    def _exposed_segment_lengths(block_sides, path_lengths,
+                                 turn_flags=None):
+        """Return straight lengths outside all max-side connector cubes."""
+        sides = [float(value) for value in block_sides]
+        lengths = [float(value) for value in path_lengths]
+        if len(sides) != len(lengths):
+            raise ValueError("block sides and path lengths must align")
+        if not sides:
+            return []
+        flags = (list(turn_flags) if turn_flags is not None
+                 else [True] * (len(sides) - 1))
+        if len(flags) != len(sides) - 1:
+            raise ValueError("turn flags must align with adjacent blocks")
+
+        exposed = list(lengths)
+        for index, is_turn in enumerate(flags):
+            if not is_turn:
+                continue
+            overlap = 0.5 * max(sides[index], sides[index + 1])
+            exposed[index] -= overlap
+            exposed[index + 1] -= overlap
+        for index, length in enumerate(exposed):
+            if length <= 1.0e-12:
+                raise ValueError(
+                    f"connector cubes consume block {index + 1} "
+                    f"(exposed length={length:.6e} m)")
+        return exposed
+
+    @staticmethod
+    def _turn_surface_areas(block_sides, turn_flags=None):
+        """Return connector exterior and shoulder areas for every turn."""
+        sides = [float(value) for value in block_sides]
+        flags = (list(turn_flags) if turn_flags is not None
+                 else [True] * max(0, len(sides) - 1))
+        if len(flags) != max(0, len(sides) - 1):
+            raise ValueError("turn flags must align with adjacent blocks")
+        areas = []
+        for index, is_turn in enumerate(flags):
+            if not is_turn:
+                areas.append((0.0, 0.0))
+                continue
+            left = sides[index]
+            right = sides[index + 1]
+            large = max(left, right)
+            connector_exterior = 4.0 * large ** 2
+            shoulder = ((large ** 2 - left ** 2)
+                        + (large ** 2 - right ** 2))
+            areas.append((connector_exterior, shoulder))
+        return areas
+
+    @staticmethod
+    def _turn_volume_corrections(block_sides):
+        """Extra union volume introduced by max-side connector cubes."""
+        corrections = []
+        for left, right in zip(block_sides[:-1], block_sides[1:]):
+            left = float(left)
+            right = float(right)
+            large = max(left, right)
+            corrections.append(
+                large ** 3 - 0.5 * large * (left ** 2 + right ** 2))
+        return corrections
+
+    @staticmethod
+    def _block_volume_derivatives(block_sides, path_lengths):
+        """Return dV/d(side_i) for segments plus max-side turn connectors."""
+        derivatives = [
+            2.0 * float(side) * float(length)
+            for side, length in zip(block_sides, path_lengths)]
+        for index in range(len(block_sides) - 1):
+            left = float(block_sides[index])
+            right = float(block_sides[index + 1])
+            if math.isclose(left, right, rel_tol=0.0, abs_tol=1.0e-15):
+                continue
+            if left > right:
+                derivatives[index] += 1.5 * left ** 2 - 0.5 * right ** 2
+                derivatives[index + 1] -= left * right
+            else:
+                derivatives[index] -= left * right
+                derivatives[index + 1] += 1.5 * right ** 2 - 0.5 * left ** 2
+        return derivatives
+
+    @staticmethod
+    def _circle_square_overlap_area(radius, side):
+        """Exact overlap of a centred circle and axis-aligned square."""
+        radius = max(0.0, float(radius))
+        side = max(0.0, float(side))
+        half = 0.5 * side
+        if radius <= half:
+            return math.pi * radius ** 2
+        if radius >= math.sqrt(2.0) * half:
+            return side ** 2
+
+        crossing = math.sqrt(max(0.0, radius ** 2 - half ** 2))
+
+        def primitive(x):
+            root = math.sqrt(max(0.0, radius ** 2 - x ** 2))
+            return 0.5 * (
+                x * root + radius ** 2 * math.asin(x / radius))
+
+        quadrant = half * crossing + primitive(half) - primitive(crossing)
+        return 4.0 * quadrant
+
+    def _block_erosion_rates(self, block_sides, temperatures_K,
+                             path_lengths=None, lateral_areas=None,
+                             surface_sides=None):
+        """Return local recession from all exposed straight and turn faces."""
+        lengths = list(path_lengths or self._block_lengths or [])
+        if not (len(block_sides) == len(temperatures_K) == len(lengths)):
+            raise ValueError(
+                "block sides, temperatures and path lengths must align")
+        represented_sides = list(surface_sides or block_sides)
+        if len(represented_sides) != len(block_sides):
+            raise ValueError("represented block sides must align")
+        turn_flags = (
+            self._turn_flags
+            if self._turn_flags is not None
+            and len(self._turn_flags) == len(block_sides) - 1
+            else [True] * max(0, len(block_sides) - 1))
+
+        speeds = [
+            self.Aev * math.exp(-self.Bev / float(temp)) / self.rho_mass
+            for temp in temperatures_K
+        ]
+        if lateral_areas is None:
+            exposed_lengths = self._exposed_segment_lengths(
+                represented_sides, lengths, turn_flags)
+            areas = [
+                4.0 * represented_sides[i] * exposed_lengths[i]
+                for i in range(len(block_sides))]
+        else:
+            areas = list(lateral_areas)
+            if len(areas) != len(block_sides):
+                raise ValueError("block lateral areas must align")
+        volume_rates = [
+            speeds[i] * areas[i] for i in range(len(block_sides))]
+        cap_areas = [0.0] * len(block_sides)
+
+        turn_areas = self._turn_surface_areas(
+            represented_sides, turn_flags)
+        for index, (connector_area, shoulder_area) in enumerate(turn_areas):
+            if connector_area <= 0.0:
+                continue
+            left = float(represented_sides[index])
+            right = float(represented_sides[index + 1])
+            interface_temp = 0.5 * (
+                float(temperatures_K[index])
+                + float(temperatures_K[index + 1]))
+            interface_speed = (
+                self.Aev * math.exp(-self.Bev / interface_temp)
+                / self.rho_mass)
+            # Two connector exterior faces are associated with each branch.
+            # This split preserves uniform recession for equal neighbouring
+            # sides; the dimensional shoulder belongs to the larger branch.
+            half_connector_area = 0.5 * connector_area
+            volume_rates[index] += interface_speed * half_connector_area
+            volume_rates[index + 1] += (
+                interface_speed * half_connector_area)
+            if shoulder_area > 0.0:
+                owner = index if left > right else index + 1
+                cap_areas[owner] += shoulder_area
+                volume_rates[owner] += interface_speed * shoulder_area
+
+        derivatives = self._block_volume_derivatives(block_sides, lengths)
+        rates = [
+            volume_rate / derivative
+            for volume_rate, derivative in zip(volume_rates, derivatives)]
+        return rates, cap_areas, volume_rates
+
+    def _stub_erosion_rates(self, stub_radii, stub_temperatures_K,
+                            end_block_sides, end_block_temperatures_K,
+                            lateral_areas=None):
+        """Map stub sidewall and exposed inner shoulder loss to stub radii."""
+        if not (len(stub_radii) == len(stub_temperatures_K)
+                == len(end_block_sides) == len(end_block_temperatures_K)
+                == 2):
+            raise ValueError("two terminal states are required")
+
+        rates = []
+        shoulder_areas = []
+        volume_rates = []
+        if lateral_areas is not None and len(lateral_areas) != 2:
+            raise ValueError("two stub lateral areas are required")
+        for terminal_index, (radius, stub_temp, block_side, block_temp) in enumerate(zip(
+                stub_radii, stub_temperatures_K,
+                end_block_sides, end_block_temperatures_K)):
+            radius = float(radius)
+            lateral_area = (
+                float(lateral_areas[terminal_index])
+                if lateral_areas is not None
+                else 2.0 * math.pi * radius * self.STUB_LEN)
+            overlap = self._circle_square_overlap_area(radius, block_side)
+            shoulder_area = max(0.0, math.pi * radius ** 2 - overlap)
+            side_speed = (
+                self.Aev * math.exp(-self.Bev / float(stub_temp))
+                / self.rho_mass)
+            interface_temp = 0.5 * (float(stub_temp) + float(block_temp))
+            shoulder_speed = (
+                self.Aev * math.exp(-self.Bev / interface_temp)
+                / self.rho_mass)
+            volume_rate = (
+                side_speed * lateral_area
+                + shoulder_speed * shoulder_area)
+            derivative = 2.0 * math.pi * radius * self.STUB_LEN
+            rates.append(volume_rate / derivative)
+            shoulder_areas.append(shoulder_area)
+            volume_rates.append(volume_rate)
+        return rates, shoulder_areas, volume_rates
+
+    @staticmethod
+    def _erosion_state_volume(block_sides, path_lengths,
+                              stub_radii, stub_length):
+        """Volume represented by the lifecycle degrees of freedom."""
+        block_volume = sum(
+            side ** 2 * length
+            for side, length in zip(block_sides, path_lengths))
+        turn_volume = sum(
+            COMSOLRunner._turn_volume_corrections(block_sides))
+        stub_volume = sum(
+            math.pi * radius ** 2 * stub_length for radius in stub_radii)
+        return block_volume + turn_volume + stub_volume
+
+    def _next_erosion_timestep(self, current, limits, rates,
+                               resolution_delta, time_s):
+        """Choose an exact interval bounded by resolution, failure and cap."""
+        candidates = [self.max_erosion_step_s]
+        for value, limit, rate in zip(current, limits, rates):
+            if rate <= 0.0:
+                continue
+            candidates.append(resolution_delta / rate)
+            remaining = value - limit
+            tolerance = self.erosion_rel_tol * max(abs(value), abs(limit), 1.0)
+            if remaining > tolerance:
+                candidates.append(remaining / rate)
+
+        cap_remaining = self.max_lifetime_h * 3600.0 - time_s
+        if cap_remaining <= self.erosion_time_tol_s:
+            return 0.0
+        candidates.append(cap_remaining)
+        dt = min(candidates)
+        return dt if dt > self.erosion_time_tol_s else 0.0
+
+    def _advance_erosion_features(self, current, initial, limits, rates, dt):
+        """Advance local dimensions and clamp exactly at their failure limits."""
+        updated = []
+        losses = []
+        failed_indices = []
+        for index, (value, start, limit, rate) in enumerate(
+                zip(current, initial, limits, rates)):
+            candidate = max(limit, value - rate * dt)
+            tolerance = self.erosion_rel_tol * max(abs(start), 1.0)
+            if candidate <= limit + tolerance:
+                candidate = limit
+                failed_indices.append(index)
+            updated.append(candidate)
+            losses.append((start - candidate) / start)
+        return updated, losses, failed_indices
+
+    @staticmethod
+    def _overtemperature_fraction(previous_K, current_K, limit_K):
+        if current_K < limit_K:
+            return 1.0
+        delta = current_K - previous_K
+        if delta <= 0.0:
+            return 0.0
+        return min(1.0, max(0.0, (limit_K - previous_K) / delta))
+
+    @staticmethod
+    def _lifecycle_terminal_status(
+            failed, cap_limited, step_limited, termination_reason):
+        if failed:
+            return "OK"
+        if cap_limited:
+            return "CENSORED_LIFETIME_CAP"
+        if step_limited:
+            return "CENSORED_STEP_LIMIT"
+        if termination_reason == "negligible_erosion":
+            return "CENSORED_NEGLIGIBLE_EROSION"
+        return "CENSORED_UNRESOLVED"
 
     def _lifecycle_radiation_fields(
             self, initial, time_s, p03_gross_j, prad_gross_j,
@@ -342,13 +745,28 @@ class COMSOLRunner:
             return False
 
     def _restart_at_geometry(self, N_RUNS, L_RUN_m, z_first_m,
-                             blocks, side, R_env, voltage):
-        """Restart COMSOL and restore the exact current erosion geometry."""
-        print("  Restarting COMSOL and restoring current erosion geometry...")
-        self.stop()
-        self.start()
-        self._init_model(N_RUNS, L_RUN_m, z_first_m)
-        self._rebuild(blocks, side, R_env, geom_only=True)
+                             blocks, block_sides, stub_radii,
+                             R_env, voltage):
+        """Rebuild on the live client and restore exact erosion geometry.
+
+        A disconnected mph client cannot be restarted inside the same Python
+        process. In that case the process-level resume worker must retry the
+        same trial in a fresh process.
+        """
+        if not self._is_server_alive():
+            raise ServerDisconnectError(
+                "COMSOL server disconnected; process restart is required")
+        print("  Rebuilding COMSOL model and restoring erosion geometry...")
+        if self.model is not None:
+            try:
+                self.client.remove(self.model)
+            except Exception:
+                pass
+        self.model = None
+        self.j = None
+        self._init_model(
+            N_RUNS, L_RUN_m, z_first_m,
+            geometry_state=(blocks, block_sides, stub_radii, R_env))
         return self._solve_prepared(voltage)
 
     def _clear_solutions(self, remove=False):
@@ -376,81 +794,99 @@ class COMSOLRunner:
     #  COMSOL 模型构建
     # ================================================================
 
-    def _block_lateral_bounds_mm(self, block, side):
-        """Return a Box-selection envelope for one block's lateral faces."""
-        _, x0, y0, z0, sx, sy, sz = block
-        x0_mm, x1_mm = x0 * 1e3, (x0 + sx) * 1e3
-        y0_mm, y1_mm = y0 * 1e3, (y0 + sy) * 1e3
-        z0_mm, z1_mm = z0 * 1e3, (z0 + sz) * 1e3
-        side_mm = side * 1e3
-        pad = max(1.0e-5, 0.01 * side_mm)
+    def _block_exposed_interval(self, index, block_sides):
+        """Return axis and interval outside the adjacent connector cubes."""
+        if self._segment_endpoints is None or self._turn_flags is None:
+            raise RuntimeError("path segments are not initialized")
+        if len(block_sides) != len(self._segment_endpoints):
+            raise ValueError("block sides and path segments must align")
+        if not 0 <= index < len(block_sides):
+            raise IndexError("block index is out of range")
 
-        tol = max(1.0e-12, 1.0e-6 * side)
-        is_horizontal = abs(sy - side) <= tol and abs(sz - side) <= tol
-        is_vertical = abs(sx - side) <= tol and abs(sy - side) <= tol
-        if is_horizontal and not is_vertical:
-            path_axis = "x"
-        elif is_vertical and not is_horizontal:
-            path_axis = "z"
+        p0, p1 = self._segment_endpoints[index]
+        dx, dz = p1[0] - p0[0], p1[1] - p0[1]
+        if abs(dx) > 1.0e-12:
+            axis = "x"
+            coordinate = 0
+        elif abs(dz) > 1.0e-12:
+            axis = "z"
+            coordinate = 1
         else:
-            path_axis = "x" if sx >= sz else "z"
+            raise ValueError(f"block {index + 1} has zero path length")
 
-        # Inset along the path axis so end caps and turn connection faces
-        # do not drive erosion.
+        start_trim = 0.0
+        if index > 0 and self._turn_flags[index - 1]:
+            start_trim = 0.5 * max(
+                float(block_sides[index - 1]), float(block_sides[index]))
+        end_trim = 0.0
+        if index < len(block_sides) - 1 and self._turn_flags[index]:
+            end_trim = 0.5 * max(
+                float(block_sides[index]), float(block_sides[index + 1]))
+
+        start = float(p0[coordinate])
+        end = float(p1[coordinate])
+        direction = 1.0 if end > start else -1.0
+        exposed_start = start + direction * start_trim
+        exposed_end = end - direction * end_trim
+        exposed_length = direction * (exposed_end - exposed_start)
+        if exposed_length <= 1.0e-12:
+            raise ValueError(
+                f"connector cubes consume block {index + 1} "
+                f"(exposed length={exposed_length:.6e} m)")
+        return (axis, min(exposed_start, exposed_end),
+                max(exposed_start, exposed_end), exposed_length)
+
+    def _block_lateral_mask(self, index, block, block_sides):
+        """Return an exposed-straight point mask and its analytic area."""
+        side = float(block_sides[index])
+        _, x0, y0, z0, sx, sy, sz = block
+        path_axis, exposed_low, exposed_high, exposed_length = (
+            self._block_exposed_interval(index, block_sides))
+        inset = min(max(1.0e-12, 0.02 * exposed_length),
+                    0.20 * exposed_length)
+        active_low = exposed_low + inset
+        active_high = exposed_high - inset
+        active_length = active_high - active_low
+        pad = max(1.0e-12, 1.0e-6 * side)
+
+        def gt(name, value):
+            return f"{name}>{value:.16g}[m]"
+
+        def lt(name, value):
+            return f"{name}<{value:.16g}[m]"
+
+        conditions = [
+            gt("y", y0 - pad), lt("y", y0 + sy + pad),
+        ]
         if path_axis == "x":
-            length_mm = max(x1_mm - x0_mm, 1.0e-9)
-            inset = min(0.10 * length_mm, 0.45 * length_mm)
-            xmin, xmax = x0_mm + inset, x1_mm - inset
-            if xmin >= xmax:
-                center = 0.5 * (x0_mm + x1_mm)
-                half = 0.25 * length_mm
-                xmin, xmax = center - half, center + half
-            return (xmin, xmax, y0_mm - pad, y1_mm + pad,
-                    z0_mm - pad, z1_mm + pad)
+            conditions.extend((
+                gt("x", active_low), lt("x", active_high),
+                gt("z", z0 - pad), lt("z", z0 + sz + pad),
+            ))
+        else:
+            conditions.extend((
+                gt("x", x0 - pad), lt("x", x0 + sx + pad),
+                gt("z", active_low), lt("z", active_high),
+            ))
+        return "&&".join(conditions), 4.0 * side * active_length
 
-        length_mm = max(z1_mm - z0_mm, 1.0e-9)
-        inset = min(0.10 * length_mm, 0.45 * length_mm)
-        zmin, zmax = z0_mm + inset, z1_mm - inset
-        if zmin >= zmax:
-            center = 0.5 * (z0_mm + z1_mm)
-            half = 0.25 * length_mm
-            zmin, zmax = center - half, center + half
-        return (x0_mm - pad, x1_mm + pad, y0_mm - pad, y1_mm + pad,
-                zmin, zmax)
-
-    def _create_or_update_box_selection(self, tag, bounds, recreate=False):
-        comp = self.j.component("comp1")
-        selections = comp.selection()
-        if recreate:
-            self._remove_safe(selections, tag)
-        try:
-            comp.selection(tag)
-        except Exception:
-            selections.create(tag, "Box")
-            comp.selection(tag).geom("geom1", 2)
-            comp.selection(tag).set("condition", "intersects")
-
-        xmin, xmax, ymin, ymax, zmin, zmax = bounds
-        comp.selection(tag).set("xmin", xmin)
-        comp.selection(tag).set("xmax", xmax)
-        comp.selection(tag).set("ymin", ymin)
-        comp.selection(tag).set("ymax", ymax)
-        comp.selection(tag).set("zmin", zmin)
-        comp.selection(tag).set("zmax", zmax)
-
-    def _update_block_side_selections(self, blocks, side, recreate=False):
-        """Create/update per-block lateral-surface selections for erosion."""
-        selections = self.j.component("comp1").selection()
-        if recreate:
-            for i in range(self.MAX_BLOCK_SLOTS):
-                self._remove_safe(selections, f"selBlkLat_{i + 1}")
-
+    def _update_block_surface_operators(self, blocks, block_sides):
+        """Update per-block exposed-surface integration masks."""
+        if len(blocks) != len(block_sides):
+            raise ValueError("block selection and side arrays must align")
         for i, block in enumerate(blocks):
-            tag = f"selBlkLat_{i + 1}"
-            bounds = self._block_lateral_bounds_mm(block, side)
-            self._create_or_update_box_selection(tag, bounds, recreate=False)
+            condition, _ = self._block_lateral_mask(
+                i, block, block_sides)
+            try:
+                self.j.result().numerical(f"TintBlk_{i + 1}").set(
+                    "expr", [f"if({condition},T,0[K])"])
+                self.j.result().numerical(f"AblkLat_{i + 1}").set(
+                    "expr", [f"if({condition},1,0)"])
+            except Exception:
+                pass
 
-    def _init_model(self, N_RUNS, L_RUN_m, z_first_m):
+    def _init_model(self, N_RUNS, L_RUN_m, z_first_m,
+                    geometry_state=None):
         """从空白创建完整 COMSOL 模型（含 1V 预热求解）。"""
         if self.model is not None:
             try:
@@ -460,11 +896,35 @@ class COMSOLRunner:
 
         side, blocks, _ = self.compute_side_and_blocks(
             N_RUNS, L_RUN_m, z_first_m)
+        z_last = self.L0 - z_first_m
+        self._path_points = self.build_full_path(
+            N_RUNS, L_RUN_m, z_first_m, z_last,
+            self.STUB_LEN, self.L0)
+        self._segment_endpoints = self.path_segments(self._path_points)
+        self._turn_flags = self.turn_flags(self._segment_endpoints)
+        self._block_lengths = self.path_segment_lengths(self._path_points)
         self._blocks0 = blocks
-        self._current_blocks = blocks
         self._init_side = side
         self._n_blocks = len(blocks)
-        R_env = self.compute_envelope(blocks)
+        initial_sides = [side] * self._n_blocks
+        initial_stub_radii = [self.R0, self.R0]
+        if geometry_state is None:
+            build_blocks = blocks
+            build_sides = initial_sides
+            build_stub_radii = initial_stub_radii
+            R_env = self.compute_envelope(
+                build_blocks, build_stub_radii, build_sides)
+        else:
+            build_blocks, build_sides, build_stub_radii, R_env = (
+                geometry_state)
+            build_blocks = list(build_blocks)
+            build_sides = list(build_sides)
+            build_stub_radii = list(build_stub_radii)
+            if len(build_blocks) != self._n_blocks:
+                raise ValueError("restart geometry block count changed")
+        self._current_blocks = list(build_blocks)
+        self._current_block_sides = list(build_sides)
+        self._current_stub_radii = list(build_stub_radii)
 
         self.model = self.client.create("zigzag_opt")
         j = self.model.java
@@ -514,7 +974,8 @@ class COMSOLRunner:
                       "Enclosing sphere area")
 
         # 几何 + 物理 + 网格
-        self._rebuild(blocks, side, R_env)
+        self._rebuild(
+            build_blocks, build_sides, build_stub_radii, R_env)
 
         # 焦耳热多物理耦合
         j.multiphysics().create("emh1", "ElectromagneticHeatSource",
@@ -616,22 +1077,37 @@ class COMSOLRunner:
         for i in range(self._n_blocks):
             int_t_tag = f"TintBlk_{i + 1}"
             int_a_tag = f"AblkLat_{i + 1}"
-            sel_tag = f"selBlkLat_{i + 1}"
             try:
                 j.result().numerical().remove(int_t_tag)
             except Exception:
                 pass
             j.result().numerical().create(int_t_tag, "IntSurface")
-            j.result().numerical(int_t_tag).selection().named(sel_tag)
-            j.result().numerical(int_t_tag).set("expr", ["T"])
+            j.result().numerical(int_t_tag).selection().all()
+            condition, _ = self._block_lateral_mask(
+                i, self._current_blocks[i], self._current_block_sides)
+            j.result().numerical(int_t_tag).set(
+                "expr", [f"if({condition},T,0[K])"])
 
             try:
                 j.result().numerical().remove(int_a_tag)
             except Exception:
                 pass
             j.result().numerical().create(int_a_tag, "IntSurface")
-            j.result().numerical(int_a_tag).selection().named(sel_tag)
-            j.result().numerical(int_a_tag).set("expr", ["1"])
+            j.result().numerical(int_a_tag).selection().all()
+            j.result().numerical(int_a_tag).set(
+                "expr", [f"if({condition},1,0)"])
+
+        for suffix, selection in (
+                ("In", "selStubInLatZZ"),
+                ("Out", "selStubOutLatZZ")):
+            temp_tag = f"TintStub{suffix}ZZ"
+            area_tag = f"AStub{suffix}LatZZ"
+            j.result().numerical().create(temp_tag, "IntSurface")
+            j.result().numerical(temp_tag).selection().named(selection)
+            j.result().numerical(temp_tag).set("expr", ["T"])
+            j.result().numerical().create(area_tag, "IntSurface")
+            j.result().numerical(area_tag).selection().named(selection)
+            j.result().numerical(area_tag).set("expr", ["1"])
 
         # 健全性检查
         san_T = float(j.result().numerical("maxTZZ").getReal()[0][0])
@@ -644,7 +1120,8 @@ class COMSOLRunner:
     #  几何 + 物理场构建
     # ================================================================
 
-    def _rebuild(self, blocks, side, R_env, geom_only=False):
+    def _rebuild(self, blocks, block_sides, stub_radii,
+                 R_env, geom_only=False):
         """重建几何+网格，可选重建物理场。
 
         geom_only=True：只重建几何+网格（侵蚀循环专用），保留 S2S/EC/材料不动。
@@ -655,6 +1132,12 @@ class COMSOLRunner:
         """
         j = self.j
         geom = j.component("comp1").geom("geom1")
+        block_sides = list(block_sides)
+        stub_radii = list(stub_radii)
+        if len(block_sides) != len(blocks):
+            raise ValueError("block geometry and side arrays must align")
+        if len(stub_radii) != 2:
+            raise ValueError("two terminal stub radii are required")
 
         # 清旧几何
         self._remove_safe(geom.feature(), "uniZZ")
@@ -662,6 +1145,7 @@ class COMSOLRunner:
         self._remove_safe(geom.feature(), "term_out")
         for i in range(self.MAX_BLOCK_SLOTS):
             self._remove_safe(geom.feature(), f"blk_{i + 1}")
+            self._remove_safe(geom.feature(), f"turn_{i + 1}")
 
         # 创建 blocks
         tags = []
@@ -673,14 +1157,24 @@ class COMSOLRunner:
             geom.feature(tag).set("pos",
                                   [f"{x0}[m]", f"{y0}[m]", f"{z0}[m]"])
 
+        turn_blocks = self.build_turn_blocks(
+            self._path_points, block_sides)
+        for tag, x0, y0, z0, sx, sy, sz in turn_blocks:
+            tags.append(tag)
+            geom.create(tag, "Block")
+            geom.feature(tag).set("size",
+                                  [f"{sx}[m]", f"{sy}[m]", f"{sz}[m]"])
+            geom.feature(tag).set("pos",
+                                  [f"{x0}[m]", f"{y0}[m]", f"{z0}[m]"])
+
         # Terminal stubs（圆柱）
         geom.create("term_in", "Cylinder")
-        geom.feature("term_in").set("r", f"{self.R0}[m]")
+        geom.feature("term_in").set("r", f"{stub_radii[0]}[m]")
         geom.feature("term_in").set("h", f"{self.STUB_LEN}[m]")
         geom.feature("term_in").set("pos", ["0[m]", "0[m]", "0[m]"])
 
         geom.create("term_out", "Cylinder")
-        geom.feature("term_out").set("r", f"{self.R0}[m]")
+        geom.feature("term_out").set("r", f"{stub_radii[1]}[m]")
         geom.feature("term_out").set("h", f"{self.STUB_LEN}[m]")
         geom.feature("term_out").set("pos",
             ["0[m]", "0[m]", f"{self.L0 - self.STUB_LEN}[m]"])
@@ -691,14 +1185,19 @@ class COMSOLRunner:
         geom.feature("uniZZ").set("intbnd", False)
         geom.run()
         self._current_blocks = list(blocks)
-        self._update_block_side_selections(
-            blocks, side, recreate=(not geom_only))
+        self._current_block_sides = list(block_sides)
+        self._current_stub_radii = list(stub_radii)
+        self._update_block_surface_operators(blocks, block_sides)
 
         if not geom_only:
             # Box selections — 电极面（坐标驱动，geom_only 时无需重建）
             self._remove_safe(j.component("comp1").selection(), "selInZZ")
             self._remove_safe(j.component("comp1").selection(), "selOutZZ")
             self._remove_safe(j.component("comp1").selection(), "selFreeZZ")
+            self._remove_safe(
+                j.component("comp1").selection(), "selStubInLatZZ")
+            self._remove_safe(
+                j.component("comp1").selection(), "selStubOutLatZZ")
 
             j.component("comp1").selection().create("selInZZ", "Box")
             j.component("comp1").selection("selInZZ").geom("geom1", 2)
@@ -738,6 +1237,27 @@ class COMSOLRunner:
             j.component("comp1").selection("selFreeZZ").set("ymax", y_max_mm)
             j.component("comp1").selection("selFreeZZ").set("zmin", 1e-6)
             j.component("comp1").selection("selFreeZZ").set("zmax", 14.999999)
+
+            # Stub lateral faces drive their own local recession. Insets in z
+            # exclude both the protected electrode contacts and inner caps.
+            stub_pad_mm = (self.R0 * 1e3) + 0.1
+            stub_inset_mm = 0.10 * self.STUB_LEN * 1e3
+            for tag, zmin, zmax in (
+                    ("selStubInLatZZ", stub_inset_mm,
+                     self.STUB_LEN * 1e3 - stub_inset_mm),
+                    ("selStubOutLatZZ",
+                     (self.L0 - self.STUB_LEN) * 1e3 + stub_inset_mm,
+                     self.L0 * 1e3 - stub_inset_mm)):
+                j.component("comp1").selection().create(tag, "Box")
+                j.component("comp1").selection(tag).geom("geom1", 2)
+                j.component("comp1").selection(tag).set(
+                    "condition", "intersects")
+                j.component("comp1").selection(tag).set("xmin", -stub_pad_mm)
+                j.component("comp1").selection(tag).set("xmax", stub_pad_mm)
+                j.component("comp1").selection(tag).set("ymin", -stub_pad_mm)
+                j.component("comp1").selection(tag).set("ymax", stub_pad_mm)
+                j.component("comp1").selection(tag).set("zmin", zmin)
+                j.component("comp1").selection(tag).set("zmax", zmax)
 
             # EC 边界条件
             ec = j.component("comp1").physics("ec")
@@ -841,36 +1361,65 @@ class COMSOLRunner:
     #  求解器
     # ================================================================
 
-    def _fallback_block_tavg(self, block, Tmin, Tmax):
-        _, _, _, z0, _, _, sz = block
-        zc = z0 + 0.5 * sz
-        eta = zc / self.L0
-        return Tmin + (Tmax - Tmin) * 4.0 * eta * (1.0 - eta)
-
-    def _read_block_temperature_averages(self, Tmin, Tmax):
-        """Read per-block lateral-surface average temperatures."""
+    def _read_block_surface_states(self, Tmin, Tmax):
+        """Read masked local temperatures and return analytic sidewall areas."""
         blocks = self._current_blocks or self._blocks0 or []
         block_Tavg = []
+        block_areas = []
+        area_ratios = []
         for i in range(self._n_blocks):
             read_ok = False
+            block = blocks[i] if i < len(blocks) else self._blocks0[i]
+            side = self._current_block_sides[i]
+            _, expected_mask_area = self._block_lateral_mask(
+                i, block, self._current_block_sides)
+            _, _, _, exposed_length = self._block_exposed_interval(
+                i, self._current_block_sides)
             try:
                 Tint = float(self.j.result().numerical(
                     f"TintBlk_{i + 1}").getReal()[0][0])
-                Ablk = float(self.j.result().numerical(
+                masked_area = float(self.j.result().numerical(
                     f"AblkLat_{i + 1}").getReal()[0][0])
-                if Ablk > 1.0e-20:
-                    value = Tint / Ablk
-                    if self._finite_number(value):
+                if masked_area > 1.0e-20:
+                    value = Tint / masked_area
+                    ratio = masked_area / expected_mask_area
+                    if (self._finite_number(value)
+                            and self._finite_number(ratio)
+                            and 0.50 <= ratio <= 1.50):
                         block_Tavg.append(value)
+                        block_areas.append(4.0 * side * exposed_length)
+                        area_ratios.append(ratio)
                         read_ok = True
             except Exception:
                 pass
 
             if not read_ok:
-                block = blocks[i] if i < len(blocks) else self._blocks0[i]
-                block_Tavg.append(self._fallback_block_tavg(block, Tmin, Tmax))
+                raise RuntimeError(
+                    f"masked local surface integral failed for block {i + 1}")
 
-        return block_Tavg
+        self._last_block_mask_area_ratios = area_ratios
+        return block_Tavg, block_areas
+
+    def _read_stub_surface_states(self, Tmin, Tmax):
+        """Read lateral temperature and actual area for terminal stubs."""
+        values = []
+        areas = []
+        for index, suffix in enumerate(("In", "Out")):
+            radius = self._current_stub_radii[index]
+            try:
+                integral = float(self.j.result().numerical(
+                    f"TintStub{suffix}ZZ").getReal()[0][0])
+                area = float(self.j.result().numerical(
+                    f"AStub{suffix}LatZZ").getReal()[0][0])
+                value = integral / area if area > 1.0e-20 else float('nan')
+                if not self._finite_number(value):
+                    raise RuntimeError("non-finite stub temperature")
+            except Exception as exc:
+                raise RuntimeError(
+                    f"local stub surface integral failed for {suffix}") from exc
+            values.append(value)
+            areas.append(2.0 * math.pi * radius * self.STUB_LEN)
+        return values, areas
 
     def _solve_prepared(self, voltage):
         """设电压、求解、提取结果。返回 dict。"""
@@ -890,9 +1439,18 @@ class COMSOLRunner:
             "FambAreaAvg": float('nan'), "selfViewLossRaw_pct": float('nan'),
             "selfViewLoss_pct": float('nan'),
             "radiationNumericalExcess_pct": float('nan'),
+            "volume_m3": float('nan'),
+            "expectedVolume_m3": float('nan'),
+            "volumeLossFromInitial_pct": float('nan'),
+            "geometryVolumeError_rel": float('nan'),
+            "targetVolumeDeviation_rel": float('nan'),
             "vol_err": float('nan'),
             "temp_ok": False, "volume_ok": False, "current_ok": False,
             "block_Tavg": [0.0] * self._n_blocks,
+            "block_A_lat": [0.0] * self._n_blocks,
+            "blockMaskAreaRatio": [0.0] * self._n_blocks,
+            "stub_Tavg": [0.0, 0.0],
+            "stub_A_lat": [0.0, 0.0],
         }
 
         try:
@@ -938,9 +1496,27 @@ class COMSOLRunner:
 
             # Per-block temperatures drive erosion. Prefer COMSOL
             # lateral-surface integrals; fallback is local.
-            block_Tavg = self._read_block_temperature_averages(Tmin, Tmax)
+            block_Tavg, block_A_lat = self._read_block_surface_states(
+                Tmin, Tmax)
+            block_mask_area_ratios = list(
+                self._last_block_mask_area_ratios)
+            stub_Tavg, stub_A_lat = self._read_stub_surface_states(
+                Tmin, Tmax)
 
-            vol_err = abs(V - self.V0) / self.V0
+            expected_volume = self._erosion_state_volume(
+                self._current_block_sides, self._block_lengths,
+                self._current_stub_radii, self.STUB_LEN)
+            geometry_vol_err = abs(V - expected_volume) / self.V0
+            target_volume_deviation = (
+                abs(expected_volume - self.V0) / self.V0)
+            volume_loss_pct = 100.0 * (1.0 - expected_volume / self.V0)
+            initial_state = (
+                all(math.isclose(side, self._init_side, rel_tol=0.0,
+                                 abs_tol=1.0e-14)
+                    for side in self._current_block_sides)
+                and all(math.isclose(radius, self.R0, rel_tol=0.0,
+                                     abs_tol=1.0e-14)
+                        for radius in self._current_stub_radii))
 
             finite_checks = {
                 "Tmax": Tmax,
@@ -948,6 +1524,10 @@ class COMSOLRunner:
                 "Tmean": Tmean,
                 "U_pct": U_pct,
                 "volume": V,
+                "expectedVolume_m3": expected_volume,
+                "volumeLossFromInitial_pct": volume_loss_pct,
+                "geometryVolumeError_rel": geometry_vol_err,
+                "targetVolumeDeviation_rel": target_volume_deviation,
                 "current": I,
                 "P03steady": P03,
                 "PradSteady": Prad,
@@ -959,13 +1539,28 @@ class COMSOLRunner:
                 "selfViewLossRaw_pct": loss["loss_raw_pct"],
                 "selfViewLoss_pct": loss["loss_pct"],
                 "radiationNumericalExcess_pct": loss["numerical_excess_pct"],
-                "vol_err": vol_err,
+                "volume_m3": V,
+                "expectedVolume_m3": expected_volume,
+                "volumeLossFromInitial_pct": volume_loss_pct,
+                "vol_err": geometry_vol_err,
             }
             invalid = [key for key, value in finite_checks.items()
                        if not self._finite_number(value)]
             invalid += [f"block_Tavg[{i}]"
                         for i, value in enumerate(block_Tavg)
                         if not self._finite_number(value)]
+            invalid += [f"stub_Tavg[{i}]"
+                        for i, value in enumerate(stub_Tavg)
+                        if not self._finite_number(value)]
+            invalid += [f"block_A_lat[{i}]"
+                        for i, value in enumerate(block_A_lat)
+                        if not self._finite_number(value) or value <= 0.0]
+            invalid += [f"blockMaskAreaRatio[{i}]"
+                        for i, value in enumerate(block_mask_area_ratios)
+                        if not self._finite_number(value)]
+            invalid += [f"stub_A_lat[{i}]"
+                        for i, value in enumerate(stub_A_lat)
+                        if not self._finite_number(value) or value <= 0.0]
             if invalid:
                 raise RuntimeError(
                     "Invalid non-finite COMSOL result: " + ", ".join(invalid))
@@ -1001,11 +1596,23 @@ class COMSOLRunner:
                 "selfViewLossRaw_pct": loss["loss_raw_pct"],
                 "selfViewLoss_pct": loss["loss_pct"],
                 "radiationNumericalExcess_pct": loss["numerical_excess_pct"],
-                "vol_err": vol_err,
+                "volume_m3": V,
+                "expectedVolume_m3": expected_volume,
+                "volumeLossFromInitial_pct": volume_loss_pct,
+                "geometryVolumeError_rel": geometry_vol_err,
+                "targetVolumeDeviation_rel": target_volume_deviation,
+                "vol_err": geometry_vol_err,
                 "temp_ok":    Tmax < self.temp_limit_K,
-                "volume_ok":  vol_err <= self.vol_tol,
+                "volume_ok": (
+                    geometry_vol_err <= self.vol_tol
+                    and (not initial_state
+                         or target_volume_deviation <= self.vol_tol)),
                 "current_ok": I > self.current_tol,
                 "block_Tavg": block_Tavg,
+                "block_A_lat": block_A_lat,
+                "blockMaskAreaRatio": block_mask_area_ratios,
+                "stub_Tavg": stub_Tavg,
+                "stub_A_lat": stub_A_lat,
             })
         except Exception as e:
             # 清空损坏的解状态，确保下次从 Tinit 重新初始化，
@@ -1156,6 +1763,14 @@ class COMSOLRunner:
         result["metricVersion"] = self.metric_version
         result["physicsVersion"] = self.physics_version
         result["geometryVersion"] = self.geometry_version
+        result["lifecycleVersion"] = self.lifecycle_version
+        result["erosionModel"] = self.erosion_model
+        result["turnConnectorRule"] = self.turn_connector_rule
+        result["geometrySideQuantum_pct"] = (
+            100.0 * self.geometry_side_quantum_fraction)
+        result["failureFraction"] = self.failure_fraction
+        result["maxErosionStep_s"] = self.max_erosion_step_s
+        result["geometryVolumeTolerance_rel"] = self.vol_tol
         result["radiationEscapeMethod"] = self.radiation_escape_method
         result["spectralSplit_um"] = self.spectral_split_um
         result["thermalAmbient_K"] = self.thermal_ambient_K
@@ -1334,189 +1949,365 @@ class COMSOLRunner:
                 "elapsed_sec": round(time.time() - t_start, 1),
             }, policy, objective, max_safe_v)
 
-        # ---- Phase 2: 侵蚀循环 ----
-        print("  Phase 2: erosion loop...")
+        # ---- Phase 2: geometry/lifecycle v2 erosion loop ----
+        print("  Phase 2: geometry/lifecycle v2 erosion loop...")
         time_s = 0.0
         p03_int, prad_int = 0.0, 0.0
         p03s_int, prads_int = 0.0, 0.0
         macro = 0
+        attempted_steps = 0
         failed = False
-        side0 = self._init_side
-        block_sides = [side0] * n_blocks  # per-block 当前边长
-        side_min = side0 * (1.0 - self.failure_fraction)
+        cap_limited = False
+        step_limited = False
+        censored = False
+        termination_reason = ""
+        failure_feature = ""
+        failure_index = ""
+        max_loss = 0.0
 
-        prev_p03  = r0_res["P03steady"]
+        side0 = self._init_side
+        block_sides = [side0] * n_blocks
+        geometry_block_sides = [side0] * n_blocks
+        stub_radii = [self.R0, self.R0]
+        initial_features = block_sides + stub_radii
+        failure_limits = [
+            value * (1.0 - self.failure_fraction)
+            for value in initial_features]
+        resolution_delta = 0.01 * min(initial_features)
+
+        initial_volume = self._erosion_state_volume(
+            block_sides, self._block_lengths,
+            stub_radii, self.STUB_LEN)
+        initial_turn_area = sum(self._turn_cap_areas(block_sides))
+
+        def stub_shoulder_area_sum(current_sides, current_stub_radii):
+            return sum(
+                max(0.0, math.pi * radius ** 2
+                    - self._circle_square_overlap_area(radius, end_side))
+                for radius, end_side in zip(
+                    current_stub_radii,
+                    (current_sides[0], current_sides[-1])))
+
+        initial_stub_shoulder_area = stub_shoulder_area_sum(
+            block_sides, stub_radii)
+        max_turn_area = initial_turn_area
+        max_stub_shoulder_area = initial_stub_shoulder_area
+        max_geometry_projection_error = 0.0
+
+        prev_p03 = r0_res["P03steady"]
         prev_prad = r0_res["PradSteady"]
         prev_p03s = r0_res["P03sphere"]
         prev_prads = r0_res["PradSphere"]
+        prev_Tmax = r0_res["Tmax"]
         block_tavg = r0_res["block_Tavg"]
+        block_A_lat = r0_res["block_A_lat"]
+        stub_tavg = r0_res["stub_Tavg"]
+        stub_A_lat = r0_res["stub_A_lat"]
         max_erosion_tmax = r0_res["Tmax"]
         erosion_retry_count = 0
+        overtemp_fields = {}
+        failure_text = ""
+
+        def assign_failure(indices):
+            nonlocal failure_feature, failure_index
+            if not indices:
+                return
+            index = indices[0]
+            if index < n_blocks:
+                failure_feature = "block_side"
+                failure_index = index + 1
+            else:
+                failure_feature = "stub_radius"
+                failure_index = "in" if index == n_blocks else "out"
+
+        def build_result(status):
+            final_volume = self._erosion_state_volume(
+                block_sides, self._block_lengths,
+                stub_radii, self.STUB_LEN)
+            final_turn_area = sum(self._turn_cap_areas(block_sides))
+            final_stub_shoulder_area = stub_shoulder_area_sum(
+                block_sides, stub_radii)
+            side_spread = max(block_sides) - min(block_sides)
+            geometry_side_spread = (
+                max(geometry_block_sides) - min(geometry_block_sides))
+            geometry_volume = self._erosion_state_volume(
+                geometry_block_sides, self._block_lengths,
+                stub_radii, self.STUB_LEN)
+            return {
+                "Vwork_V": Vwork,
+                "initialTmax_K": r0_res["Tmax"],
+                "Tmin_K": r0_res["Tmin"],
+                "Tmean_K": r0_res["Tmean"],
+                "U_pct": r0_res["U_pct"],
+                "lifetimeH": time_s / 3600.0,
+                **self._lifecycle_radiation_fields(
+                    r0_res, time_s, p03_int, prad_int,
+                    p03s_int, prads_int),
+                "maxErosionTmax_K": max_erosion_tmax,
+                "failureReached": failed,
+                "capLimited": cap_limited,
+                "stepLimited": step_limited,
+                "censored": censored,
+                "lifetimeExact": failed and status == "OK",
+                "terminationReason": termination_reason,
+                "failureFeature": failure_feature,
+                "failureIndex": failure_index,
+                "maxFeatureLoss_pct": 100.0 * max_loss,
+                "erosionSteps": macro,
+                "erosionAttemptedSteps": attempted_steps,
+                "erosionSolveRetries": erosion_retry_count,
+                "maxLifetimeCap_h": self.max_lifetime_h,
+                "maxErosionSteps": self.max_erosion_steps,
+                "initialCOMSOLVolume_m3": r0_res["volume_m3"],
+                "initialExpectedVolume_m3": r0_res["expectedVolume_m3"],
+                "initialGeometryVolumeError_rel": (
+                    r0_res["geometryVolumeError_rel"]),
+                "initialTargetVolumeDeviation_rel": (
+                    r0_res["targetVolumeDeviation_rel"]),
+                "initialBlockMaskAreaRatioMin": min(
+                    r0_res["blockMaskAreaRatio"]),
+                "initialBlockMaskAreaRatioMax": max(
+                    r0_res["blockMaskAreaRatio"]),
+                "initialErosionStateVolume_m3": initial_volume,
+                "finalErosionStateVolume_m3": final_volume,
+                "erosionStateVolumeLoss_pct": 100.0 * (
+                    1.0 - final_volume / initial_volume),
+                "finalGeometryStateVolume_m3": geometry_volume,
+                "maxGeometrySideProjectionError_pct": (
+                    100.0 * max_geometry_projection_error / side0),
+                "initialTurnCapArea_m2": initial_turn_area,
+                "finalTurnCapArea_m2": final_turn_area,
+                "maxTurnCapArea_m2": max_turn_area,
+                "initialStubShoulderArea_m2": initial_stub_shoulder_area,
+                "finalStubShoulderArea_m2": final_stub_shoulder_area,
+                "maxStubShoulderArea_m2": max_stub_shoulder_area,
+                "finalMinBlockSide_mm": min(block_sides) * 1.0e3,
+                "finalMaxBlockSide_mm": max(block_sides) * 1.0e3,
+                "finalBlockSideSpread_mm": side_spread * 1.0e3,
+                "finalGeometryMinBlockSide_mm": (
+                    min(geometry_block_sides) * 1.0e3),
+                "finalGeometryMaxBlockSide_mm": (
+                    max(geometry_block_sides) * 1.0e3),
+                "finalGeometryBlockSideSpread_mm": (
+                    geometry_side_spread * 1.0e3),
+                "finalStubInRadius_mm": stub_radii[0] * 1.0e3,
+                "finalStubOutRadius_mm": stub_radii[1] * 1.0e3,
+                **overtemp_fields,
+                "status": status,
+                "failure": failure_text,
+                "elapsed_sec": round(time.time() - t_start, 1),
+            }
 
         while macro < self.max_erosion_steps and not failed:
-            macro += 1
+            block_rates, _, _ = self._block_erosion_rates(
+                block_sides, block_tavg, self._block_lengths,
+                block_A_lat, geometry_block_sides)
+            stub_rates, _, _ = self._stub_erosion_rates(
+                stub_radii, stub_tavg,
+                (geometry_block_sides[0], geometry_block_sides[-1]),
+                (block_tavg[0], block_tavg[-1]),
+                stub_A_lat)
+            feature_rates = block_rates + stub_rates
+            current_features = block_sides + stub_radii
 
-            # (a) 蒸发速率：方截面 4 面蒸发 dside/dt = 2γ/ρ
-            dsdt = [
-                2.0 * self.Aev * math.exp(-self.Bev / block_tavg[i])
-                / self.rho_mass
-                for i in range(n_blocks)]
-            max_dsdt = max(dsdt)
-
-            if max_dsdt < 1e-15:
-                print("  Evaporation negligible. Infinite lifetime.")
+            if max(feature_rates) < 1.0e-15:
+                remaining = max(
+                    0.0, self.max_lifetime_h * 3600.0 - time_s)
+                p03_int += prev_p03 * remaining
+                prad_int += prev_prad * remaining
+                p03s_int += prev_p03s * remaining
+                prads_int += prev_prads * remaining
+                time_s += remaining
+                termination_reason = "negligible_erosion"
+                censored = True
+                print("  Evaporation negligible; integrated constant power "
+                      "to the lifecycle cap and censored the lifetime.")
                 break
 
-            # (b) 宏步时长
-            dt = float('inf')
-            for i in range(n_blocks):
-                if dsdt[i] > 1e-20:
-                    dt = min(dt, resolve_thr / dsdt[i])
-                    t_fail = (block_sides[i] - side_min) / dsdt[i]
-                    if t_fail > 0:
-                        dt = min(dt, t_fail)
-            dt = max(1.0, min(36000.0, dt))
-
-            # (c) 推进 per-block 边长
-            max_loss = 0.0
-            for i in range(n_blocks):
-                block_sides[i] = max(1e-6, block_sides[i] - dsdt[i] * dt)
-                loss = (side0 - block_sides[i]) / side0
-                max_loss = max(max_loss, loss)
-            time_s += dt
-
-            if max_loss >= self.failure_fraction:
-                failed = True
-
-            # 最大仿真时长保护：低蒸发率构型不值得跑超过 max_lifetime_h
-            if not failed and time_s / 3600.0 >= self.max_lifetime_h:
-                print(f"  Lifetime cap {self.max_lifetime_h:.0f}h at step {macro}, stopping.")
+            dt = self._next_erosion_timestep(
+                current_features, failure_limits, feature_rates,
+                resolution_delta, time_s)
+            if dt <= 0.0:
+                cap_limited = True
+                censored = True
+                termination_reason = "lifetime_cap"
                 break
 
-            # (d) 重建几何：使用最小 block 边长做保守统一侵蚀。
-            # 平均边长在局部高温侵蚀很不均匀时会产生极小几何变化和求解奇异。
-            geom_side = min(block_sides)
-            new_blocks = self.eroded_blocks(self._blocks0, side0, geom_side)
-            new_Renv = self.compute_envelope(new_blocks)
-            print(f"  SOLVING step={macro} t={time_s / 3600.0:.3f}h "
-                  f"loss={max_loss:.4f}")
+            candidate_features, candidate_losses, failed_indices = (
+                self._advance_erosion_features(
+                    current_features, initial_features, failure_limits,
+                    feature_rates, dt))
+            candidate_sides = candidate_features[:n_blocks]
+            candidate_stub_radii = candidate_features[n_blocks:]
+            candidate_time_s = time_s + dt
+            candidate_max_loss = max(candidate_losses)
+            candidate_geometry_sides = (
+                self._project_block_sides_to_geometry(candidate_sides))
+            candidate_projection_error = max(
+                abs(exact - represented)
+                for exact, represented in zip(
+                    candidate_sides, candidate_geometry_sides))
+            new_blocks = self.eroded_blocks(candidate_geometry_sides)
+            new_Renv = self.compute_envelope(
+                new_blocks, candidate_stub_radii, candidate_geometry_sides)
+            attempted_steps += 1
+
+            print(f"  SOLVING step={attempted_steps} "
+                  f"t={candidate_time_s / 3600.0:.3f}h "
+                  f"loss={candidate_max_loss:.6f} "
+                  f"sideSpread={(max(candidate_sides) - min(candidate_sides)) * 1e3:.6f}mm")
             r_now = None
-            failure = ""
+            solve_failure = ""
             for attempt in range(self.max_erosion_solve_retries + 1):
                 try:
                     if attempt == 0:
                         self._rebuild(
-                            new_blocks, geom_side, new_Renv, geom_only=True)
+                            new_blocks, candidate_geometry_sides,
+                            candidate_stub_radii, new_Renv,
+                            geom_only=True)
                         r_now = self._solve_prepared(Vwork)
                     else:
                         erosion_retry_count += 1
-                        print(f"  RETRY step {macro}: {attempt}/"
+                        print(f"  RETRY step {attempted_steps}: {attempt}/"
                               f"{self.max_erosion_solve_retries}")
                         r_now = self._restart_at_geometry(
                             N_RUNS, L_RUN_m, z_first_m,
-                            new_blocks, geom_side, new_Renv, Vwork)
+                            new_blocks, candidate_geometry_sides,
+                            candidate_stub_radii, new_Renv, Vwork)
                     if r_now.get("solve_ok", False):
                         break
-                    failure = r_now.get("failure", "unknown solve failure")
+                    solve_failure = r_now.get(
+                        "failure", "unknown solve failure")
+                except ServerDisconnectError:
+                    raise
                 except Exception as exc:
-                    failure = self._safe_exception_text(exc)
+                    solve_failure = self._safe_exception_text(exc)
                     r_now = None
                 if attempt < self.max_erosion_solve_retries:
-                    print(f"  WARN step {macro} attempt {attempt + 1} failed: "
-                          f"{failure}")
+                    print(f"  WARN step {attempted_steps} attempt "
+                          f"{attempt + 1} failed: {solve_failure}")
 
             if r_now is None or not r_now.get("solve_ok", False):
-                print(f"  WARN: solve failed step {macro}: {failure}")
-                return self._annotate_voltage_result({
-                    "Vwork_V": Vwork,
-                    "initialTmax_K": r0_res["Tmax"],
-                    "Tmin_K": r0_res["Tmin"],
-                    "Tmean_K": r0_res["Tmean"],
-                    "U_pct": r0_res["U_pct"],
-                    "lifetimeH": time_s / 3600.0,
-                    **self._lifecycle_radiation_fields(
-                        r0_res, time_s, p03_int, prad_int,
-                        p03s_int, prads_int),
-                    "maxErosionTmax_K": max_erosion_tmax,
-                    "failureReached": failed,
-                    "erosionSteps": macro,
-                    "erosionSolveRetries": erosion_retry_count,
-                    "status": "FAIL_EROSION_SOLVE",
-                    "failure": failure,
-                    "elapsed_sec": round(time.time() - t_start, 1),
-                }, policy, objective, max_safe_v)
+                censored = True
+                termination_reason = "erosion_solve_failure"
+                failure_text = solve_failure
+                print(f"  WARN: solve failed step {attempted_steps}: "
+                      f"{solve_failure}")
+                result = build_result("FAIL_EROSION_SOLVE")
+                return self._annotate_voltage_result(
+                    result, policy, objective, max_safe_v)
 
-            print(f"  SOLVED step={macro} Tmax={r_now['Tmax']:.1f}K "
+            print(f"  SOLVED step={attempted_steps} "
+                  f"Tmax={r_now['Tmax']:.1f}K "
                   f"P03escape={r_now['P03sphere']:.2f}W")
+            max_erosion_tmax = max(max_erosion_tmax, r_now["Tmax"])
 
-            # (e) 梯形积分
-            if r_now["solve_ok"] and r_now["Tmax"] > max_erosion_tmax:
-                max_erosion_tmax = r_now["Tmax"]
+            cur_p03 = r_now["P03steady"]
+            cur_prad = r_now["PradSteady"]
+            cur_p03s = r_now["P03sphere"]
+            cur_prads = r_now["PradSphere"]
 
-            cur_p03   = r_now["P03steady"]  if r_now["solve_ok"] else prev_p03
-            cur_prad  = r_now["PradSteady"] if r_now["solve_ok"] else prev_prad
-            cur_p03s  = r_now["P03sphere"]  if r_now["solve_ok"] else prev_p03s
-            cur_prads = r_now["PradSphere"] if r_now["solve_ok"] else prev_prads
+            if r_now["Tmax"] >= self.temp_limit_K:
+                fraction = self._overtemperature_fraction(
+                    prev_Tmax, r_now["Tmax"], self.temp_limit_K)
+                valid_dt = fraction * dt
 
-            p03_int   += 0.5 * (prev_p03   + cur_p03)   * dt
-            prad_int  += 0.5 * (prev_prad  + cur_prad)  * dt
-            p03s_int  += 0.5 * (prev_p03s  + cur_p03s)  * dt
-            prads_int += 0.5 * (prev_prads + cur_prads) * dt
+                def at_crossing(previous, current):
+                    return previous + fraction * (current - previous)
 
-            if r_now["solve_ok"] and r_now["Tmax"] >= self.temp_limit_K:
-                elapsed = time.time() - t_start
-                lifetime_h = time_s / 3600.0
-                return self._annotate_voltage_result({
-                    "Vwork_V": Vwork,
-                    "initialTmax_K": r0_res["Tmax"],
-                    "Tmin_K": r0_res["Tmin"],
-                    "Tmean_K": r0_res["Tmean"],
-                    "U_pct": r0_res["U_pct"],
-                    "lifetimeH": lifetime_h,
-                    **self._lifecycle_radiation_fields(
-                        r0_res, time_s, p03_int, prad_int,
-                        p03s_int, prads_int),
-                    "maxErosionTmax_K": max_erosion_tmax,
+                cross_p03 = at_crossing(prev_p03, cur_p03)
+                cross_prad = at_crossing(prev_prad, cur_prad)
+                cross_p03s = at_crossing(prev_p03s, cur_p03s)
+                cross_prads = at_crossing(prev_prads, cur_prads)
+                p03_int += 0.5 * (prev_p03 + cross_p03) * valid_dt
+                prad_int += 0.5 * (prev_prad + cross_prad) * valid_dt
+                p03s_int += 0.5 * (prev_p03s + cross_p03s) * valid_dt
+                prads_int += 0.5 * (prev_prads + cross_prads) * valid_dt
+
+                crossing_features, crossing_losses, crossing_failed = (
+                    self._advance_erosion_features(
+                        current_features, initial_features, failure_limits,
+                        feature_rates, valid_dt))
+                block_sides = crossing_features[:n_blocks]
+                geometry_block_sides = (
+                    self._project_block_sides_to_geometry(block_sides))
+                stub_radii = crossing_features[n_blocks:]
+                max_geometry_projection_error = max(
+                    max_geometry_projection_error,
+                    max(abs(exact - represented)
+                        for exact, represented in zip(
+                            block_sides, geometry_block_sides)))
+                time_s += valid_dt
+                macro += 1
+                max_loss = max(crossing_losses)
+                failed = bool(crossing_failed)
+                assign_failure(crossing_failed)
+                censored = not failed
+                termination_reason = "overtemperature"
+                overtemp_fields = {
                     "overtempStep": macro,
-                    "overtempTimeH": lifetime_h,
+                    "overtempTimeH": time_s / 3600.0,
                     "overtempTmax_K": r_now["Tmax"],
-                    "failureReached": failed,
-                    "erosionSteps": macro,
-                    "erosionSolveRetries": erosion_retry_count,
-                    "status": "FAIL_OVERTEMP_DURING_EROSION",
-                    "elapsed_sec": round(elapsed, 1),
-                }, policy, objective, max_safe_v)
+                    "overtempInterpolationFraction": fraction,
+                    "overtempBracketEndTimeH": candidate_time_s / 3600.0,
+                }
+                result = build_result("FAIL_OVERTEMP_DURING_EROSION")
+                return self._annotate_voltage_result(
+                    result, policy, objective, max_safe_v)
 
-            prev_p03, prev_prad   = cur_p03, cur_prad
+            # Commit only a solved endpoint, then integrate its exact interval.
+            p03_int += 0.5 * (prev_p03 + cur_p03) * dt
+            prad_int += 0.5 * (prev_prad + cur_prad) * dt
+            p03s_int += 0.5 * (prev_p03s + cur_p03s) * dt
+            prads_int += 0.5 * (prev_prads + cur_prads) * dt
+            block_sides = list(candidate_sides)
+            geometry_block_sides = list(candidate_geometry_sides)
+            stub_radii = list(candidate_stub_radii)
+            max_geometry_projection_error = max(
+                max_geometry_projection_error, candidate_projection_error)
+            time_s = candidate_time_s
+            macro += 1
+            max_loss = candidate_max_loss
+            max_turn_area = max(
+                max_turn_area, sum(self._turn_cap_areas(block_sides)))
+            max_stub_shoulder_area = max(
+                max_stub_shoulder_area,
+                stub_shoulder_area_sum(block_sides, stub_radii))
+
+            prev_p03, prev_prad = cur_p03, cur_prad
             prev_p03s, prev_prads = cur_p03s, cur_prads
+            prev_Tmax = r_now["Tmax"]
+            block_tavg = r_now["block_Tavg"]
+            block_A_lat = r_now["block_A_lat"]
+            stub_tavg = r_now["stub_Tavg"]
+            stub_A_lat = r_now["stub_A_lat"]
 
-            if r_now["solve_ok"] and "block_Tavg" in r_now:
-                block_tavg = r_now["block_Tavg"]
+            if failed_indices:
+                failed = True
+                termination_reason = "feature_loss_20pct"
+                assign_failure(failed_indices)
+            elif time_s >= (self.max_lifetime_h * 3600.0
+                            - self.erosion_time_tol_s):
+                cap_limited = True
+                censored = True
+                termination_reason = "lifetime_cap"
 
-            if macro % 5 == 0 or failed:
+            if macro % 5 == 0 or failed or cap_limited:
                 print(f"  STEP={macro} t={time_s / 3600:.2f}h "
-                      f"loss={max_loss:.4f}")
+                      f"loss={max_loss:.6f}")
+            if cap_limited:
+                break
 
-        # ---- Phase 3: 汇总结果 ----
-        lifetime_h = time_s / 3600.0
+        if not termination_reason:
+            step_limited = not failed
+            censored = step_limited
+            termination_reason = (
+                "step_limit" if step_limited else "feature_loss_20pct")
 
-        elapsed = time.time() - t_start
-        result = {
-            "Vwork_V":              Vwork,
-            "initialTmax_K":        r0_res["Tmax"],
-            "Tmin_K":               r0_res["Tmin"],
-            "Tmean_K":              r0_res["Tmean"],
-            "U_pct":                r0_res["U_pct"],
-            "lifetimeH":            lifetime_h,
-            **self._lifecycle_radiation_fields(
-                r0_res, time_s, p03_int, prad_int, p03s_int, prads_int),
-            "maxErosionTmax_K":     max_erosion_tmax,
-            "failureReached":       failed,
-            "erosionSteps":         macro,
-            "erosionSolveRetries":  erosion_retry_count,
-            "status":               "OK",
-            "elapsed_sec":          round(elapsed, 1),
-        }
+        status = self._lifecycle_terminal_status(
+            failed, cap_limited, step_limited, termination_reason)
+
+        result = build_result(status)
         required = [
             "Vwork_V", "initialTmax_K", "Tmin_K", "Tmean_K", "U_pct",
             "maxErosionTmax_K", "lifetimeH", "initialP03gross_W",
@@ -1531,6 +2322,8 @@ class COMSOLRunner:
             result["status"] = "FAIL_INVALID_RESULT"
             result["failure"] = (
                 "Non-finite final metric(s): " + ", ".join(invalid))
+            result["censored"] = True
+            result["lifetimeExact"] = False
         return self._annotate_voltage_result(
             result, policy, objective, max_safe_v)
 

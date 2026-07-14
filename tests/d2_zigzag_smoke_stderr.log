@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 166, in main
+    run_cylinder() if family == "cylinder" else run_zigzag())
+                                                ^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 108, in run_zigzag
+    eroded = finite_summary(eroded_result)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 43, in finite_summary
+    raise RuntimeError(f"non-finite smoke field: {field}={value}")
+RuntimeError: non-finite smoke field: Tmax=nan
+Traceback (most recent call last):
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 187, in <module>
+    main()
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 166, in main
+    run_cylinder() if family == "cylinder" else run_zigzag())
+                                                ^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 108, in run_zigzag
+    eroded = finite_summary(eroded_result)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 43, in finite_summary
+    raise RuntimeError(f"non-finite smoke field: {field}={value}")
+RuntimeError: non-finite smoke field: Tmax=nan

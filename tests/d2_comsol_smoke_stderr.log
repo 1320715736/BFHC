@@ -1,0 +1,49 @@
+The client is not connected to a server.
+Traceback (most recent call last):
+  File "SourceFile", line 99, in com.comsol.model.util.ModelUtil.createUnique
+Exception: Java Exception
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 148, in main
+    run_cylinder() if family == "cylinder" else run_zigzag())
+                                                ^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 93, in run_zigzag
+    runner._init_model(n_runs, run_length, z_first)
+  File "D:\VScode\project\BFHC\zigzag_family\ML\zigzag_runner.py", line 696, in _init_model
+    self.model = self.client.create("zigzag_opt")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\conda_envs\BFHC\Lib\site-packages\mph\client.py", line 360, in create
+    java = self.java.createUnique('model')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+com.comsol.util.exceptions.com.comsol.util.exceptions.FlException: Exception:
+	com.comsol.util.exceptions.FlException: 未连接到服务器。
+Messages:
+	Not connected to a server
+
+Traceback (most recent call last):
+  File "SourceFile", line 99, in com.comsol.model.util.ModelUtil.createUnique
+Exception: Java Exception
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 169, in <module>
+    main()
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 148, in main
+    run_cylinder() if family == "cylinder" else run_zigzag())
+                                                ^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\tests\run_d2_comsol_smoke.py", line 93, in run_zigzag
+    runner._init_model(n_runs, run_length, z_first)
+  File "D:\VScode\project\BFHC\zigzag_family\ML\zigzag_runner.py", line 696, in _init_model
+    self.model = self.client.create("zigzag_opt")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\conda_envs\BFHC\Lib\site-packages\mph\client.py", line 360, in create
+    java = self.java.createUnique('model')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+com.comsol.util.exceptions.com.comsol.util.exceptions.FlException: Exception:
+	com.comsol.util.exceptions.FlException: 未连接到服务器。
+Messages:
+	Not connected to a server
+
