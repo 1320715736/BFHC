@@ -1,0 +1,32 @@
+Model does not exist.
+Traceback (most recent call last):
+  File "SourceFile", line 224, in com.comsol.clientapi.impl.StudyClient.run
+Exception: Java Exception
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\VScode\project\BFHC\tests\run_d5_comsol_smoke.py", line 336, in <module>
+    main()
+  File "D:\VScode\project\BFHC\tests\run_d5_comsol_smoke.py", line 327, in main
+    run_zigzag(args.scope, args.output, args.resume))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\tests\run_d5_comsol_smoke.py", line 267, in run_zigzag
+    result = verifier.run_case(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\VScode\project\BFHC\verification\d5_mechanics.py", line 448, in run_case
+    self.j.study("std1").run()
+java.lang.java.lang.NullPointerException: java.lang.NullPointerException
+Error while disconnecting client at session clean-up.
+Traceback (most recent call last):
+  File "SourceFile", line 290, in com.comsol.model.util.ModelUtil.disconnect
+Exception: Java Exception
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\conda_envs\BFHC\Lib\site-packages\mph\session.py", line 160, in cleanup
+    client.disconnect()
+  File "D:\conda_envs\BFHC\Lib\site-packages\mph\client.py", line 441, in disconnect
+    self.java.disconnect()
+java.lang.java.lang.IllegalStateException: java.lang.IllegalStateException: Tried to disconnect while not connected.

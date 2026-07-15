@@ -1,0 +1,330 @@
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+D5 cylinder official_initial_cylinder: model initialization
+  Model init OK: sanity Tmax=2969.8K, I=2413.9910A
+  D5 mechanics fixed_fixed_high_temperature_no_gravity started
+  D5 mechanics fixed_fixed_high_temperature_no_gravity completed in 27.9s
+  D5 mechanics fixed_sliding_high_temperature_no_gravity started
+  D5 mechanics fixed_sliding_high_temperature_no_gravity completed in 24.7s
+D5 cylinder historical_trial68_pressure_test: model initialization
+  Model init OK: sanity Tmax=2892.9K, I=1696.3935A
+  D5 mechanics fixed_fixed_high_temperature_no_gravity started
+  D5 mechanics fixed_fixed_high_temperature_no_gravity completed in 42.8s
+  D5 mechanics fixed_sliding_high_temperature_no_gravity started
+  D5 mechanics fixed_sliding_high_temperature_no_gravity completed in 41.6s
+COMSOL disconnected.
+{
+  "family": "cylinder",
+  "scope": "full",
+  "status": "PASS_WITH_ELASTIC_STRENGTH_SCREEN",
+  "competitionScope": {
+    "stressComparisonRequired": true,
+    "thermalGeometryDistortionIgnored": true,
+    "mechanicsOutsideOptimizationLoop": true,
+    "strengthCertificationClaimed": false
+  },
+  "cases": {
+    "official_initial_cylinder": {
+      "role": "official_initial_geometry",
+      "radii_mm": [
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5
+      ],
+      "voltage_V": 1.0,
+      "geometry": {
+        "manufacturabilityVersion": "geometry_integrity_d5_v1",
+        "family": "cylinder",
+        "endpointDistance_mm": 15.0,
+        "analyticVolume_m3": 2.9452431127404315e-07,
+        "analyticTargetVolumeError_rel": 1.7974597402295807e-16,
+        "minFeature_mm": 1.875,
+        "minimumFeatureFloor_mm": 0.1,
+        "minimumFeaturePass": true,
+        "analyticConnected": true,
+        "maxAdjacentRadiusJump_mm": 0.0,
+        "maxRadiusRatio": 1.0,
+        "parameterizationSymmetric": true,
+        "screenScope": "geometric_manufacturability_only",
+        "comsolDomainCount": 1,
+        "comsolFiniteVoidCount": 0,
+        "comsolEntitiesPerDimension": [
+          36,
+          68,
+          34,
+          1
+        ],
+        "comsolVolume_m3": 2.945097859409846e-07,
+        "comsolTargetVolumeError_rel": 4.931794253476495e-05,
+        "singleDomainPass": true,
+        "noFiniteVoidPass": true,
+        "endpointDistancePass": true,
+        "strictVolumePass": true,
+        "officialGeometryPass": true,
+        "manufacturingProcessValidated": false
+      },
+      "analyses": {
+        "fixed_fixed_high_temperature_no_gravity": {
+          "solveOK": true,
+          "mechanicsVersion": "linear_thermoelastic_d5_v1",
+          "mechanicalMaterialModel": "uw_pppl_tungsten_d5_v1",
+          "mechanicalMaterialSources": {
+            "elastic_modulus_poisson_yield": "University of Wisconsin Fusion Technology Institute UWFDM-1237, Appendix: Material Properties Used in Analysis",
+            "thermal_expansion": "Princeton Plasma Physics Laboratory ARIES tungsten property table, valid 293-2500 K",
+            "room_temperature": "Princeton Plasma Physics Laboratory ARIES general tungsten properties"
+          },
+          "family": "cylinder",
+          "voltage_V": 1.0,
+          "boundaryMode": "fixed_fixed",
+          "gravityEnabled": false,
+          "gravityDirection": "none",
+          "Tmax_K": 2969.8031518045614,
+          "temperatureLimit_K": 3273.15,
+          "temperatureLimitPass": true,
+          "volume_m3": 2.945097859409846e-07,
+          "domainCount": 1,
+          "finiteVoidCount": 0,
+          "maxMises_MPa": 5577.069667135776,
+          "rmsMises_MPa": 2849.282384767135,
+          "stressConcentrationRatio": 1.9573594028278725,
+          "mostCompressivePrincipalStress_MPa": -7008.849349203831,
+          "maxDisplacement_mm": 0.05462379927075567,
+          "maxAbsUx_mm": 0.054606289320068294,
+          "maxAbsUy_mm": 0.05459554341911749,
+          "maxAbsUz_mm": 0.01603749174138547,
+          "maxThermalStrain_pct": 1.7398245486729647,
+          "maxYieldScreenUtilization": 331.3497017718883,
+          "elasticYieldScreenPass": false,
+          "propertiesAtTmax": {
+            "youngModulus_GPa": 193.9740116043922,
+            "poissonRatio": 0.30839351935466974,
+            "thermalExpansion_1_K": 6.5e-06,
+            "yieldScreen_MPa": 10.0
+          },
+          "thermalExpansionGeometryCoupling": false,
+          "undeformedThermalGeometry": true,
+          "mechanicsInOptimizationLoop": false,
+          "stressInterpretation": "linear_elastic_comparison_not_strength_certification",
+          "bucklingRequested": false,
+          "elapsed_sec": 27.9
+        },
+        "fixed_sliding_high_temperature_no_gravity": {
+          "solveOK": true,
+          "mechanicsVersion": "linear_thermoelastic_d5_v1",
+          "mechanicalMaterialModel": "uw_pppl_tungsten_d5_v1",
+          "mechanicalMaterialSources": {
+            "elastic_modulus_poisson_yield": "University of Wisconsin Fusion Technology Institute UWFDM-1237, Appendix: Material Properties Used in Analysis",
+            "thermal_expansion": "Princeton Plasma Physics Laboratory ARIES tungsten property table, valid 293-2500 K",
+            "room_temperature": "Princeton Plasma Physics Laboratory ARIES general tungsten properties"
+          },
+          "family": "cylinder",
+          "voltage_V": 1.0,
+          "boundaryMode": "fixed_sliding",
+          "gravityEnabled": false,
+          "gravityDirection": "none",
+          "Tmax_K": 2969.803481418861,
+          "temperatureLimit_K": 3273.15,
+          "temperatureLimitPass": true,
+          "volume_m3": 2.9450978594098465e-07,
+          "domainCount": 1,
+          "finiteVoidCount": 0,
+          "maxMises_MPa": 1861.7406438654862,
+          "rmsMises_MPa": 264.1933595784106,
+          "stressConcentrationRatio": 7.0468865941081145,
+          "mostCompressivePrincipalStress_MPa": -2326.004102938818,
+          "maxDisplacement_mm": 0.1539729859621341,
+          "maxAbsUx_mm": 0.04328195059561017,
+          "maxAbsUy_mm": 0.04328570583054396,
+          "maxAbsUz_mm": 0.1539729859621341,
+          "maxThermalStrain_pct": 1.7398247629222592,
+          "maxYieldScreenUtilization": 35.29953815286526,
+          "elasticYieldScreenPass": false,
+          "propertiesAtTmax": {
+            "youngModulus_GPa": 193.97396248924423,
+            "poissonRatio": 0.3083935229474656,
+            "thermalExpansion_1_K": 6.5e-06,
+            "yieldScreen_MPa": 10.0
+          },
+          "thermalExpansionGeometryCoupling": false,
+          "undeformedThermalGeometry": true,
+          "mechanicsInOptimizationLoop": false,
+          "stressInterpretation": "linear_elastic_comparison_not_strength_certification",
+          "bucklingRequested": false,
+          "elapsed_sec": 24.7
+        }
+      }
+    },
+    "historical_trial68_pressure_test": {
+      "role": "historical_shape_pressure_test_not_formal_candidate",
+      "radii_mm": [
+        1.906383264,
+        1.9423869759999999,
+        3.647488445,
+        2.0709089130000002,
+        2.0709089130000002,
+        3.647488445,
+        1.9423869759999999,
+        1.906383264
+      ],
+      "voltage_V": 1.0,
+      "geometry": {
+        "manufacturabilityVersion": "geometry_integrity_d5_v1",
+        "family": "cylinder",
+        "endpointDistance_mm": 15.0,
+        "analyticVolume_m3": 2.9452431122862837e-07,
+        "analyticTargetVolumeError_rel": 1.5419688127533482e-10,
+        "minFeature_mm": 1.875,
+        "minimumFeatureFloor_mm": 0.1,
+        "minimumFeaturePass": true,
+        "analyticConnected": true,
+        "maxAdjacentRadiusJump_mm": 1.705101469,
+        "maxRadiusRatio": 1.913302804257098,
+        "parameterizationSymmetric": true,
+        "screenScope": "geometric_manufacturability_only",
+        "comsolDomainCount": 1,
+        "comsolFiniteVoidCount": 0,
+        "comsolEntitiesPerDimension": [
+          60,
+          92,
+          40,
+          1
+        ],
+        "comsolVolume_m3": 2.9451875907196547e-07,
+        "comsolTargetVolumeError_rel": 1.8851421988250908e-05,
+        "singleDomainPass": true,
+        "noFiniteVoidPass": true,
+        "endpointDistancePass": true,
+        "strictVolumePass": true,
+        "officialGeometryPass": true,
+        "manufacturingProcessValidated": false
+      },
+      "analyses": {
+        "fixed_fixed_high_temperature_no_gravity": {
+          "solveOK": true,
+          "mechanicsVersion": "linear_thermoelastic_d5_v1",
+          "mechanicalMaterialModel": "uw_pppl_tungsten_d5_v1",
+          "mechanicalMaterialSources": {
+            "elastic_modulus_poisson_yield": "University of Wisconsin Fusion Technology Institute UWFDM-1237, Appendix: Material Properties Used in Analysis",
+            "thermal_expansion": "Princeton Plasma Physics Laboratory ARIES tungsten property table, valid 293-2500 K",
+            "room_temperature": "Princeton Plasma Physics Laboratory ARIES general tungsten properties"
+          },
+          "family": "cylinder",
+          "voltage_V": 1.0,
+          "boundaryMode": "fixed_fixed",
+          "gravityEnabled": false,
+          "gravityDirection": "none",
+          "Tmax_K": 2892.929871059587,
+          "temperatureLimit_K": 3273.15,
+          "temperatureLimitPass": true,
+          "volume_m3": 2.9451875907196547e-07,
+          "domainCount": 1,
+          "finiteVoidCount": 0,
+          "maxMises_MPa": 6434.4172642649255,
+          "rmsMises_MPa": 2395.768237061688,
+          "stressConcentrationRatio": 2.685742787940321,
+          "mostCompressivePrincipalStress_MPa": -8203.123279126816,
+          "maxDisplacement_mm": 0.06049212277617211,
+          "maxAbsUx_mm": 0.05829059170583223,
+          "maxAbsUy_mm": 0.058344929398313046,
+          "maxAbsUz_mm": 0.033016897359711576,
+          "maxThermalStrain_pct": 1.6898569161887316,
+          "maxYieldScreenUtilization": 313.37018753729143,
+          "elasticYieldScreenPass": false,
+          "propertiesAtTmax": {
+            "youngModulus_GPa": 205.2680017174479,
+            "poissonRatio": 0.3075556005945495,
+            "thermalExpansion_1_K": 6.5e-06,
+            "yieldScreen_MPa": 10.0
+          },
+          "thermalExpansionGeometryCoupling": false,
+          "undeformedThermalGeometry": true,
+          "mechanicsInOptimizationLoop": false,
+          "stressInterpretation": "linear_elastic_comparison_not_strength_certification",
+          "bucklingRequested": false,
+          "elapsed_sec": 42.8
+        },
+        "fixed_sliding_high_temperature_no_gravity": {
+          "solveOK": true,
+          "mechanicsVersion": "linear_thermoelastic_d5_v1",
+          "mechanicalMaterialModel": "uw_pppl_tungsten_d5_v1",
+          "mechanicalMaterialSources": {
+            "elastic_modulus_poisson_yield": "University of Wisconsin Fusion Technology Institute UWFDM-1237, Appendix: Material Properties Used in Analysis",
+            "thermal_expansion": "Princeton Plasma Physics Laboratory ARIES tungsten property table, valid 293-2500 K",
+            "room_temperature": "Princeton Plasma Physics Laboratory ARIES general tungsten properties"
+          },
+          "family": "cylinder",
+          "voltage_V": 1.0,
+          "boundaryMode": "fixed_sliding",
+          "gravityEnabled": false,
+          "gravityDirection": "none",
+          "Tmax_K": 2892.9298603068587,
+          "temperatureLimit_K": 3273.15,
+          "temperatureLimitPass": true,
+          "volume_m3": 2.9451875907196547e-07,
+          "domainCount": 1,
+          "finiteVoidCount": 0,
+          "maxMises_MPa": 1530.4393853695801,
+          "rmsMises_MPa": 171.71780219329048,
+          "stressConcentrationRatio": 8.912526050425882,
+          "mostCompressivePrincipalStress_MPa": -2094.2759191620876,
+          "maxDisplacement_mm": 0.1554087030587606,
+          "maxAbsUx_mm": 0.053009604756472775,
+          "maxAbsUy_mm": 0.05303490116615129,
+          "maxAbsUz_mm": 0.1554087030587606,
+          "maxThermalStrain_pct": 1.6898569091994582,
+          "maxYieldScreenUtilization": 29.3799366335733,
+          "elasticYieldScreenPass": false,
+          "propertiesAtTmax": {
+            "youngModulus_GPa": 205.26800327472282,
+            "poissonRatio": 0.30755560047734476,
+            "thermalExpansion_1_K": 6.5e-06,
+            "yieldScreen_MPa": 10.0
+          },
+          "thermalExpansionGeometryCoupling": false,
+          "undeformedThermalGeometry": true,
+          "mechanicsInOptimizationLoop": false,
+          "stressInterpretation": "linear_elastic_comparison_not_strength_certification",
+          "bucklingRequested": false,
+          "elapsed_sec": 41.6
+        }
+      }
+    }
+  },
+  "sameBoundaryComparison": {
+    "fixed_fixed": {
+      "sameMechanicalBoundary": true,
+      "sameMaterialModel": true,
+      "sameVoltage": true,
+      "initialMaxMises_MPa": 5577.069667135776,
+      "candidateMaxMises_MPa": 6434.4172642649255,
+      "maxMisesChange_pct": 15.372725253573138,
+      "initialRmsMises_MPa": 2849.282384767135,
+      "candidateRmsMises_MPa": 2395.768237061688,
+      "rmsMisesChange_pct": -15.916784876431677,
+      "initialMaxDisplacement_mm": 0.05462379927075567,
+      "candidateMaxDisplacement_mm": 0.06049212277617211,
+      "maxDisplacementChange_pct": 10.743162474526379
+    },
+    "fixed_sliding": {
+      "sameMechanicalBoundary": true,
+      "sameMaterialModel": true,
+      "sameVoltage": true,
+      "initialMaxMises_MPa": 1861.7406438654862,
+      "candidateMaxMises_MPa": 1530.4393853695801,
+      "maxMisesChange_pct": -17.795242295835223,
+      "initialRmsMises_MPa": 264.1933595784106,
+      "candidateRmsMises_MPa": 171.71780219329048,
+      "rmsMisesChange_pct": -35.00298324404859,
+      "initialMaxDisplacement_mm": 0.1539729859621341,
+      "candidateMaxDisplacement_mm": 0.1554087030587606,
+      "maxDisplacementChange_pct": 0.932447395012237
+    }
+  },
+  "elapsed_sec": 201.3
+}

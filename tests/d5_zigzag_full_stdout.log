@@ -1,0 +1,19 @@
+Starting COMSOL server...
+COMSOL server connected. Running warm-up...
+Warm-up done.
+D5 zigzag d4_reference: model initialization
+  Model init OK: sanity Tmax=668.3K I=3.0854A
+  D5 mechanics fixed_fixed_high_temperature_no_gravity started
+  D5 mechanics fixed_fixed_high_temperature_no_gravity completed in 110.4s
+  D5 mechanics fixed_sliding_high_temperature_no_gravity started
+  D5 mechanics fixed_sliding_high_temperature_no_gravity completed in 108.7s
+D5 zigzag historical_c10_pressure_test: model initialization
+  Model init OK: sanity Tmax=590.3K I=1.8775A
+  D5 mechanics fixed_fixed_high_temperature_no_gravity started
+  D5 mechanics fixed_fixed_high_temperature_no_gravity completed in 111.1s
+  D5 mechanics fixed_sliding_high_temperature_no_gravity started
+  D5 mechanics fixed_sliding_high_temperature_no_gravity completed in 60.5s
+  D5 mechanics sensitivity fixed_sliding_high_temperature_gravity_100V started
+  D5 mechanics sensitivity fixed_sliding_high_temperature_gravity_100V completed in 54.2s
+  D5 mechanics sensitivity fixed_sliding_room_temperature_no_gravity started
+COMSOL disconnected.
