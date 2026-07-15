@@ -60,7 +60,7 @@ class COMSOLRunner:
         self.voltage_objective = "lifeTotalP03escape_J"
         self.operating_point_version = "rated_lifecycle_energy_v1"
         self.metric_version = "radiation_escape_v2"
-        self.physics_version = "thermal_s2s_d3_v1"
+        self.physics_version = "thermal_s2s_d4_v1"
         self.geometry_version = "cylinder_segmented_erosion_v2"
         self.lifecycle_version = "lifecycle_v2"
         self.erosion_model = "local_sidewall_plus_shoulder_volume_balance"
@@ -83,15 +83,37 @@ class COMSOLRunner:
             1.0, 0.95, 0.90, 0.85, 0.80, 0.70, 0.60)
         self.Aev = 3.9e9
         self.Bev = 1.023e5
+        self.material_model = "nist_reference_d4_v1"
+        self.material_uncertainty_version = "nist_bounds_d4_v1"
+        self.rhoe_scale = 1.0
+        self.k_scale = 1.0
+        self.cp_scale = 1.0
+        self.sublimation_enthalpy_J_kg = 4.62e6
+        self.sublimation_heat_enabled = True
+        self.sublimation_heat_scale = 1.0
+        self.sublimation_heat_version = "janaf_constant_d4_v1"
+        self.transient_version = "cold_start_transient_d4_v1"
+        self.transient_initial_temperature_K = 293.15
+        self.transient_relative_tolerance = 1.0e-3
+        self.transient_settling_relative_band = 0.01
+        self.transient_settling_absolute_band_K = 5.0
         self.failure_fraction = 0.20
         self.mesh_hauto_levels = (4, 5, 6, 7, 8)
 
-        # 材料属性表达式
-        self.rhoe_expr = (
+        # D4 保留旧物性用于模型形式敏感性，正式默认使用 NIST 参考模型。
+        self.legacy_rhoe_expr = (
             "max(1e-10[ohm*m], 5.5e-8[ohm*m]*(1+0.003836*(T-293.15[K])/1[K]"
             "+7.55e-7*((T-293.15[K])/1[K])^2))")
-        self.k_expr = "max(75[W/(m*K)],175[W/(m*K)]-0.032[W/(m*K^2)]*(T-293.15[K]))"
-        self.cp_expr = "min(195[J/(kg*K)],132[J/(kg*K)]+0.020[J/(kg*K^2)]*(T-293.15[K]))"
+        self.legacy_k_expr = (
+            "max(75[W/(m*K)],175[W/(m*K)]"
+            "-0.032[W/(m*K^2)]*(T-293.15[K]))")
+        self.legacy_cp_expr = (
+            "min(195[J/(kg*K)],132[J/(kg*K)]"
+            "+0.020[J/(kg*K^2)]*(T-293.15[K]))")
+        self.rhoe_expr = None
+        self.k_expr = None
+        self.cp_expr = None
+        self._refresh_material_expressions()
 
         # Planck f03 表达式（在 _build_expressions 中构建）
         self.q03_net_out_expr = None
@@ -129,6 +151,219 @@ class COMSOLRunner:
             f"eps03*sigmaSB*(({f03bb_T})*T^4)")
         self.q_rad_net_out_expr = (
             f"sigmaSB*(epsRest*T^4+(eps03-epsRest)*(({f03bb_T})*T^4))")
+
+    # ================================================================
+    #  D4 材料、潜热和瞬态公共合同
+    # ================================================================
+
+    @staticmethod
+    def _canonical_material_model(model):
+        aliases = {
+            "legacy": "legacy_v1",
+            "legacy_v1": "legacy_v1",
+            "nist": "nist_reference_d4_v1",
+            "nist_reference_d4_v1": "nist_reference_d4_v1",
+        }
+        try:
+            return aliases[str(model)]
+        except KeyError as exc:
+            raise ValueError(
+                "material_model must be legacy_v1 or "
+                "nist_reference_d4_v1") from exc
+
+    @staticmethod
+    def _positive_scale(value, name):
+        value = float(value)
+        if not math.isfinite(value) or value <= 0.0:
+            raise ValueError(f"{name} must be a finite positive number")
+        return value
+
+    @staticmethod
+    def _nist_cp_J_kgK(temperature_K):
+        """NIST WebBook Shomate heat capacity for solid tungsten."""
+        temperature = min(3680.0, max(298.15, float(temperature_K)))
+        t = temperature / 1000.0
+        if temperature < 1900.0:
+            coefficients = (
+                5.726411, 0.630899, 0.300610, -0.060861, -0.011570)
+        else:
+            coefficients = (
+                -5.395890, 21.57739, -10.58114, 1.715256, -5.759417)
+        a, b, c, d, e = coefficients
+        cp_cal_molK = a + b * t + c * t ** 2 + d * t ** 3 + e / t ** 2
+        return cp_cal_molK * 4.184 / 0.18384
+
+    @staticmethod
+    def _nist_k_W_mK(temperature_K):
+        """Polynomial fit to the NIST recommended 300-3600 K table."""
+        temperature = min(3600.0, max(300.0, float(temperature_K)))
+        x = (temperature - 300.0) / 1000.0
+        coefficients = (
+            174.03820649764003,
+            -187.55430888772554,
+            280.0376748433148,
+            -265.16767002441196,
+            149.71450435287025,
+            -49.02680797888553,
+            8.595133635348382,
+            -0.6232182629268345,
+        )
+        return sum(coefficient * x ** order
+                   for order, coefficient in enumerate(coefficients))
+
+    @staticmethod
+    def _legacy_material_values(temperature_K):
+        temperature = float(temperature_K)
+        delta = temperature - 293.15
+        return {
+            "rhoe_ohm_m": max(
+                1.0e-10,
+                5.5e-8 * (1.0 + 0.003836 * delta
+                          + 7.55e-7 * delta ** 2)),
+            "k_W_mK": max(75.0, 175.0 - 0.032 * delta),
+            "cp_J_kgK": min(195.0, 132.0 + 0.020 * delta),
+        }
+
+    @classmethod
+    def _nist_material_values(cls, temperature_K):
+        temperature = float(temperature_K)
+        legacy = cls._legacy_material_values(temperature)
+        rhoe_nist = max(
+            1.0e-10, (-14.08 + 0.03515 * temperature) * 1.0e-8)
+        blend = min(1.0, max(0.0, (temperature - 1800.0) / 400.0))
+        rhoe = ((1.0 - blend) * legacy["rhoe_ohm_m"]
+                + blend * rhoe_nist)
+        return {
+            "rhoe_ohm_m": rhoe,
+            "k_W_mK": cls._nist_k_W_mK(temperature),
+            "cp_J_kgK": cls._nist_cp_J_kgK(temperature),
+        }
+
+    def material_property_values(self, temperature_K):
+        """Return the active, scaled material properties for audit/tests."""
+        if self.material_model == "legacy_v1":
+            values = self._legacy_material_values(temperature_K)
+        else:
+            values = self._nist_material_values(temperature_K)
+        return {
+            "rhoe_ohm_m": values["rhoe_ohm_m"] * self.rhoe_scale,
+            "k_W_mK": values["k_W_mK"] * self.k_scale,
+            "cp_J_kgK": values["cp_J_kgK"] * self.cp_scale,
+        }
+
+    def _refresh_material_expressions(self):
+        if self.material_model == "legacy_v1":
+            rhoe_base = self.legacy_rhoe_expr
+            k_base = self.legacy_k_expr
+            cp_base = self.legacy_cp_expr
+        else:
+            rhoe_nist = (
+                "max(1e-10[ohm*m],"
+                "(-14.08+0.03515*T/1[K])*1e-8[ohm*m])")
+            blend = "min(1,max(0,(T-1800[K])/400[K]))"
+            rhoe_base = (
+                f"((1-({blend}))*({self.legacy_rhoe_expr})"
+                f"+({blend})*({rhoe_nist}))")
+            x = "((min(3600[K],max(300[K],T))-300[K])/1000[K])"
+            k_base = (
+                "(174.03820649764003"
+                f"-187.55430888772554*{x}"
+                f"+280.0376748433148*{x}^2"
+                f"-265.16767002441196*{x}^3"
+                f"+149.71450435287025*{x}^4"
+                f"-49.02680797888553*{x}^5"
+                f"+8.595133635348382*{x}^6"
+                f"-0.6232182629268345*{x}^7)[W/(m*K)]")
+            t = "(min(3680[K],max(298.15[K],T))/1000[K])"
+            cp_low = (
+                f"(5.726411+0.630899*{t}+0.300610*{t}^2"
+                f"-0.060861*{t}^3-0.011570/{t}^2)"
+                "*4.184[J/(mol*K)]/0.18384[kg/mol]")
+            cp_high = (
+                f"(-5.395890+21.57739*{t}-10.58114*{t}^2"
+                f"+1.715256*{t}^3-5.759417/{t}^2)"
+                "*4.184[J/(mol*K)]/0.18384[kg/mol]")
+            cp_base = f"if(T<1900[K],{cp_low},{cp_high})"
+
+        self.rhoe_expr = f"rhoeScale*({rhoe_base})"
+        self.k_expr = f"kScale*({k_base})"
+        self.cp_expr = f"cpScale*({cp_base})"
+
+    def configure_material_model(self, material_model=None,
+                                 rhoe_scale=1.0, k_scale=1.0,
+                                 cp_scale=1.0):
+        """Select a versioned material model and uncertainty scales."""
+        self.material_model = self._canonical_material_model(
+            material_model or self.material_model)
+        self.rhoe_scale = self._positive_scale(rhoe_scale, "rhoe_scale")
+        self.k_scale = self._positive_scale(k_scale, "k_scale")
+        self.cp_scale = self._positive_scale(cp_scale, "cp_scale")
+        self._refresh_material_expressions()
+        if self.j is not None:
+            self._apply_material_properties()
+        return self
+
+    def configure_sublimation_heat(self, enabled=True, scale=1.0):
+        """Enable or disable the free-surface sublimation latent-heat sink."""
+        self.sublimation_heat_enabled = bool(enabled)
+        self.sublimation_heat_scale = self._positive_scale(
+            scale, "sublimation_heat_scale")
+        if self.j is not None:
+            self.j.param().set(
+                "latentHeatScale", f"{self.sublimation_heat_scale}")
+            self.j.param().set(
+                "latentHeatEnabled",
+                "1" if self.sublimation_heat_enabled else "0")
+            self._configure_sublimation_heat_boundary()
+        return self
+
+    def sublimation_heat_flux_W_m2(self, temperature_K):
+        temperature = float(temperature_K)
+        if not math.isfinite(temperature) or temperature <= 0.0:
+            raise ValueError("temperature_K must be finite and positive")
+        mass_flux = self.Aev * math.exp(-self.Bev / temperature)
+        return (mass_flux * self.sublimation_enthalpy_J_kg
+                * self.sublimation_heat_scale)
+
+    @staticmethod
+    def _startup_metrics(times_s, temperatures_K, steady_temperature_K,
+                         limit_K, initial_temperature_K=293.15,
+                         relative_band=0.01, absolute_band_K=5.0):
+        """Compute deterministic D4 startup metrics from a sampled trace."""
+        times = [float(value) for value in times_s]
+        temperatures = [float(value) for value in temperatures_K]
+        if not times or len(times) != len(temperatures):
+            raise ValueError("startup time and temperature arrays must match")
+        if any(not math.isfinite(value) for value in times + temperatures):
+            raise ValueError("startup arrays must contain finite values")
+        if any(right <= left for left, right in zip(times, times[1:])):
+            raise ValueError("startup times must be strictly increasing")
+
+        steady = float(steady_temperature_K)
+        rise = max(0.0, steady - float(initial_temperature_K))
+        band = max(float(absolute_band_K), float(relative_band) * rise)
+        peak = max(temperatures)
+        peak_index = temperatures.index(peak)
+        settling_index = None
+        for index in range(len(temperatures)):
+            if all(abs(value - steady) <= band
+                   for value in temperatures[index:]):
+                settling_index = index
+                break
+        return {
+            "transientPeakTmax_K": peak,
+            "transientPeakTime_s": times[peak_index],
+            "steadyReferenceTmax_K": steady,
+            "startupOvershootRaw_K": peak - steady,
+            "startupOvershoot_K": max(0.0, peak - steady),
+            "startupSettlingBand_K": band,
+            "startupSettlingTime_s": (
+                times[settling_index]
+                if settling_index is not None else float("nan")),
+            "startupSettled": settling_index is not None,
+            "startupTemperatureOK": peak < float(limit_K),
+            "startupTemperatureMargin_K": float(limit_K) - peak,
+        }
 
     # ================================================================
     #  服务器管理
@@ -216,6 +451,23 @@ class COMSOLRunner:
         j.param().set("eps03", "0.35", "Emissivity 0-3 um band")
         j.param().set("epsRest", "0.15", "Emissivity outside 0-3 um band")
         j.param().set("rhoMassW", "19350[kg/m^3]", "Density of tungsten")
+        j.param().set("rhoeScale", f"{self.rhoe_scale}",
+                      "Electrical resistivity uncertainty scale")
+        j.param().set("kScale", f"{self.k_scale}",
+                      "Thermal conductivity uncertainty scale")
+        j.param().set("cpScale", f"{self.cp_scale}",
+                      "Heat capacity uncertainty scale")
+        j.param().set("Aev", f"{self.Aev}[kg/(m^2*s)]",
+                      "Tungsten sublimation mass-flux prefactor")
+        j.param().set("Bev", f"{self.Bev}[K]",
+                      "Tungsten sublimation temperature coefficient")
+        j.param().set("LsubW", f"{self.sublimation_enthalpy_J_kg}[J/kg]",
+                      "Tungsten sublimation enthalpy")
+        j.param().set("latentHeatScale", f"{self.sublimation_heat_scale}",
+                      "Sublimation latent-heat sensitivity scale")
+        j.param().set("latentHeatEnabled",
+                      "1" if self.sublimation_heat_enabled else "0",
+                      "Sublimation latent-heat coupling switch")
         j.param().set("Tamb", f"{self.thermal_ambient_K}[K]",
                       "Ambient temperature for S2S solve")
         j.param().set(
@@ -331,6 +583,23 @@ class COMSOLRunner:
         j.result().numerical().create("AsurfS2S", "IntSurface")
         j.result().numerical("AsurfS2S").selection().named("selFreeS2S")
         j.result().numerical("AsurfS2S").set("expr", ["1"])
+
+        j.result().numerical().create("MdotSubS2S", "IntSurface")
+        j.result().numerical("MdotSubS2S").selection().named("selFreeS2S")
+        j.result().numerical("MdotSubS2S").set(
+            "expr", ["Aev*exp(-Bev/max(T,1[K]))"])
+
+        j.result().numerical().create("PsubS2S", "IntSurface")
+        j.result().numerical("PsubS2S").selection().named("selFreeS2S")
+        j.result().numerical("PsubS2S").set(
+            "expr", ["latentHeatEnabled*latentHeatScale*Aev"
+                     "*exp(-Bev/max(T,1[K]))*LsubW"])
+
+        j.result().numerical().create("qSubMaxS2S", "MaxSurface")
+        j.result().numerical("qSubMaxS2S").selection().named("selFreeS2S")
+        j.result().numerical("qSubMaxS2S").set(
+            "expr", ["latentHeatEnabled*latentHeatScale*Aev"
+                     "*exp(-Bev/max(T,1[K]))*LsubW"])
 
         # Gross emission uses COMSOL's exact spectral-band Planck integration.
         # Contact end faces have zero emissivity in the S2S interface.
@@ -561,6 +830,33 @@ class COMSOLRunner:
             ht.feature(tag).set(
                 "q0", f"{coefficient}*(Telectrode-T)")
 
+    def _configure_sublimation_heat_boundary(self):
+        """Apply the D4 latent-heat sink only on sublimating free surfaces."""
+        ht = self.j.component("comp1").physics("ht")
+        self._remove_safe(ht.feature(), "subHeatS2S")
+        if not self.sublimation_heat_enabled:
+            return
+        ht.create("subHeatS2S", "HeatFluxBoundary", 2)
+        ht.feature("subHeatS2S").selection().named("selFreeS2S")
+        ht.feature("subHeatS2S").set(
+            "HeatFluxType", "GeneralInwardHeatFlux")
+        ht.feature("subHeatS2S").set(
+            "q0", "-latentHeatEnabled*latentHeatScale*Aev"
+            "*exp(-Bev/max(T,1[K]))*LsubW")
+
+    def _apply_material_properties(self):
+        """Push the selected D4 material model into an existing COMSOL model."""
+        j = self.j
+        j.param().set("rhoeScale", f"{self.rhoe_scale}")
+        j.param().set("kScale", f"{self.k_scale}")
+        j.param().set("cpScale", f"{self.cp_scale}")
+        material = j.component("comp1").material("mat1").propertyGroup("def")
+        material.set("density", ["rhoMassW"])
+        material.set("relpermittivity", ["1"])
+        material.set("electricconductivity", [f"1/({self.rhoe_expr})"])
+        material.set("thermalconductivity", [self.k_expr])
+        material.set("heatcapacity", [self.cp_expr])
+
     def _temperature_output_fields(self, steady_result):
         """Map one steady solve onto the versioned D3 output contract."""
         keys = (
@@ -747,6 +1043,15 @@ class COMSOLRunner:
             "initialP03ambient_W": initial["P03ambient"],
             "initialAmbient03ToEscape_pct": initial["ambient03ToEscape_pct"],
             "initialFambAreaAvg": initial["FambAreaAvg"],
+            "initialSublimationMassRate_kg_s": (
+                initial["sublimationMassRate_kg_s"]),
+            "initialSublimationHeat_W": initial["sublimationHeat_W"],
+            "initialMaxSublimationHeatFlux_W_m2": (
+                initial["maxSublimationHeatFlux_W_m2"]),
+            "initialSublimationHeatToElectric_pct": (
+                initial["sublimationHeatToElectric_pct"]),
+            "initialSublimationHeatToGrossRadiation_pct": (
+                initial["sublimationHeatToGrossRadiation_pct"]),
             "lifeAvgP03gross_W": avg(p03_gross_j),
             "lifeAvgPradGross_W": avg(prad_gross_j),
             "lifeAvgP03escape_W": avg(p03_escape_j),
@@ -879,18 +1184,15 @@ class COMSOLRunner:
         # resistance boundary is a D3 sensitivity case only.
         self._configure_electrode_thermal_boundary()
 
+        # D4: sublimation cooling is applied to the same free-surface set used
+        # by erosion. The two electrode contact faces remain excluded.
+        self._configure_sublimation_heat_boundary()
+
         # S2S 面-面辐射
         self._setup_s2s()
 
-        # 材料属性
-        j.component("comp1").material("mat1").propertyGroup("def").set(
-            "density", ["rhoMassW"])
-        j.component("comp1").material("mat1").propertyGroup("def").set(
-            "electricconductivity", [f"1/({self.rhoe_expr})"])
-        j.component("comp1").material("mat1").propertyGroup("def").set(
-            "thermalconductivity", [self.k_expr])
-        j.component("comp1").material("mat1").propertyGroup("def").set(
-            "heatcapacity", [self.cp_expr])
+        # D4 versioned high-temperature material model.
+        self._apply_material_properties()
 
         # 网格：相邻段半径跳变大时可能产生相交边/移动域网格点失败，
         # 统一使用降级重试逻辑；侵蚀循环中的几何更新也复用同一逻辑。
@@ -986,6 +1288,11 @@ class COMSOLRunner:
             "FambAreaAvg": float('nan'), "selfViewLossRaw_pct": float('nan'),
             "selfViewLoss_pct": float('nan'),
             "radiationNumericalExcess_pct": float('nan'),
+            "sublimationMassRate_kg_s": float('nan'),
+            "sublimationHeat_W": float('nan'),
+            "maxSublimationHeatFlux_W_m2": float('nan'),
+            "sublimationHeatToElectric_pct": float('nan'),
+            "sublimationHeatToGrossRadiation_pct": float('nan'),
             "volume_m3": float('nan'),
             "expectedVolume_m3": float('nan'),
             "volumeLossFromInitial_pct": float('nan'),
@@ -1053,6 +1360,12 @@ class COMSOLRunner:
                     f"by {electrode_undershoot:.6g} K")
             I = abs(float(
                 j.result().numerical("IinS2S").getReal()[0][0]))
+            sublimation_mass_rate = float(
+                j.result().numerical("MdotSubS2S").getReal()[0][0])
+            sublimation_heat = float(
+                j.result().numerical("PsubS2S").getReal()[0][0])
+            max_sublimation_heat_flux = float(
+                j.result().numerical("qSubMaxS2S").getReal()[0][0])
             P03steady = float(
                 j.result().numerical("P03emitS2S").getReal()[0][0])
             PradSteady = float(
@@ -1072,6 +1385,13 @@ class COMSOLRunner:
             ambient_ratio = (P03ambient / P03sphere * 100.0
                              if P03sphere > 1e-20 else float('nan'))
             loss = self._radiation_loss_metrics(P03steady, P03sphere)
+            electric_power = voltage * I
+            sublimation_to_electric = (
+                sublimation_heat / electric_power * 100.0
+                if electric_power > 1.0e-20 else float('nan'))
+            sublimation_to_radiation = (
+                sublimation_heat / PradSteady * 100.0
+                if PradSteady > 1.0e-20 else float('nan'))
 
             # D2: every segment erosion rate must use its COMSOL surface value.
             seg_Tavg = []
@@ -1135,6 +1455,12 @@ class COMSOLRunner:
                 "geometryVolumeError_rel": geometry_vol_err,
                 "targetVolumeDeviation_rel": target_volume_deviation,
                 "current": I,
+                "sublimationMassRate_kg_s": sublimation_mass_rate,
+                "sublimationHeat_W": sublimation_heat,
+                "maxSublimationHeatFlux_W_m2": max_sublimation_heat_flux,
+                "sublimationHeatToElectric_pct": sublimation_to_electric,
+                "sublimationHeatToGrossRadiation_pct": (
+                    sublimation_to_radiation),
                 "P03steady": P03steady,
                 "PradSteady": PradSteady,
                 "P03sphere": P03sphere,
@@ -1173,6 +1499,10 @@ class COMSOLRunner:
                     ("P03sphere", P03sphere),
                     ("PradSphere", PradSphere),
                     ("P03ambient", P03ambient),
+                    ("sublimationMassRate_kg_s", sublimation_mass_rate),
+                    ("sublimationHeat_W", sublimation_heat),
+                    ("maxSublimationHeatFlux_W_m2",
+                     max_sublimation_heat_flux),
                 ) if value < 0.0
             ]
             if negative_powers:
@@ -1199,7 +1529,13 @@ class COMSOLRunner:
                 "electrodeTemperatureUndershoot_K": electrode_undershoot,
                 "temperatureFallbackUsed": False,
                 "I": I,
-                "Pelec": voltage * I,
+                "Pelec": electric_power,
+                "sublimationMassRate_kg_s": sublimation_mass_rate,
+                "sublimationHeat_W": sublimation_heat,
+                "maxSublimationHeatFlux_W_m2": max_sublimation_heat_flux,
+                "sublimationHeatToElectric_pct": sublimation_to_electric,
+                "sublimationHeatToGrossRadiation_pct": (
+                    sublimation_to_radiation),
                 "P03steady": P03steady, "PradSteady": PradSteady,
                 "P03sphere": P03sphere, "PradSphere": PradSphere,
                 "P03gross": P03steady, "PradGross": PradSteady,
@@ -1235,6 +1571,230 @@ class COMSOLRunner:
             result["failure"] = str(e)
 
         return result
+
+    @staticmethod
+    def _transient_output_times(duration_s):
+        """Dense early-time output followed by a coarser settling window."""
+        duration = float(duration_s)
+        if not math.isfinite(duration) or duration <= 0.0:
+            raise ValueError("duration_s must be finite and positive")
+        points = [0.0]
+        current = 0.0
+        for end, step in ((0.2, 0.01), (2.0, 0.05),
+                          (10.0, 0.1), (duration, 0.5)):
+            end = min(duration, end)
+            while current + step < end - 1.0e-12:
+                current += step
+                points.append(round(current, 12))
+            if end > points[-1] + 1.0e-12:
+                points.append(end)
+            current = end
+            if current >= duration - 1.0e-12:
+                break
+        if points[-1] < duration - 1.0e-12:
+            points.append(duration)
+        return points
+
+    @staticmethod
+    def _real_series(raw_values):
+        """Normalize COMSOL getReal() row/column layouts to one Python list."""
+        rows = [[float(value) for value in row] for row in raw_values]
+        if not rows:
+            return []
+        if len(rows) == 1:
+            return rows[0]
+        if all(len(row) == 1 for row in rows):
+            return [row[0] for row in rows]
+        if all(len(row) == len(rows[0]) for row in rows):
+            # A single expression is returned in the first row by COMSOL's
+            # numerical API. Multiple rows here are metadata/outer solutions.
+            return rows[0]
+        raise RuntimeError("unsupported COMSOL transient result layout")
+
+    def _transient_series(self, tag, feature_type, expression,
+                          dataset_tag, selection=None):
+        numerical = self.j.result().numerical()
+        self._remove_safe(numerical, tag)
+        numerical.create(tag, feature_type)
+        feature = self.j.result().numerical(tag)
+        if selection is not None:
+            feature.selection().named(selection)
+        elif feature_type != "EvalGlobal":
+            feature.selection().all()
+        feature.set("expr", [expression])
+        feature.set("data", dataset_tag)
+        return self._real_series(feature.getReal())
+
+    def _run_startup_transient_prepared(
+            self, radii_m, voltage, duration_s=60.0,
+            voltage_ramp_s=0.5):
+        """Run a cold-start Time Dependent study on an initialized geometry."""
+        voltage = float(voltage)
+        ramp = float(voltage_ramp_s)
+        if not math.isfinite(voltage) or voltage <= 0.0:
+            raise ValueError("voltage must be finite and positive")
+        if not math.isfinite(ramp) or ramp < 0.0:
+            raise ValueError("voltage_ramp_s must be finite and non-negative")
+
+        steady = self._solve_prepared(radii_m, voltage)
+        if not steady.get("solve_ok", False):
+            raise RuntimeError(
+                "D4 steady reference failed: " + steady.get("failure", ""))
+
+        j = self.j
+        output_times = self._transient_output_times(duration_s)
+        time_list = " ".join(f"{value:.12g}" for value in output_times)
+        datasets_before = set(str(tag) for tag in j.result().dataset().tags())
+
+        self._remove_safe(j.study(), "stdD4")
+        j.study().create("stdD4")
+        j.study("stdD4").create("time", "Transient")
+        time_step = j.study("stdD4").feature("time")
+        time_step.set("tunit", "s")
+        time_step.set("tlist", time_list)
+        time_step.set("usertol", "on")
+        time_step.set("rtol", f"{self.transient_relative_tolerance}")
+
+        ht_init = j.component("comp1").physics("ht").feature("init1")
+        potential = j.component("comp1").physics("ec").feature("potS2S")
+        ht_init.set("Tinit", f"{self.transient_initial_temperature_K}[K]")
+        if ramp > 0.0:
+            potential.set("V0", f"Vapp*min(1,t/{ramp:.12g}[s])")
+            profile = "linear_ramp"
+        else:
+            potential.set("V0", "Vapp")
+            profile = "step"
+
+        try:
+            j.study("stdD4").run()
+        finally:
+            potential.set("V0", "Vapp")
+            ht_init.set("Tinit", "3000[K]")
+
+        dataset_tags = [str(tag) for tag in j.result().dataset().tags()]
+        new_datasets = [tag for tag in dataset_tags
+                        if tag not in datasets_before]
+        candidate_datasets = new_datasets or dataset_tags
+        dataset_types = {}
+        solution_datasets = []
+        for tag in candidate_datasets:
+            try:
+                dataset_type = str(j.result().dataset(tag).getType())
+            except Exception:
+                dataset_type = "UNKNOWN"
+            dataset_types[tag] = dataset_type
+            if dataset_type.lower() == "solution":
+                solution_datasets.append(tag)
+        if not solution_datasets:
+            raise RuntimeError(
+                "transient study created no Solution dataset: "
+                f"{dataset_types}")
+        dataset_tag = solution_datasets[-1]
+
+        times = self._transient_series(
+            "timeD4", "EvalGlobal", "t", dataset_tag)
+        maxima = self._transient_series(
+            "maxTD4", "MaxVolume", "T", dataset_tag)
+        temperature_integrals = self._transient_series(
+            "tintD4", "IntVolume", "T", dataset_tag)
+        volumes = self._transient_series(
+            "volD4", "IntVolume", "1", dataset_tag)
+        sublimation_heat = self._transient_series(
+            "psubD4", "IntSurface",
+            "latentHeatEnabled*latentHeatScale*Aev"
+            "*exp(-Bev/max(T,1[K]))*LsubW",
+            dataset_tag, selection="selFreeS2S")
+
+        lengths = {len(times), len(maxima), len(temperature_integrals),
+                   len(volumes), len(sublimation_heat)}
+        if len(lengths) != 1 or not times:
+            raise RuntimeError(
+                "inconsistent COMSOL transient series lengths: "
+                f"time={len(times)}, Tmax={len(maxima)}, "
+                f"Tint={len(temperature_integrals)}, volume={len(volumes)}, "
+                f"Psub={len(sublimation_heat)}")
+        means = [integral / volume if volume > 1.0e-20 else float("nan")
+                 for integral, volume in zip(temperature_integrals, volumes)]
+        traces = {
+            "time": times,
+            "Tmax": maxima,
+            "Tmean": means,
+            "Psub": sublimation_heat,
+        }
+        invalid_trace = {
+            name: [(index, value) for index, value in enumerate(values)
+                   if not self._finite_number(value)][:5]
+            for name, values in traces.items()
+            if any(not self._finite_number(value) for value in values)
+        }
+        if invalid_trace:
+            raise RuntimeError(
+                "non-finite value in COMSOL transient trace: "
+                f"{invalid_trace}")
+
+        metrics = self._startup_metrics(
+            times, maxima, steady["TmaxAll_K"], self.temp_limit_K,
+            initial_temperature_K=self.transient_initial_temperature_K,
+            relative_band=self.transient_settling_relative_band,
+            absolute_band_K=self.transient_settling_absolute_band_K)
+        if not metrics["startupTemperatureOK"]:
+            status = "FAIL_OVERTEMP_DURING_STARTUP"
+        elif not metrics["startupSettled"]:
+            status = "CENSORED_STARTUP_WINDOW"
+        else:
+            status = "OK"
+
+        result = {
+            "status": status,
+            "solve_ok": True,
+            "applied_V": voltage,
+            "startupVoltageProfile": profile,
+            "startupVoltageRamp_s": ramp,
+            "startupDuration_s": times[-1],
+            "startupOutputCount": len(times),
+            "startupInitialTemperature_K": (
+                self.transient_initial_temperature_K),
+            "startupRelativeSolverTolerance": (
+                self.transient_relative_tolerance),
+            "startupDatasetTag": dataset_tag,
+            "startupDatasetTypes": dataset_types,
+            "startupDatasetReused": not bool(new_datasets),
+            "startupTimes_s": times,
+            "startupTmaxSeries_K": maxima,
+            "startupTmeanSeries_K": means,
+            "startupSublimationHeatSeries_W": sublimation_heat,
+            "steadyReferencePelec_W": steady["Pelec"],
+            "steadyReferencePradGross_W": steady["PradGross"],
+            "steadyReferenceP03escape_W": steady["P03escape"],
+            "steadyReferenceSublimationHeat_W": (
+                steady["sublimationHeat_W"]),
+            "steadyReferenceSublimationHeatToElectric_pct": (
+                steady["sublimationHeatToElectric_pct"]),
+            "steadyReferenceSublimationHeatToGrossRadiation_pct": (
+                steady["sublimationHeatToGrossRadiation_pct"]),
+            **metrics,
+        }
+        return self._annotate_voltage_result(
+            result, "fixed", self.voltage_objective)
+
+    def evaluate_startup(self, radii_m, voltage, duration_s=60.0,
+                         voltage_ramp_s=0.5,
+                         electrode_boundary_mode=None):
+        """Build a cylinder and execute the public D4 startup audit."""
+        self._ensure_server_ready()
+        if len(radii_m) != self.seg_count:
+            raise ValueError(f"radii_m must contain {self.seg_count} values")
+        self._active_electrode_boundary_mode = (
+            self._canonical_electrode_boundary_mode(
+                electrode_boundary_mode or self.electrode_boundary_mode))
+        self._r0 = max(radii_m)
+        self._initial_radii = list(radii_m)
+        self._fail_radii = [
+            radius * (1.0 - self.failure_fraction) for radius in radii_m]
+        self._init_model(radii_m)
+        return self._run_startup_transient_prepared(
+            radii_m, voltage, duration_s=duration_s,
+            voltage_ramp_s=voltage_ramp_s)
 
     def _meets_constraint(self, r):
         """判断结果是否满足电压搜索约束。"""
@@ -1418,6 +1978,18 @@ class COMSOLRunner:
             f"{ratio:g}" for ratio in self.voltage_candidate_ratios)
         result["metricVersion"] = self.metric_version
         result["physicsVersion"] = self.physics_version
+        result["materialModel"] = self.material_model
+        result["materialUncertaintyVersion"] = (
+            self.material_uncertainty_version)
+        result["rhoeScale"] = self.rhoe_scale
+        result["kScale"] = self.k_scale
+        result["cpScale"] = self.cp_scale
+        result["sublimationHeatEnabled"] = self.sublimation_heat_enabled
+        result["sublimationHeatScale"] = self.sublimation_heat_scale
+        result["sublimationEnthalpy_J_kg"] = (
+            self.sublimation_enthalpy_J_kg)
+        result["sublimationHeatVersion"] = self.sublimation_heat_version
+        result["transientVersion"] = self.transient_version
         result["geometryVersion"] = self.geometry_version
         result["lifecycleVersion"] = self.lifecycle_version
         result["erosionModel"] = self.erosion_model
